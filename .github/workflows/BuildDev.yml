@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: docker.lechner-systems.at
-  IMAGE_NAME: lechnersystems/ttm
+  IMAGE_NAME: lechnersystems/portfolio
 
 jobs:
   docker:
