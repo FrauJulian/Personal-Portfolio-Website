@@ -1,0 +1,39 @@
+# Paketmanager-Abhaengigkeiten werden nicht formatiert
+/node_modules
+
+# Lokale Tool-Caches
+.npm-cache
+.eslintcache
+
+# Generierte Build- und Test-Ausgaben
+/dist
+/coverage
+
+# Betriebssystem-Dateileichen
+.DS_Store
+Thumbs.db
+
+# Editor- und IDE-Konfigurationen
+/.idea
+/.vscode
+
+# Lokale Log- und Debug-Dateien
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+*.tsbuildinfo
+
+# Lokale Secrets und Umgebungsdateien
+.env
+.env.*
+backend/.env
+backend/.env.*
+
+# Angular-CLI-Cache
+/.angular
+
+# Generierte Tailwind-Ausgabe wird aus dem Quell-CSS erzeugt
+src/assets/Resources/CSS/Tailwind.css

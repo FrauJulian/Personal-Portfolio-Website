@@ -1,0 +1,63 @@
+name: Build Docker Image - Dev
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: docker.lechner-systems.at
+  IMAGE_NAME: lechnersystems/ttm
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js v24.14.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+
+      - name: Set build version
+        run: npm run version:set
+
+      - name: Read version from package.json
+        id: version
+        run: |
+          version=$(node -p 'require("./package.json").version')
+          docker_tag=$version
+          echo "value=$version" >> "$GITHUB_OUTPUT"
+          echo "docker_tag=$docker_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: Build and push dev image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          provenance: false
+          build-args: |
+            APP_VERSION=${{ steps.version.outputs.value }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev
+          #                     ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.docker_tag }}
+          labels: |
+            org.opencontainers.image.version=${{ steps.version.outputs.value }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}

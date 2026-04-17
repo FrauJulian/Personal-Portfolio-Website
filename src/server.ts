@@ -1,8 +1,9 @@
-import {APP_BASE_HREF} from '@angular/common';
-import {CommonEngine, isMainModule} from '@angular/ssr/node';
-import express, {Express, NextFunction, Request, Response} from 'express';
-import {dirname, join, resolve} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import { APP_BASE_HREF } from '@angular/common';
+import { CommonEngine, isMainModule } from '@angular/ssr/node';
+import type { Express, NextFunction, Request, Response } from 'express';
+import express from 'express';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import bootstrap from './main.server';
 import ProductionConfig from '../configs/Production.json';
@@ -18,12 +19,12 @@ app.get(
   '**',
   express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html'
+    index: 'index.html',
   }),
 );
 
 app.get('**', (req: Request, res: Response, next: NextFunction): void => {
-  const {protocol, originalUrl, baseUrl, headers} = req;
+  const { protocol, originalUrl, baseUrl, headers } = req;
 
   commonEngine
     .render({
@@ -31,7 +32,7 @@ app.get('**', (req: Request, res: Response, next: NextFunction): void => {
       documentFilePath: indexHtml,
       url: `${protocol}://${headers.host}${originalUrl}`,
       publicPath: browserDistFolder,
-      providers: [{provide: APP_BASE_HREF, useValue: baseUrl}],
+      providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
     })
     .then((html: string): Response => res.send(html))
     .catch((err: Error): void => next(err.stack));

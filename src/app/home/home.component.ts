@@ -1,148 +1,63 @@
-import {
-  Component,
-  NgZone,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import {trigger, transition, style, animate} from '@angular/animations';
-import {faArrowRight, faArrowLeft, faArrowDown, faStar, faEnvelope, faPhone} from '@fortawesome/free-solid-svg-icons';
-import {
-  faDiscord,
-  faGithub,
-  faXing,
-  faLinkedin
-} from '@fortawesome/free-brands-svg-icons';
-import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
-import {FaIconComponent, IconDefinition} from '@fortawesome/angular-fontawesome';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {interval, Subscription} from 'rxjs';
-import MarkdownIt from 'markdown-it';
+import type { OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, NgZone } from '@angular/core';
+import { faArrowRight, faArrowDown, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import type { IconDefinition } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { DomSanitizer } from '@angular/platform-browser';
+import type { SafeUrl } from '@angular/platform-browser';
+import type { Subscription } from 'rxjs';
+import { interval } from 'rxjs';
 
-import {globalFields} from '../../global.fields';
-import {FooterComponent} from '../footer/footer.component';
-import {MatDialog} from '@angular/material/dialog';
-import {StalkerComponent} from '../stalker/stalker.component';
-
-interface Project {
-  Link: string;
-  Title: string;
-  FullName?: string;
-  Description: string;
-  Languages: string[];
-  DefaultBranch?: string;
-  Stars?: number;
-  IsReadmeShown: boolean;
-  Readme?: string;
-  Clickable?: boolean;
-}
+import type { Global, PortraitHighlight, PortfolioProject } from '../../global.fields';
+import { global } from '../../global.fields';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    NgOptimizedImage,
-    FooterComponent,
-    NgIf,
-    FaIconComponent,
-    NgForOf
-  ],
+  imports: [FooterComponent, FaIconComponent],
   templateUrl: './home.component.html',
-  animations: [
-    trigger('fadeInOut', [
-      transition(':enter', [
-        style({opacity: 0}),
-        animate('300ms ease-in', style({opacity: 1}))
-      ]),
-      transition(':leave', [
-        animate('300ms ease-out', style({opacity: 0}))
-      ])
-    ])
-  ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  protected readonly globalFields: typeof globalFields = globalFields;
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly zone = inject(NgZone);
+  private preloadedImages: HTMLImageElement[] = [];
 
-  protected readonly age: number | string = this.calculateAge('2009-03-03');
+  protected readonly global: Global = global;
+  protected readonly age: number | string = this.calculateAge(global.birthdate);
 
   protected isLongBioShown: boolean = false;
-  protected isApiRateLimitExceeded: boolean = false;
   protected readonly faArrowRight: IconDefinition = faArrowRight;
-  protected readonly faArrowLeft: IconDefinition = faArrowLeft;
   protected readonly faArrowDown: IconDefinition = faArrowDown;
-  protected readonly faStar: IconDefinition = faStar;
   protected readonly faEnvelope: IconDefinition = faEnvelope;
   protected readonly faPhone: IconDefinition = faPhone;
   readonly faDiscord: IconDefinition = faDiscord;
   readonly faGithub: IconDefinition = faGithub;
-  readonly faXing: IconDefinition = faXing;
   readonly faLinkedin: IconDefinition = faLinkedin;
 
   protected readonly contactSafeMail: SafeUrl;
-
-  protected readonly personalInformation: string = 'You found an easter egg, why are you here!?!\nYou want to know more personal things about me? - Then you will find your information here!:\nI am currently building an independent foundation for my financial freedom. I am establishing my own software company specializing in client-based projects.\nMy motto, “No stress in life,” guides me to avoid unnecessary pressure.\nI identify as pansexual, meaning I am attracted to individuals regardless of their gender. - I am in a committed relationship. (I have been a man since the very beginning of my life. Don\'t be confused about my username, it\'s just a name!)';
-  readonly bioTextsList: string[] = [
-    'C#',
-    '.NET',
-    '.NET Framework',
-    'WPF',
-    'Avalonia',
-    'NodeJS',
-    'Angular',
-    'TypeScript',
-    'JavaScript',
-    'Java',
-    'HTML',
-    '(S)CSS',
-    'Github',
-    'Gitlab',
-    'Azure DevOps',
-    'Ubuntu',
-    'Debian',
-    'SSMS',
-    'MariaDB',
-    'MySQL',
-    'Grandle'
-  ];
+  protected readonly portraitHighlights: PortraitHighlight[] = global.portraitHighlights;
+  protected currentPortraitHighlightIndex: number = 0;
+  protected isPortraitSwitching: boolean = false;
 
   protected currentIndex = 0;
+  protected readonly projects: PortfolioProject[] = global.projects;
   private sub!: Subscription;
 
-  protected projects: Project[] = [
-    {
-      Link: "https://www.synradio.de/",
-      Title: "SynRadio",
-      Description: "🖥️ An internet radio station that is available on various media.",
-      Languages: ["TypeScript", "JavaScript", "HTML", "CSS"],
-      Clickable: false,
-      IsReadmeShown: false
-    },
-    {
-      Link: "https://www.synhost.de/",
-      Title: "SynHost",
-      Description: "❓ A support system integrating various platforms and media to offer employees a unified overview.",
-      Languages: ["TypeScript"],
-      Clickable: false,
-      IsReadmeShown: false
-    }
-  ]
-
-  constructor(private _sanitizer: DomSanitizer, private zone: NgZone, private dialog: MatDialog) {
-    this.contactSafeMail = this._sanitizer.bypassSecurityTrustUrl(`mailto:${globalFields.contactMail}`);
+  constructor() {
+    this.contactSafeMail = this.sanitizer.bypassSecurityTrustUrl(`mailto:${global.contactMail}`);
   }
 
   ngOnInit(): void {
+    this.preloadImageAssets();
+
     this.zone.runOutsideAngular((): void => {
       this.sub = interval(1000).subscribe((): void => {
         this.zone.run((): void => {
-          this.currentIndex = (this.currentIndex + 1) % this.bioTextsList.length;
+          this.currentIndex = (this.currentIndex + 1) % this.global.bioTextsList.length;
         });
       });
-
-      setTimeout((): void => {
-        this.zone.run((): void => {
-          this.fillProjects();
-        });
-      }, 1000);
     });
   }
 
@@ -150,94 +65,54 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  openStalkerInfo(): void {
-    this.dialog.open(StalkerComponent, {
-      width: '420px',
-      data: {message: this.personalInformation}
-    });
-  }
-
-  private fillProjects(): void {
-    const sortOnKey: <T>(key: keyof T, descending: boolean) => (a: T, b: T) => number = <T>(key: keyof T, descending: boolean): (a: T, b: T) => number => {
-      return (a: T, b: T): number => {
-        const aValue = a[key] as number;
-        const bValue = b[key] as number;
-        return descending ? bValue - aValue : aValue - bValue;
-      };
-    };
-
-    fetch(`https://api.github.com/users/${this.globalFields.githubUsername}/repos?per_page=${this.globalFields.numberOfLoadedRepositories}`)
-      .then(async (rawResponse: Response): Promise<any> => {
-        if (rawResponse.status === 403) {
-          const data = await rawResponse.json();
-          if (data.message && data.documentation_url) {
-            this.isApiRateLimitExceeded = true;
-          }
-          return new Error('403 Forbidden');
-        }
-        return rawResponse.json();
-      })
-      .then((allProjects: any): void => {
-        allProjects = allProjects.sort(sortOnKey("stargazers_count", true));
-        allProjects.sort(sortOnKey("stargazers_count", true)).forEach((currentProject: any): void => {
-          if (currentProject === undefined || currentProject.fork === true) return;
-          if (currentProject.description == null) currentProject.description = "";
-          if (currentProject.name === "FrauJulian") return;
-
-          let newProject: Project = {
-            Link: "",
-            Title: "",
-            FullName: "",
-            Description: "",
-            Languages: [],
-            DefaultBranch: "",
-            Stars: 0,
-            Clickable: true,
-            IsReadmeShown: false,
-            Readme: ""
-          };
-
-          if (currentProject.language != null) {
-            fetch(currentProject.languages_url)
-              .then((rawResponse: Response): Promise<any> => rawResponse.json())
-              .then((languages: any): void => {
-                newProject.Languages = Object.keys(languages);
-              });
-          } else {
-            newProject.Languages = [""];
-          }
-
-          fetch(`https://raw.githubusercontent.com/${currentProject.full_name}/${currentProject.default_branch}/README.md`)
-            .then((rawResponse: Response): Promise<any> => rawResponse.text())
-            .then((readmeText: string): void => {
-              newProject.Readme = new MarkdownIt({html: true, linkify: true, typographer: true}).render(readmeText);
-            });
-
-          currentProject.name = currentProject.name
-            .replaceAll("_", " ")
-            .replaceAll("-", " ");
-
-          newProject.Link = currentProject.html_url;
-          newProject.Title = currentProject.name;
-          newProject.FullName = currentProject.full_name;
-          newProject.Description = currentProject.description;
-          newProject.DefaultBranch = currentProject.default_branch;
-          newProject.Stars = currentProject.stargazers_count;
-          newProject.IsReadmeShown = false;
-
-          this.projects.push(newProject);
-        });
-      });
-  }
-
   protected toggleBio(): void {
     this.isLongBioShown = !this.isLongBioShown;
   }
 
-  protected closeOnOverlayClick(evt: MouseEvent): void {
-    if ((evt.target as HTMLElement).classList.contains('long-bio-overlay')) {
-      this.isLongBioShown = false;
+  protected get currentPortraitHighlight(): PortraitHighlight | null {
+    return this.portraitHighlights[this.currentPortraitHighlightIndex] ?? null;
+  }
+
+  protected showNextPortraitHighlight(): void {
+    if (this.portraitHighlights.length <= 1 || this.isPortraitSwitching) {
+      return;
     }
+
+    this.isPortraitSwitching = true;
+
+    setTimeout((): void => {
+      this.currentPortraitHighlightIndex =
+        (this.currentPortraitHighlightIndex + 1) % this.portraitHighlights.length;
+    }, 125);
+
+    setTimeout((): void => {
+      this.isPortraitSwitching = false;
+    }, 250);
+  }
+
+  private preloadImageAssets(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const projectIcons: string[] = this.projects
+      .map((project: PortfolioProject): string | undefined => project.icon)
+      .filter((icon: string | undefined): icon is string => Boolean(icon));
+
+    const uniqueImageUrls: string[] = Array.from(
+      new Set<string>([
+        ...this.portraitHighlights.map((highlight: PortraitHighlight): string => highlight.image),
+        ...projectIcons,
+      ]),
+    );
+
+    this.preloadedImages = uniqueImageUrls.map((url: string): HTMLImageElement => {
+      const image = new Image();
+      image.decoding = 'async';
+      image.loading = 'eager';
+      image.src = url;
+      return image;
+    });
   }
 
   private calculateAge(birthDateString: string): number | string {

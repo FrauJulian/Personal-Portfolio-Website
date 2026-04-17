@@ -1,0 +1,31 @@
+# Git- und Projekt-Metadaten werden nicht in den Docker-Build-Kontext kopiert
+.git
+.github
+.husky
+
+# Lokale Editor-/IDE-Dateien
+.idea
+.vscode
+
+# Build- und Tool-Caches
+.angular
+node_modules
+dist
+.npm-cache
+coverage
+.eslintcache
+
+# Lokale Log- und Debug-Dateien
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+*.tsbuildinfo
+
+# Lokale Secrets und Umgebungsdateien
+.env
+.env.*
+backend/.env
+backend/.env.*

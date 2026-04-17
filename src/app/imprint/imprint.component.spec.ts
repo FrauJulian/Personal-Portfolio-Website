@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ImprintComponent } from './imprint.component';
 
@@ -8,9 +9,8 @@ describe('ImprintComponent', (): void => {
 
   beforeEach(async (): Promise<void> => {
     await TestBed.configureTestingModule({
-      imports: [ImprintComponent]
-    })
-    .compileComponents();
+      imports: [ImprintComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ImprintComponent);
     component = fixture.componentInstance;

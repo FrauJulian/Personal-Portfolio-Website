@@ -1,0 +1,27 @@
+name: Build Validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout Repository
+        uses: actions/checkout@v4
+
+      - name: use NodeJS v24.14.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+
+      - name: install Dependencies
+        run: npm install
+
+      - name: run Build Validation
+        run: npm run check
