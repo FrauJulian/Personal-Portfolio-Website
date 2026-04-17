@@ -6,7 +6,6 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import bootstrap from './main.server';
-import ProductionConfig from '../configs/Production.json';
 
 const serverDistFolder: string = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder: string = resolve(serverDistFolder, '../browser');
@@ -39,9 +38,11 @@ app.get('**', (req: Request, res: Response, next: NextFunction): void => {
 });
 
 if (isMainModule(import.meta.url)) {
-  const port: number = ProductionConfig.Server.Port;
+  const envPort: number = Number.parseInt(process.env['MAIN_PORT'] ?? '', 10);
+  const port: number = Number.isFinite(envPort) ? envPort : 3000;
+
   app.listen(port, (): void => {
-    console.log(`✔️ Listening on Port ${port}`);
+    console.log(`Listening on port ${port}`);
   });
 }
 

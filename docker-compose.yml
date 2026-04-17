@@ -1,6 +1,6 @@
 services:
   app:
-    image: docker.lechner-systems.at/lechnersystems/ttm:${IMAGE_TAG}
+    image: docker.lechner-systems.at/lechnersystems/portfolio:${IMAGE_TAG}
     build:
       context: .
       dockerfile: Dockerfile
