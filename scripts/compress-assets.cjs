@@ -108,7 +108,9 @@ async function run() {
     const ext = path.extname(filePath).toLowerCase();
     if (skippedNoLosslessEncoder.has(ext)) {
       skippedCount += 1;
-      console.log(`Skip (no lossless encoder configured): ${path.relative(process.cwd(), filePath)}`);
+      console.log(
+        `Skip (no lossless encoder configured): ${path.relative(process.cwd(), filePath)}`,
+      );
       continue;
     }
 
