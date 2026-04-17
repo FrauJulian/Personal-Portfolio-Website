@@ -49,12 +49,15 @@
                 "styles": {
                   "minify": true,
                   "inlineCritical": true
+                },
+                "fonts": {
+                  "inline": true
                 }
               },
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": false,
+              "extractLicenses": true,
               "aot": true,
               "budgets": [
                 {

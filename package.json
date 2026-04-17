@@ -26,7 +26,8 @@
     "------ BUILD": "",
     "generate:static-files": "node scripts/generate-static-files.cjs",
     "generate:assets": "npm run generate:static-files",
-    "build": "npm run generate:assets && ng build --configuration production && node scripts/copy-static-root-files.cjs",
+    "compress:assets": "node scripts/compress-assets.cjs",
+    "build": "npm run generate:assets && ng build --configuration production && npm run compress:assets && node scripts/copy-static-root-files.cjs",
     "------ STARTUP": "",
     "test": "ng test",
     "dev": "npm run generate:assets && ng serve",
@@ -105,6 +106,7 @@
     "postcss": "^8.5.8",
     "postcss-selector-parser": "^7.1.1",
     "prettier": "^3.8.1",
+    "sharp": "^0.34.5",
     "typescript": "~5.9.3",
     "typescript-eslint": "8.57.2"
   }
