@@ -334,8 +334,21 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.aboutSectionObserver = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]): void => {
         for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            this.zone.run((): void => {
+              this.isAboutSectionInView = false;
+            });
+            continue;
+          }
+
           this.zone.run((): void => {
-            this.isAboutSectionInView = entry.isIntersecting;
+            this.isAboutSectionInView = false;
+          });
+
+          window.requestAnimationFrame((): void => {
+            this.zone.run((): void => {
+              this.isAboutSectionInView = true;
+            });
           });
         }
       },
