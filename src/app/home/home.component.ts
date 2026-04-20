@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   protected isLongBioShown: boolean = false;
   protected isLongBioMounted: boolean = false;
   protected isAboutSectionInView: boolean = true;
-  protected isAboutSectionAnimationReady: boolean = false;
+  protected isAboutSectionAnimationReady: boolean = true;
   protected readonly faArrowRight: IconDefinition = faArrowRight;
   protected readonly faArrowDown: IconDefinition = faArrowDown;
   protected readonly faEnvelope: IconDefinition = faEnvelope;
@@ -326,12 +326,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (aboutSection === null) {
       return;
     }
-
-    const initialRect: DOMRect = aboutSection.getBoundingClientRect();
-    const viewportHeight: number = window.innerHeight || document.documentElement.clientHeight;
-    this.isAboutSectionInView =
-      initialRect.top < viewportHeight * 0.95 && initialRect.bottom > viewportHeight * 0.1;
-    this.isAboutSectionAnimationReady = true;
 
     if (typeof IntersectionObserver === 'undefined') {
       return;
