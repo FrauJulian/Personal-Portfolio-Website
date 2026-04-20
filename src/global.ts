@@ -28,10 +28,15 @@ export interface Global {
   contactPhone: string;
   hrefContactPhone: string;
   birthdate: string;
-  bioTextsList: string[];
+  bioTextsList: BioTextEntry[];
   portraitHighlights: PortraitHighlight[];
   projects: PortfolioProject[];
   address: ImprintData;
+}
+
+export interface BioTextEntry {
+  label: string;
+  value: string;
 }
 
 export const global: Global = {
@@ -43,27 +48,26 @@ export const global: Global = {
   hrefContactPhone: '+436609254001',
   birthdate: '2009-03-03',
   bioTextsList: [
-    'C#',
-    '.NET',
-    '.NET Framework',
-    'WPF',
-    'Avalonia',
-    'NodeJS',
-    'Angular',
-    'TypeScript',
-    'JavaScript',
-    'Java',
-    'HTML',
-    '(S)CSS',
-    'Github',
-    'Gitlab',
-    'Azure DevOps',
-    'Ubuntu',
-    'Debian',
-    'SSMS',
-    'MariaDB',
-    'MySQL',
-    'Grandle',
+    { label: 'Languages', value: 'C#' },
+    { label: 'Languages', value: 'TypeScript' },
+    { label: 'Languages', value: 'Bash' },
+    { label: 'Frontend', value: 'Angular' },
+    { label: 'Frontend', value: 'WPF' },
+    { label: 'Frontend', value: 'Avalonia' },
+    { label: 'Backend', value: '.NET' },
+    { label: 'Backend', value: 'ASP.NET Core' },
+    { label: 'Backend', value: 'Entity Framework Core' },
+    { label: 'Backend', value: 'Node.js' },
+    { label: 'Backend', value: 'REST' },
+    { label: 'Backend', value: 'Swagger' },
+    { label: 'Database', value: 'Microsoft SQL' },
+    { label: 'Database', value: 'MariaDB' },
+    { label: 'DevOps', value: 'Git' },
+    { label: 'DevOps', value: 'GitHub & GitLab' },
+    { label: 'DevOps', value: 'Azure DevOps' },
+    { label: 'DevOps', value: 'Docker' },
+    { label: 'DevOps', value: 'Ubuntu' },
+    { label: 'DevOps', value: 'Arch' },
   ],
   portraitHighlights: [
     {

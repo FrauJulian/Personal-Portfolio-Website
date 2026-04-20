@@ -2,10 +2,10 @@
   <section class="hero-section panel">
     <div class="hero-copy">
       <div class="hero-copy-main">
-        <p class="eyebrow">Portfolio</p>
+        <p id="portfolio-eyebrow" class="eyebrow">Portfolio</p>
         <h1>
-          <span class="hero-name-part">{{ global.firstname }}</span>
-          <span class="hero-name-part">{{ global.lastname }}</span>
+          <span class="hero-name-part" [attr.data-name]="global.firstname">{{ global.firstname }}</span>
+          <span class="hero-name-part" [attr.data-name]="global.lastname">{{ global.lastname }}</span>
         </h1>
         <p class="hero-intro">
           Full-stack development, thoughtful interfaces, and tailored digital products for companies, associations, and private clients.
@@ -43,8 +43,8 @@
 
       <div class="hero-meta">
         <div>
-          <span class="meta-label">my stack</span>
-          <strong>{{ global.bioTextsList[currentIndex] }}</strong>
+          <span class="meta-label">{{ currentBioEntry.label }}</span>
+          <strong>{{ currentBioEntry.value }}</strong>
         </div>
       </div>
     </div>
@@ -81,7 +81,6 @@
   <section id="about" class="story-section panel">
     <div class="section-heading">
       <p class="eyebrow">About me</p>
-      <h2>Direct communication, solid implementation, and software that stays understandable.</h2>
     </div>
 
     <div class="story-grid">
@@ -120,9 +119,8 @@
   </section>
 
   <section id="projects" class="projects-section">
-    <div class="section-heading">
-      <p class="eyebrow">Selected Projects</p>
-      <h2>A compact look at products, platforms, and systems I have helped shape.</h2>
+    <div class="section-heading section-heading-centered">
+      <p class="eyebrow">Projects</p>
     </div>
 
     <div class="project-list">

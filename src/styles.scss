@@ -1,5 +1,5 @@
 :root {
-  --page-max-width: 1160px;
+  --page-max-width: 1000px;
   --content-max-width: 920px;
   --surface: rgba(20, 18, 22, 0.62);
   --surface-strong: rgba(15, 14, 18, 0.78);
@@ -24,6 +24,7 @@
   --space-7: 4.5rem;
   --transition-fast: 180ms ease;
   --transition-medium: 320ms ease;
+  --name-pride-progress: 0;
 }
 
 * {
@@ -68,7 +69,7 @@ hr {
 }
 
 .page-shell {
-  width: min(calc(100% - 2rem), var(--page-max-width));
+  width: min(calc(100% - 6rem), var(--page-max-width));
   margin: 0 auto;
   padding: var(--space-6) 0 var(--space-7);
 }
@@ -94,6 +95,11 @@ hr {
   max-width: 44rem;
 }
 
+.section-heading-centered {
+  margin-inline: auto;
+  text-align: center;
+}
+
 .section-heading.compact {
   max-width: 52rem;
 }
@@ -111,7 +117,7 @@ hr {
   grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
   gap: var(--space-6);
   align-items: start;
-  min-height: min(86svh, 780px);
+  min-height: var(--hero-section-min-height, auto);
   padding: clamp(2rem, 4vw, 4rem);
 }
 
@@ -122,8 +128,27 @@ hr {
 }
 
 .hero-name-part {
+  position: relative;
   display: inline-block;
   margin-right: 0.28em;
+  color: var(--text-primary);
+}
+
+.hero-name-part::after {
+  content: attr(data-name);
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  color: transparent;
+}
+
+.hero-name-part::after {
+  --name-pride-reveal: clamp(0, var(--name-pride-progress), 1);
+  width: calc(var(--name-pride-reveal) * (100% + 0.14em));
+  overflow: hidden;
+  color: transparent;
   background: linear-gradient(
     to right,
     #e40303 0%,
@@ -141,9 +166,10 @@ hr {
   );
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  background-position: 0 50%;
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .hero-name-part:last-child {
@@ -623,7 +649,6 @@ hr {
   min-width: 100px;
   height: 100px;
   object-fit: cover;
-  background: rgba(255, 255, 255, 0.06);
   box-shadow: var(--shadow-soft);
 }
 
@@ -728,7 +753,7 @@ hr {
 }
 
 .footer-inner {
-  width: min(calc(100% - 2rem), var(--page-max-width));
+  width: min(calc(100% - 6rem), var(--page-max-width));
   margin: 0 auto;
   padding-top: var(--space-4);
   border-top: 1px solid var(--border-soft);
@@ -785,7 +810,7 @@ hr {
 
 @media (max-width: 700px) {
   .page-shell {
-    width: min(calc(100% - 2rem), var(--page-max-width));
+    width: min(calc(100% - 4rem), var(--page-max-width));
     padding: var(--space-4) 0 var(--space-6);
   }
 

@@ -7,8 +7,8 @@ import type { IconDefinition } from '@fortawesome/angular-fontawesome';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-import type { Global } from '../../global.fields';
-import { global } from '../../global.fields';
+import type { Global } from '../../global';
+import { global } from '../../global';
 import { FooterComponent } from '../footer/footer.component';
 
 @Component({
