@@ -4,10 +4,10 @@
 
 This repository is an Angular 21 SSR application. Main app code lives in `src/`,
 with standalone components under `src/app/` such as `home/`, `footer/`, and
-`imprint/`. Shared constants are kept in `src/global.ts`. Component tests
-sit next to their source files as `*.spec.ts`. Automation and project
-maintenance scripts live in `scripts/`. Generated build output goes to `dist/`
-and should not be edited manually.
+`imprint/`. Shared constants are kept in `src/global.ts`. Component tests sit
+next to their source files as `*.spec.ts`. Automation and project maintenance
+scripts live in `scripts/`. Generated build output goes to `dist/` and should
+not be edited manually.
 
 ## Build, Test, and Development Commands
 
@@ -42,12 +42,11 @@ tests for changed behavior.
 
 ## Commit & Pull Request Guidelines
 
-Recent history mixes short imperative messages (`Update src/global.ts`)
-with lightweight conventional commits
-(`feat: pre-render routes and restore scroll`). Prefer concise, imperative
-commit subjects and include a scope or prefix when it adds clarity. PRs should
-summarize the user-visible change, mention any config or script updates, link
-related issues, and include screenshots for UI changes.
+Recent history mixes short imperative messages (`Update src/global.ts`) with
+lightweight conventional commits (`feat: pre-render routes and restore scroll`).
+Prefer concise, imperative commit subjects and include a scope or prefix when it
+adds clarity. PRs should summarize the user-visible change, mention any config
+or script updates, link related issues, and include screenshots for UI changes.
 
 ## Configuration Tips
 

@@ -155,11 +155,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     const portraitImageUrls: Set<string> = new Set<string>(
-      this.portraitHighlights.map((highlight: PortraitHighlight): string => new URL(highlight.image, window.location.href).href),
+      this.portraitHighlights.map(
+        (highlight: PortraitHighlight): string =>
+          new URL(highlight.image, window.location.href).href,
+      ),
     );
 
-    const portraitImages: HTMLImageElement[] = this.preloadedImages.filter((image: HTMLImageElement): boolean =>
-      portraitImageUrls.has(image.src),
+    const portraitImages: HTMLImageElement[] = this.preloadedImages.filter(
+      (image: HTMLImageElement): boolean => portraitImageUrls.has(image.src),
     );
 
     if (portraitImages.length === 0) {
@@ -167,14 +170,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     const finalizeAspectRatio = (): void => {
-      const minAspectRatio: number = portraitImages.reduce((minRatio: number, image: HTMLImageElement): number => {
-        if (image.naturalWidth === 0 || image.naturalHeight === 0) {
-          return minRatio;
-        }
+      const minAspectRatio: number = portraitImages.reduce(
+        (minRatio: number, image: HTMLImageElement): number => {
+          if (image.naturalWidth === 0 || image.naturalHeight === 0) {
+            return minRatio;
+          }
 
-        const currentRatio: number = image.naturalWidth / image.naturalHeight;
-        return minRatio === 0 ? currentRatio : Math.min(minRatio, currentRatio);
-      }, 0);
+          const currentRatio: number = image.naturalWidth / image.naturalHeight;
+          return minRatio === 0 ? currentRatio : Math.min(minRatio, currentRatio);
+        },
+        0,
+      );
 
       if (minAspectRatio > 0) {
         this.tallestPortraitAspectRatio = minAspectRatio;
@@ -284,14 +290,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     const maxMediaHeight: number = buttonWidth / this.tallestPortraitAspectRatio;
     const currentButtonHeight: number = portraitButton.getBoundingClientRect().height;
     const currentHighlightHeight: number = portraitHighlight.getBoundingClientRect().height;
-    const staticHighlightOverhead: number = Math.max(currentHighlightHeight - currentButtonHeight, 0);
+    const staticHighlightOverhead: number = Math.max(
+      currentHighlightHeight - currentButtonHeight,
+      0,
+    );
     const requiredHighlightHeight: number = maxMediaHeight + staticHighlightOverhead;
-    const requiredContentHeight: number = Math.max(heroCopy.getBoundingClientRect().height, requiredHighlightHeight);
+    const requiredContentHeight: number = Math.max(
+      heroCopy.getBoundingClientRect().height,
+      requiredHighlightHeight,
+    );
     const heroSectionStyles: CSSStyleDeclaration = window.getComputedStyle(heroSection);
     const paddingTop: number = Number.parseFloat(heroSectionStyles.paddingTop) || 0;
     const paddingBottom: number = Number.parseFloat(heroSectionStyles.paddingBottom) || 0;
     const requiredSectionMinHeight: number = requiredContentHeight + paddingTop + paddingBottom;
-    this.lockedHeroSectionMinHeight = Math.max(this.lockedHeroSectionMinHeight, requiredSectionMinHeight);
+    this.lockedHeroSectionMinHeight = Math.max(
+      this.lockedHeroSectionMinHeight,
+      requiredSectionMinHeight,
+    );
 
     document.documentElement.style.setProperty(
       '--hero-section-min-height',
