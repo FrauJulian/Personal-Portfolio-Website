@@ -101,8 +101,8 @@ export const global: Global = {
       link: 'https://www.synradio.de/',
       description: 'An internet radio station that is available on various media.',
       languages: ['TypeScript', 'JavaScript', 'HTML', 'CSS'],
-      icon: 'https://gerlach-systems.de/IMAGES/SYNHOST/SYNHOST_DARK.png',
-      CircleIcon: false,
+      icon: 'assets/portrait/me.png',
+      CircleIcon: true,
     },
     {
       title: 'SynHost',

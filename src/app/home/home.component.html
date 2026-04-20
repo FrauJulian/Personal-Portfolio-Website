@@ -13,7 +13,7 @@
       </div>
 
       <div class="hero-actions">
-        <div class="contact-area hero-contact-area">
+        <div id="contact-links" class="contact-area hero-contact-area">
           <a [href]="contactSafeMail" aria-label="Send mail">
             <fa-icon class="fab" [icon]="faEnvelope" size="lg"></fa-icon>
           </a>
@@ -78,7 +78,12 @@
     </div>
   </section>
 
-  <section id="about" class="story-section panel">
+  <section
+    id="about"
+    class="story-section panel about-scroll-anim-enabled"
+    [class.about-scroll-in-view]="isAboutSectionInView"
+    [class.about-scroll-anim-ready]="isAboutSectionAnimationReady"
+  >
     <div class="section-heading">
       <p class="eyebrow">About me</p>
     </div>
@@ -101,8 +106,8 @@
           <fa-icon [icon]="isLongBioShown ? faArrowDown : faArrowRight"></fa-icon>
         </button>
 
-        @if (isLongBioShown) {
-          <div class="detail-panel detail-panel-enter">
+        @if (isLongBioMounted) {
+          <div class="detail-panel" [class.detail-panel-enter]="isLongBioShown" [class.detail-panel-leave]="!isLongBioShown">
             <p>
               My biggest hobby apart from software development is scuba diving. Floating in deep water and only thinking about the here and
               now always brings me back to a calmer pace.
@@ -111,7 +116,7 @@
               I currently work mainly for the Viennese company SobIT GmbH and also take on freelance projects for companies, associations,
               and private clients. The common thread is always the same: practical software, well delivered.
             </p>
-            <a class="inline-link" [href]="contactSafeMail">Get in touch</a>
+            <a class="inline-link" href="#contact-links">Get in touch</a>
           </div>
         }
       </div>
@@ -125,7 +130,15 @@
 
     <div class="project-list">
       @for (project of projects; track project.link + '-' + $index; let i = $index) {
-        <article class="panel project-entry" [class.project-entry-reverse]="i % 2 === 1">
+        <a
+          class="panel project-entry"
+          [class.project-entry-reverse]="i % 2 === 1"
+          [class.project-entry-from-right]="i % 2 === 0"
+          [class.project-entry-from-left]="i % 2 === 1"
+          [href]="project.link"
+          [attr.aria-label]="'Open project ' + project.title"
+          [attr.data-project-index]="i"
+        >
           @if (project.icon) {
             <img
               class="project-icon"
@@ -137,15 +150,19 @@
 
           <div class="project-copy">
             <div class="project-header">
-              <div>
-                <a class="project-link" href="{{ project.link }}">{{ project.title }}</a>
+              <div class="project-title-wrap">
+                <span class="project-link">{{ project.title }}</span>
               </div>
-              <div class="project-languages">{{ project.languages.join(' · ') }}</div>
+              <div class="project-languages" aria-label="Project languages">
+                @for (language of project.languages; track language + '-' + $index) {
+                  <span class="project-language-chip">{{ language }}</span>
+                }
+              </div>
             </div>
 
             <p class="project-description">{{ project.description }}</p>
           </div>
-        </article>
+        </a>
       }
     </div>
   </section>

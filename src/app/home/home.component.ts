@@ -1,4 +1,4 @@
-import type { OnDestroy, OnInit } from '@angular/core';
+import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { Component, inject, NgZone } from '@angular/core';
 import { faArrowRight, faArrowDown, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
@@ -19,12 +19,14 @@ import { FooterComponent } from '../footer/footer.component';
   imports: [FooterComponent, FaIconComponent],
   templateUrl: './home.component.html',
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly zone = inject(NgZone);
   private preloadedImages: HTMLImageElement[] = [];
   private tallestPortraitAspectRatio: number | null = null;
   private lockedHeroSectionMinHeight: number = 0;
+  private projectEntryObserver: IntersectionObserver | null = null;
+  private aboutSectionObserver: IntersectionObserver | null = null;
   private scrollAnimationFrameId: number | null = null;
   private heroHeightAnimationFrameId: number | null = null;
   private readonly scheduleNameGradientUpdate: () => void = (): void => {
@@ -53,6 +55,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   protected readonly age: number | string = this.calculateAge(global.birthdate);
 
   protected isLongBioShown: boolean = false;
+  protected isLongBioMounted: boolean = false;
+  protected isAboutSectionInView: boolean = true;
+  protected isAboutSectionAnimationReady: boolean = false;
   protected readonly faArrowRight: IconDefinition = faArrowRight;
   protected readonly faArrowDown: IconDefinition = faArrowDown;
   protected readonly faEnvelope: IconDefinition = faEnvelope;
@@ -70,6 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   protected readonly projects: PortfolioProject[] = global.projects;
   protected readonly fallbackBioEntry: BioTextEntry = { label: 'my stack', value: '' };
   private sub!: Subscription;
+  private bioHideTimeoutId: number | null = null;
 
   constructor() {
     this.contactSafeMail = this.sanitizer.bypassSecurityTrustUrl(`mailto:${global.contactMail}`);
@@ -88,13 +94,54 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.initProjectEntryRevealObserver();
+    this.initAboutSectionScrollAnimation();
+  }
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+    if (this.bioHideTimeoutId !== null) {
+      window.clearTimeout(this.bioHideTimeoutId);
+      this.bioHideTimeoutId = null;
+    }
     this.destroyNameGradientScrollAnimation();
+    this.destroyProjectEntryRevealObserver();
+    this.destroyAboutSectionScrollAnimation();
   }
 
   protected toggleBio(): void {
-    this.isLongBioShown = !this.isLongBioShown;
+    if (this.isLongBioShown) {
+      this.isLongBioShown = false;
+      if (typeof window !== 'undefined') {
+        if (this.bioHideTimeoutId !== null) {
+          window.clearTimeout(this.bioHideTimeoutId);
+        }
+        this.bioHideTimeoutId = window.setTimeout((): void => {
+          this.isLongBioMounted = false;
+          this.bioHideTimeoutId = null;
+        }, 300);
+      } else {
+        this.isLongBioMounted = false;
+      }
+      return;
+    }
+
+    if (this.bioHideTimeoutId !== null && typeof window !== 'undefined') {
+      window.clearTimeout(this.bioHideTimeoutId);
+      this.bioHideTimeoutId = null;
+    }
+
+    this.isLongBioMounted = true;
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame((): void => {
+        window.requestAnimationFrame((): void => {
+          this.isLongBioShown = true;
+        });
+      });
+    } else {
+      this.isLongBioShown = true;
+    }
   }
 
   protected get currentPortraitHighlight(): PortraitHighlight | null {
@@ -217,6 +264,100 @@ export class HomeComponent implements OnInit, OnDestroy {
     window.addEventListener('resize', this.scheduleHeroSectionHeightUpdate, { passive: true });
     this.scheduleNameGradientUpdate();
     this.scheduleHeroSectionHeightUpdate();
+  }
+
+  private initProjectEntryRevealObserver(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const projectEntries: NodeListOf<Element> = document.querySelectorAll('.project-entry');
+    projectEntries.forEach((entry: Element): void => {
+      entry.classList.add('project-entry-reveal-pending');
+    });
+
+    if (typeof IntersectionObserver === 'undefined') {
+      projectEntries.forEach((entry: Element): void => {
+        entry.classList.add('project-entry-visible');
+        entry.classList.remove('project-entry-reveal-pending');
+      });
+      return;
+    }
+
+    this.projectEntryObserver = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]): void => {
+        for (const entry of entries) {
+          const element: Element = entry.target;
+          if (entry.isIntersecting) {
+            window.requestAnimationFrame((): void => {
+              element.classList.add('project-entry-visible');
+              element.classList.remove('project-entry-reveal-pending');
+            });
+            continue;
+          }
+
+          element.classList.add('project-entry-reveal-pending');
+          element.classList.remove('project-entry-visible');
+        }
+      },
+      {
+        root: null,
+        threshold: 0.18,
+        rootMargin: '0px 0px -8% 0px',
+      },
+    );
+
+    projectEntries.forEach((entry: Element): void => {
+      this.projectEntryObserver?.observe(entry);
+    });
+  }
+
+  private destroyProjectEntryRevealObserver(): void {
+    this.projectEntryObserver?.disconnect();
+    this.projectEntryObserver = null;
+  }
+
+  private initAboutSectionScrollAnimation(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const aboutSection: HTMLElement | null = document.getElementById('about');
+    if (aboutSection === null) {
+      return;
+    }
+
+    const initialRect: DOMRect = aboutSection.getBoundingClientRect();
+    const viewportHeight: number = window.innerHeight || document.documentElement.clientHeight;
+    this.isAboutSectionInView =
+      initialRect.top < viewportHeight * 0.95 && initialRect.bottom > viewportHeight * 0.1;
+    this.isAboutSectionAnimationReady = true;
+
+    if (typeof IntersectionObserver === 'undefined') {
+      return;
+    }
+
+    this.aboutSectionObserver = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]): void => {
+        for (const entry of entries) {
+          this.zone.run((): void => {
+            this.isAboutSectionInView = entry.isIntersecting;
+          });
+        }
+      },
+      {
+        root: null,
+        threshold: 0.05,
+        rootMargin: '0px 0px -6% 0px',
+      },
+    );
+
+    this.aboutSectionObserver.observe(aboutSection);
+  }
+
+  private destroyAboutSectionScrollAnimation(): void {
+    this.aboutSectionObserver?.disconnect();
+    this.aboutSectionObserver = null;
   }
 
   private destroyNameGradientScrollAnimation(): void {
