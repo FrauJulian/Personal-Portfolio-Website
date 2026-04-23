@@ -170,15 +170,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected scrollToAboutSection(): void {
-    this.scrollToElementById('about', 24);
+    this.scrollToElementById('about', this.getResponsiveScrollOffset(0.035));
   }
 
   protected scrollToProjectsSection(): void {
-    this.scrollToElementById('projects', 24);
+    this.scrollToElementById('projects', this.getResponsiveScrollOffset(0.035));
   }
 
   protected scrollToContactLinks(): void {
-    this.scrollToElementById('contact-links', 48);
+    this.scrollToElementById('contact-links', this.getResponsiveScrollOffset(0.05));
   }
 
   private preloadImageAssets(): void {
@@ -508,5 +508,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       top: targetTop,
       behavior: 'smooth',
     });
+  }
+
+  private getResponsiveScrollOffset(viewportRatio: number = 0.05): number {
+    if (typeof window === 'undefined') {
+      return 0;
+    }
+
+    const minOffsetPx: number = 20;
+    const maxOffsetPx: number = 48;
+    const responsiveOffsetPx: number = window.innerHeight * viewportRatio;
+    return Math.min(Math.max(responsiveOffsetPx, minOffsetPx), maxOffsetPx);
   }
 }
