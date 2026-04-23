@@ -68,6 +68,9 @@ export const global: Global = {
     { label: 'DevOps', value: 'Docker' },
     { label: 'DevOps', value: 'Ubuntu' },
     { label: 'DevOps', value: 'Arch' },
+    { label: 'Declarative Languages', value: 'XAML' },
+    { label: 'Declarative Languages', value: 'YAML' },
+    { label: 'Declarative Languages', value: 'Markdown' },
   ],
   portraitHighlights: [
     {
@@ -79,8 +82,8 @@ export const global: Global = {
       text: 'My Love',
     },
     {
-      image: 'assets/portrait/anniversary.jpg',
-      text: 'Anniversary',
+      image: 'assets/portrait/sbua.jpg',
+      text: 'Scuba Diving',
     },
     {
       image: 'assets/portrait/trains.jpg',
@@ -97,12 +100,12 @@ export const global: Global = {
   ],
   projects: [
     {
-      title: 'SynRadio',
-      link: 'https://www.synradio.de/',
-      description: 'An internet radio station that is available on various media.',
-      languages: ['TypeScript', 'JavaScript', 'HTML', 'CSS'],
-      icon: 'assets/portrait/me.png',
-      CircleIcon: true,
+      title: 'SobIT GmbH',
+      link: 'https://sobit.at/',
+      description: 'I currently work primarily for the viennese company SobIT GmbH. This company develops software for the healthcare industry. - Development of modern desktop, mobile, and web applications to support healthcare delivery.',
+      languages: ['TypeScript', 'C#', 'WPF', 'YML', 'XAML'],
+      icon: 'assets/logos/sobit.png',
+      CircleIcon: false,
     },
     {
       title: 'SynHost',

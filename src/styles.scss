@@ -804,7 +804,8 @@ hr {
   width: clamp(84px, 12vw, 108px);
   min-width: clamp(84px, 12vw, 108px);
   height: clamp(84px, 12vw, 108px);
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   box-shadow: none;
 }
 

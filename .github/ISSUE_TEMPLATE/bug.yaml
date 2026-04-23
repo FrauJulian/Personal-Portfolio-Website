@@ -24,7 +24,7 @@ body:
       required: false
 
   - type: textarea
-    id: logs
+    id: logos
     attributes:
       label: Logs or Error Messages
       description: Paste any relevant console output, stack traces, or screenshots.
