@@ -240,7 +240,10 @@ hr {
   padding: 0 1.25rem;
   border-radius: 999px;
   border: 1px solid var(--border-soft);
+  font: inherit;
+  color: inherit;
   background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
   transition:
     transform var(--transition-fast),
     border-color var(--transition-fast),
@@ -605,6 +608,14 @@ hr {
 .inline-link {
   color: var(--accent-strong);
   font-weight: 600;
+}
+
+.inline-link-button {
+  padding: 0;
+  border: 0;
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
 }
 
 .contact-strip {

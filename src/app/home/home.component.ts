@@ -169,6 +169,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 250);
   }
 
+  protected scrollToAboutSection(): void {
+    this.scrollToElementById('about', 24);
+  }
+
+  protected scrollToProjectsSection(): void {
+    this.scrollToElementById('projects', 24);
+  }
+
+  protected scrollToContactLinks(): void {
+    this.scrollToElementById('contact-links');
+  }
+
   private preloadImageAssets(): void {
     if (typeof window === 'undefined') {
       return;
@@ -475,5 +487,26 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     return age;
+  }
+
+  private scrollToElementById(elementId: string, offsetPx: number = 0): void {
+    if (typeof document === 'undefined' || typeof window === 'undefined') {
+      return;
+    }
+
+    const element: HTMLElement | null = document.getElementById(elementId);
+    if (element === null) {
+      return;
+    }
+
+    const targetTop: number = Math.max(
+      element.getBoundingClientRect().top + window.scrollY - offsetPx,
+      0,
+    );
+
+    window.scrollTo({
+      top: targetTop,
+      behavior: 'smooth',
+    });
   }
 }

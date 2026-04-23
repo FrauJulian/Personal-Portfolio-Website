@@ -36,8 +36,8 @@
         </div>
 
         <div class="hero-action-links">
-          <a class="action-link" href="#projects">View projects</a>
-          <a class="action-link" href="#about">About me</a>
+          <button class="action-link" type="button" (click)="scrollToProjectsSection()">View projects</button>
+          <button class="action-link" type="button" (click)="scrollToAboutSection()">About me</button>
         </div>
       </div>
 
@@ -116,7 +116,7 @@
               I currently work mainly for the Viennese company SobIT GmbH and also take on freelance projects for companies, associations,
               and private clients. The common thread is always the same: practical software, well delivered.
             </p>
-            <a class="inline-link" href="#contact-links">Get in touch</a>
+            <button class="inline-link inline-link-button" type="button" (click)="scrollToContactLinks()">Get in touch</button>
           </div>
         }
       </div>
