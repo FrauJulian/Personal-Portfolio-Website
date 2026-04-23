@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   protected readonly global: Global = global;
-  protected readonly age: number | string = this.calculateAge(global.birthdate);
+  protected readonly age: number = this.calculateAge(global.birthdate);
 
   protected isLongBioShown: boolean = false;
   protected isLongBioMounted: boolean = false;
@@ -462,12 +462,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  private calculateAge(birthDateString: string): number | string {
-    let birthDate: Date = new Date(birthDateString);
-    let now: Date = new Date();
-    let diffMs: number = now.getTime() - birthDate.getTime();
-    let diffYears: number = diffMs / (1000 * 60 * 60 * 24 * 365.25);
-    let tempAge: string = diffYears.toFixed(1);
-    return tempAge.endsWith('.0') ? Math.round(diffYears) : tempAge;
+  private calculateAge(birthDateString: string): number {
+    const birthDate: Date = new Date(birthDateString);
+    const now: Date = new Date();
+    let age: number = now.getFullYear() - birthDate.getFullYear();
+    const hasBirthdayPassedThisYear: boolean =
+      now.getMonth() > birthDate.getMonth() ||
+      (now.getMonth() === birthDate.getMonth() && now.getDate() >= birthDate.getDate());
+
+    if (!hasBirthdayPassedThisYear) {
+      age -= 1;
+    }
+
+    return age;
   }
 }
