@@ -82,7 +82,7 @@ export const global: Global = {
       text: 'My Love',
     },
     {
-      image: 'assets/portrait/sbua.jpg',
+      image: 'assets/portrait/scuba.jpg',
       text: 'Scuba Diving',
     },
     {
