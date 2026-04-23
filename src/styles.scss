@@ -219,6 +219,22 @@ hr {
   gap: var(--space-3);
 }
 
+.hero-contact-block {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+}
+
+.hero-contact-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 .hero-contact-area {
   gap: 0.6rem;
 }

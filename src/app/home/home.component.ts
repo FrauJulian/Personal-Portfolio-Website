@@ -178,7 +178,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected scrollToContactLinks(): void {
-    this.scrollToElementById('contact-links');
+    this.scrollToElementById('contact-links', 48);
   }
 
   private preloadImageAssets(): void {
