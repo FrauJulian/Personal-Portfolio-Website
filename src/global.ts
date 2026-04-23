@@ -102,7 +102,8 @@ export const global: Global = {
     {
       title: 'SobIT GmbH',
       link: 'https://sobit.at/',
-      description: 'I currently work primarily for the viennese company SobIT GmbH. This company develops software for the healthcare industry. - Development of modern desktop, mobile, and web applications to support healthcare delivery.',
+      description:
+        'I currently work primarily for the viennese company SobIT GmbH. This company develops software for the healthcare industry. - Development of modern desktop, mobile, and web applications to support healthcare delivery.',
       languages: ['TypeScript', 'C#', 'WPF', 'YML', 'XAML'],
       icon: 'assets/logos/sobit.png',
       CircleIcon: false,
