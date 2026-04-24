@@ -26,13 +26,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets/optimized",
-                "output": "assets/optimized"
-              },
-              {
-                "glob": "**/*",
-                "input": "src/assets/logos",
-                "output": "assets/logos"
+                "input": "src/assets",
+                "output": "assets"
               },
               {
                 "glob": "**/*",
@@ -113,13 +108,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets/optimized",
-                "output": "assets/optimized"
-              },
-              {
-                "glob": "**/*",
-                "input": "src/assets/logos",
-                "output": "assets/logos"
+                "input": "src/assets",
+                "output": "assets"
               },
               {
                 "glob": "**/*",
