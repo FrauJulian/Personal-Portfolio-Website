@@ -969,9 +969,17 @@ hr {
 }
 
 @media (max-width: 700px) {
+  .page-shell,
+  .footer-inner {
+    width: min(calc(100% - 2rem), var(--page-max-width));
+  }
+
   .page-shell {
-    width: min(calc(100% - 4rem), var(--page-max-width));
     padding: var(--space-4) 0 var(--space-6);
+  }
+
+  .hero-section {
+    padding: clamp(1rem, 4vw, 1.2rem);
   }
 
   .hero-copy h1,
