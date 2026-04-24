@@ -483,59 +483,30 @@ hr {
   margin-top: var(--space-5);
 }
 
+.about-scroll-anim-enabled {
+  --about-scroll-progress: 0;
+}
+
 .about-scroll-anim-enabled .story-copy,
 .about-scroll-anim-enabled .story-detail {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+  opacity: calc(0.12 + (var(--about-scroll-progress) * 0.88));
+  will-change: opacity, transform;
 }
 
-.about-scroll-anim-enabled:not(.about-scroll-anim-ready) .story-copy,
-.about-scroll-anim-enabled:not(.about-scroll-anim-ready) .story-detail {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+.about-scroll-anim-enabled .story-copy {
+  transform: translate3d(
+    calc((1 - var(--about-scroll-progress)) * -44px),
+    calc((1 - var(--about-scroll-progress)) * 26px),
+    0
+  );
 }
 
-.about-scroll-anim-enabled.about-scroll-anim-ready .story-copy,
-.about-scroll-anim-enabled.about-scroll-anim-ready .story-detail {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-}
-
-.about-scroll-anim-enabled.about-scroll-anim-ready.about-scroll-in-view .story-copy,
-.about-scroll-anim-enabled.about-scroll-anim-ready.about-scroll-in-view .story-detail {
-  animation-duration: 680ms;
-  animation-fill-mode: both;
-  animation-timing-function: cubic-bezier(0.16, 0.84, 0.24, 1);
-}
-
-.about-scroll-anim-enabled.about-scroll-anim-ready.about-scroll-in-view .story-copy {
-  animation-name: about-copy-reveal;
-}
-
-.about-scroll-anim-enabled.about-scroll-anim-ready.about-scroll-in-view .story-detail {
-  animation-name: about-detail-reveal;
-}
-
-@keyframes about-copy-reveal {
-  from {
-    opacity: 0.12;
-    transform: translate3d(-44px, 26px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes about-detail-reveal {
-  from {
-    opacity: 0.12;
-    transform: translate3d(44px, 26px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
+.about-scroll-anim-enabled .story-detail {
+  transform: translate3d(
+    calc((1 - var(--about-scroll-progress)) * 44px),
+    calc((1 - var(--about-scroll-progress)) * 26px),
+    0
+  );
 }
 
 .story-copy p:first-child,
@@ -678,6 +649,7 @@ hr {
 }
 
 .project-entry {
+  --project-entry-progress: 0;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
@@ -685,33 +657,49 @@ hr {
   padding: clamp(1.4rem, 3vw, 2rem);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+  opacity: calc(0.12 + (var(--project-entry-progress) * 0.88));
   transition:
-    opacity 520ms ease,
-    transform 620ms cubic-bezier(0.2, 0.8, 0.2, 1),
     border-color var(--transition-fast),
     background var(--transition-fast),
     box-shadow var(--transition-fast);
+  will-change: opacity, transform;
 }
 
-.project-entry-reveal-pending.project-entry-from-right {
-  opacity: 0;
-  transform: translate3d(54px, 16px, 0);
+.project-entry.project-entry-from-right {
+  transform: translate3d(
+    calc((1 - var(--project-entry-progress)) * 54px),
+    calc((1 - var(--project-entry-progress)) * 16px),
+    0
+  );
 }
 
-.project-entry-reveal-pending.project-entry-from-left {
-  opacity: 0;
-  transform: translate3d(-54px, 16px, 0);
+.project-entry.project-entry-from-left {
+  transform: translate3d(
+    calc((1 - var(--project-entry-progress)) * -54px),
+    calc((1 - var(--project-entry-progress)) * 16px),
+    0
+  );
 }
 
-.project-entry-visible {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+.project-entry.project-entry-from-right:hover {
+  transform: translate3d(
+    calc((1 - var(--project-entry-progress)) * 54px),
+    calc((1 - var(--project-entry-progress)) * 16px - 2px),
+    0
+  );
+  border-color: rgba(255, 255, 255, 0.24);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.26),
+    var(--shadow-soft);
 }
 
-.project-entry:hover {
-  transform: translateY(-2px);
+.project-entry.project-entry-from-left:hover {
+  transform: translate3d(
+    calc((1 - var(--project-entry-progress)) * -54px),
+    calc((1 - var(--project-entry-progress)) * 16px - 2px),
+    0
+  );
   border-color: rgba(255, 255, 255, 0.24);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
   box-shadow:

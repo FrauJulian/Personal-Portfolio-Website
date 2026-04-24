@@ -25,10 +25,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private preloadedImages: HTMLImageElement[] = [];
   private tallestPortraitAspectRatio: number | null = null;
   private lockedHeroSectionMinHeight: number = 0;
-  private projectEntryObserver: IntersectionObserver | null = null;
-  private aboutSectionObserver: IntersectionObserver | null = null;
   private scrollAnimationFrameId: number | null = null;
   private heroHeightAnimationFrameId: number | null = null;
+  private projectEntryAnimationFrameId: number | null = null;
+  private aboutSectionAnimationFrameId: number | null = null;
   private readonly scheduleNameGradientUpdate: () => void = (): void => {
     if (this.scrollAnimationFrameId !== null || typeof window === 'undefined') {
       return;
@@ -50,14 +50,32 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.updateHeroSectionMinHeight();
     });
   };
+  private readonly scheduleProjectEntryRevealUpdate: () => void = (): void => {
+    if (this.projectEntryAnimationFrameId !== null || typeof window === 'undefined') {
+      return;
+    }
+
+    this.projectEntryAnimationFrameId = window.requestAnimationFrame((): void => {
+      this.projectEntryAnimationFrameId = null;
+      this.updateProjectEntryRevealProgress();
+    });
+  };
+  private readonly scheduleAboutSectionScrollAnimationUpdate: () => void = (): void => {
+    if (this.aboutSectionAnimationFrameId !== null || typeof window === 'undefined') {
+      return;
+    }
+
+    this.aboutSectionAnimationFrameId = window.requestAnimationFrame((): void => {
+      this.aboutSectionAnimationFrameId = null;
+      this.updateAboutSectionScrollProgress();
+    });
+  };
 
   protected readonly global: Global = global;
   protected readonly age: number = this.calculateAge(global.birthdate);
 
   protected isLongBioShown: boolean = false;
   protected isLongBioMounted: boolean = false;
-  protected isAboutSectionInView: boolean = true;
-  protected isAboutSectionAnimationReady: boolean = true;
   protected readonly faArrowRight: IconDefinition = faArrowRight;
   protected readonly faArrowDown: IconDefinition = faArrowDown;
   protected readonly faEnvelope: IconDefinition = faEnvelope;
@@ -283,50 +301,28 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const projectEntries: NodeListOf<Element> = document.querySelectorAll('.project-entry');
-    projectEntries.forEach((entry: Element): void => {
-      entry.classList.add('project-entry-reveal-pending');
-    });
-
-    if (typeof IntersectionObserver === 'undefined') {
-      projectEntries.forEach((entry: Element): void => {
-        entry.classList.add('project-entry-visible');
-        entry.classList.remove('project-entry-reveal-pending');
-      });
-      return;
-    }
-
-    this.projectEntryObserver = new IntersectionObserver(
-      (entries: IntersectionObserverEntry[]): void => {
-        for (const entry of entries) {
-          const element: Element = entry.target;
-          if (entry.isIntersecting) {
-            window.requestAnimationFrame((): void => {
-              element.classList.add('project-entry-visible');
-              element.classList.remove('project-entry-reveal-pending');
-            });
-            continue;
-          }
-
-          element.classList.add('project-entry-reveal-pending');
-          element.classList.remove('project-entry-visible');
-        }
-      },
-      {
-        root: null,
-        threshold: 0.18,
-        rootMargin: '0px 0px -8% 0px',
-      },
-    );
-
-    projectEntries.forEach((entry: Element): void => {
-      this.projectEntryObserver?.observe(entry);
-    });
+    window.addEventListener('scroll', this.scheduleProjectEntryRevealUpdate, { passive: true });
+    window.addEventListener('resize', this.scheduleProjectEntryRevealUpdate, { passive: true });
+    this.scheduleProjectEntryRevealUpdate();
   }
 
   private destroyProjectEntryRevealObserver(): void {
-    this.projectEntryObserver?.disconnect();
-    this.projectEntryObserver = null;
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    window.removeEventListener('scroll', this.scheduleProjectEntryRevealUpdate);
+    window.removeEventListener('resize', this.scheduleProjectEntryRevealUpdate);
+
+    if (this.projectEntryAnimationFrameId !== null) {
+      window.cancelAnimationFrame(this.projectEntryAnimationFrameId);
+      this.projectEntryAnimationFrameId = null;
+    }
+
+    const projectEntries: NodeListOf<HTMLElement> = document.querySelectorAll('.project-entry');
+    projectEntries.forEach((entry: HTMLElement): void => {
+      entry.style.removeProperty('--project-entry-progress');
+    });
   }
 
   private initAboutSectionScrollAnimation(): void {
@@ -334,49 +330,30 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const aboutSection: HTMLElement | null = document.getElementById('about');
-    if (aboutSection === null) {
-      return;
-    }
-
-    if (typeof IntersectionObserver === 'undefined') {
-      return;
-    }
-
-    this.aboutSectionObserver = new IntersectionObserver(
-      (entries: IntersectionObserverEntry[]): void => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) {
-            this.zone.run((): void => {
-              this.isAboutSectionInView = false;
-            });
-            continue;
-          }
-
-          this.zone.run((): void => {
-            this.isAboutSectionInView = false;
-          });
-
-          window.requestAnimationFrame((): void => {
-            this.zone.run((): void => {
-              this.isAboutSectionInView = true;
-            });
-          });
-        }
-      },
-      {
-        root: null,
-        threshold: 0.05,
-        rootMargin: '0px 0px -6% 0px',
-      },
-    );
-
-    this.aboutSectionObserver.observe(aboutSection);
+    window.addEventListener('scroll', this.scheduleAboutSectionScrollAnimationUpdate, {
+      passive: true,
+    });
+    window.addEventListener('resize', this.scheduleAboutSectionScrollAnimationUpdate, {
+      passive: true,
+    });
+    this.scheduleAboutSectionScrollAnimationUpdate();
   }
 
   private destroyAboutSectionScrollAnimation(): void {
-    this.aboutSectionObserver?.disconnect();
-    this.aboutSectionObserver = null;
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    window.removeEventListener('scroll', this.scheduleAboutSectionScrollAnimationUpdate);
+    window.removeEventListener('resize', this.scheduleAboutSectionScrollAnimationUpdate);
+
+    if (this.aboutSectionAnimationFrameId !== null) {
+      window.cancelAnimationFrame(this.aboutSectionAnimationFrameId);
+      this.aboutSectionAnimationFrameId = null;
+    }
+
+    const aboutSection: HTMLElement | null = document.getElementById('about');
+    aboutSection?.style.removeProperty('--about-scroll-progress');
   }
 
   private destroyNameGradientScrollAnimation(): void {
@@ -472,6 +449,46 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       '--hero-section-min-height',
       `${Math.ceil(this.lockedHeroSectionMinHeight)}px`,
     );
+  }
+
+  private updateAboutSectionScrollProgress(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const aboutSection: HTMLElement | null = document.getElementById('about');
+    if (aboutSection === null) {
+      return;
+    }
+
+    const sectionRect: DOMRect = aboutSection.getBoundingClientRect();
+    const viewportHeight: number = window.innerHeight || 1;
+    const startY: number = viewportHeight * 0.96;
+    const endY: number = viewportHeight * 0.46;
+    const totalDistance: number = Math.max(startY - endY, 1);
+    const rawProgress: number = (startY - sectionRect.top) / totalDistance;
+    const clampedProgress: number = Math.min(Math.max(rawProgress, 0), 1);
+
+    aboutSection.style.setProperty('--about-scroll-progress', clampedProgress.toFixed(4));
+  }
+
+  private updateProjectEntryRevealProgress(): void {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    const projectEntries: NodeListOf<HTMLElement> = document.querySelectorAll('.project-entry');
+    const viewportHeight: number = window.innerHeight || 1;
+    const startY: number = viewportHeight * 0.98;
+    const endY: number = viewportHeight * 0.56;
+    const totalDistance: number = Math.max(startY - endY, 1);
+
+    projectEntries.forEach((entry: HTMLElement): void => {
+      const entryRect: DOMRect = entry.getBoundingClientRect();
+      const rawProgress: number = (startY - entryRect.top) / totalDistance;
+      const clampedProgress: number = Math.min(Math.max(rawProgress, 0), 1);
+      entry.style.setProperty('--project-entry-progress', clampedProgress.toFixed(4));
+    });
   }
 
   private calculateAge(birthDateString: string): number {

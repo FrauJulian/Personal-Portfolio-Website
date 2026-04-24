@@ -69,7 +69,7 @@
                 [src]="currentPortraitHighlight.image"
                 width="560"
                 height="420"
-                [alt]="global.firstname + ' highlight'"
+                [alt]="currentPortraitHighlight.text + ' Image'"
               />
               @if (currentPortraitHighlightIndex === 0) {
                 <span class="portrait-click-hint">Click me!</span>
@@ -82,12 +82,7 @@
     </div>
   </section>
 
-  <section
-    id="about"
-    class="story-section panel about-scroll-anim-enabled"
-    [class.about-scroll-in-view]="isAboutSectionInView"
-    [class.about-scroll-anim-ready]="isAboutSectionAnimationReady"
-  >
+  <section id="about" class="story-section panel about-scroll-anim-enabled">
     <div class="section-heading">
       <p class="eyebrow">About me</p>
     </div>
