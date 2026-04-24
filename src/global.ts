@@ -4,11 +4,18 @@ export interface PortfolioProject {
   description: string;
   languages: string[];
   icon?: string;
+  iconWidth?: number;
+  iconHeight?: number;
   CircleIcon?: boolean;
 }
 
 export interface PortraitHighlight {
   image: string;
+  avifSrcset: string;
+  webpSrcset: string;
+  width: number;
+  height: number;
+  alt: string;
   text: string;
 }
 
@@ -74,27 +81,69 @@ export const global: Global = {
   ],
   portraitHighlights: [
     {
-      image: 'assets/portrait/me.png',
+      image: 'assets/optimized/portrait/me-960.jpg',
+      avifSrcset:
+        'assets/optimized/portrait/me-480.avif 480w, assets/optimized/portrait/me-720.avif 720w, assets/optimized/portrait/me-960.avif 900w',
+      webpSrcset:
+        'assets/optimized/portrait/me-480.webp 480w, assets/optimized/portrait/me-720.webp 720w, assets/optimized/portrait/me-960.webp 900w',
+      width: 900,
+      height: 1154,
+      alt: 'Portrait of Julian Lechner',
       text: 'ME',
     },
     {
-      image: 'assets/portrait/love.jpg',
+      image: 'assets/optimized/portrait/love-960.jpg',
+      avifSrcset:
+        'assets/optimized/portrait/love-480.avif 480w, assets/optimized/portrait/love-720.avif 720w, assets/optimized/portrait/love-960.avif 960w',
+      webpSrcset:
+        'assets/optimized/portrait/love-480.webp 480w, assets/optimized/portrait/love-720.webp 720w, assets/optimized/portrait/love-960.webp 960w',
+      width: 960,
+      height: 1065,
+      alt: 'Julian with his partner',
       text: 'My Love',
     },
     {
-      image: 'assets/portrait/scuba.jpg',
+      image: 'assets/optimized/portrait/scuba-960.jpg',
+      avifSrcset:
+        'assets/optimized/portrait/scuba-480.avif 480w, assets/optimized/portrait/scuba-720.avif 720w, assets/optimized/portrait/scuba-960.avif 960w',
+      webpSrcset:
+        'assets/optimized/portrait/scuba-480.webp 480w, assets/optimized/portrait/scuba-720.webp 720w, assets/optimized/portrait/scuba-960.webp 960w',
+      width: 960,
+      height: 720,
+      alt: 'Julian scuba diving',
       text: 'Scuba Diving',
     },
     {
-      image: 'assets/portrait/trains.jpg',
+      image: 'assets/optimized/portrait/trains-960.jpg',
+      avifSrcset:
+        'assets/optimized/portrait/trains-480.avif 480w, assets/optimized/portrait/trains-720.avif 720w, assets/optimized/portrait/trains-960.avif 960w',
+      webpSrcset:
+        'assets/optimized/portrait/trains-480.webp 480w, assets/optimized/portrait/trains-720.webp 720w, assets/optimized/portrait/trains-960.webp 960w',
+      width: 960,
+      height: 1275,
+      alt: 'Julian traveling by train',
       text: 'Trains',
     },
     {
-      image: 'assets/portrait/traveling.jpg',
+      image: 'assets/optimized/portrait/traveling-960.jpg',
+      avifSrcset:
+        'assets/optimized/portrait/traveling-480.avif 480w, assets/optimized/portrait/traveling-720.avif 720w, assets/optimized/portrait/traveling-960.avif 960w',
+      webpSrcset:
+        'assets/optimized/portrait/traveling-480.webp 480w, assets/optimized/portrait/traveling-720.webp 720w, assets/optimized/portrait/traveling-960.webp 960w',
+      width: 960,
+      height: 720,
+      alt: 'Julian traveling',
       text: 'Traveling',
     },
     {
-      image: 'assets/portrait/culture.jpg',
+      image: 'assets/optimized/portrait/culture-960.jpg',
+      avifSrcset:
+        'assets/optimized/portrait/culture-480.avif 480w, assets/optimized/portrait/culture-720.avif 720w, assets/optimized/portrait/culture-960.avif 960w',
+      webpSrcset:
+        'assets/optimized/portrait/culture-480.webp 480w, assets/optimized/portrait/culture-720.webp 720w, assets/optimized/portrait/culture-960.webp 960w',
+      width: 960,
+      height: 723,
+      alt: 'Julian visiting cultural landmarks',
       text: 'Culture',
     },
   ],
@@ -114,7 +163,9 @@ export const global: Global = {
       description:
         'A support system integrating various platforms and media to offer employees a unified overview.',
       languages: ['TypeScript'],
-      icon: 'https://gerlach-systems.de/IMAGES/SYNHOST/SYNHOST_DARK.png',
+      icon: 'assets/logos/synhost-dark.webp',
+      iconWidth: 230,
+      iconHeight: 136,
       CircleIcon: false,
     },
     {
@@ -123,7 +174,9 @@ export const global: Global = {
       description:
         'A support system integrating various platforms and media to offer employees a unified overview.',
       languages: ['TypeScript'],
-      icon: 'https://gerlach-systems.de/IMAGES/SYNHOST/SYNHOST_DARK.png',
+      icon: 'assets/logos/synhost-dark.webp',
+      iconWidth: 230,
+      iconHeight: 136,
       CircleIcon: false,
     },
     {
@@ -132,7 +185,9 @@ export const global: Global = {
       description:
         'A support system integrating various platforms and media to offer employees a unified overview.',
       languages: ['TypeScript'],
-      icon: 'https://gerlach-systems.de/IMAGES/SYNHOST/SYNHOST_DARK.png',
+      icon: 'assets/logos/synhost-dark.webp',
+      iconWidth: 230,
+      iconHeight: 136,
       CircleIcon: false,
     },
   ],

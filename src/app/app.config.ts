@@ -1,7 +1,7 @@
 import type { ApplicationConfig } from '@angular/core';
-import { importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
 
@@ -16,6 +16,5 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideClientHydration(withEventReplay()),
-    importProvidersFrom(BrowserModule),
   ],
 };

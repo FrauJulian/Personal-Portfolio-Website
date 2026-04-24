@@ -22,7 +22,6 @@ import { FooterComponent } from '../footer/footer.component';
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly zone = inject(NgZone);
-  private preloadedImages: HTMLImageElement[] = [];
   private tallestPortraitAspectRatio: number | null = null;
   private lockedHeroSectionMinHeight: number = 0;
   private projectEntryObserver: IntersectionObserver | null = null;
@@ -82,7 +81,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.preloadImageAssets();
+    this.initPortraitAspectRatio();
     this.initNameGradientScrollAnimation();
 
     this.zone.runOutsideAngular((): void => {
@@ -181,88 +180,21 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scrollToElementById('contact-links', this.getResponsiveScrollOffset(0.05));
   }
 
-  private preloadImageAssets(): void {
-    if (typeof window === 'undefined') {
-      return;
-    }
+  private initPortraitAspectRatio(): void {
+    const minAspectRatio: number = this.portraitHighlights.reduce(
+      (minRatio: number, highlight: PortraitHighlight): number => {
+        if (highlight.width <= 0 || highlight.height <= 0) {
+          return minRatio;
+        }
 
-    const projectIcons: string[] = this.projects
-      .map((project: PortfolioProject): string | undefined => project.icon)
-      .filter((icon: string | undefined): icon is string => Boolean(icon));
-
-    const uniqueImageUrls: string[] = Array.from(
-      new Set<string>([
-        ...this.portraitHighlights.map((highlight: PortraitHighlight): string => highlight.image),
-        ...projectIcons,
-      ]),
+        const currentRatio: number = highlight.width / highlight.height;
+        return minRatio === 0 ? currentRatio : Math.min(minRatio, currentRatio);
+      },
+      0,
     );
 
-    this.preloadedImages = uniqueImageUrls.map((url: string): HTMLImageElement => {
-      const image = new Image();
-      image.decoding = 'async';
-      image.loading = 'eager';
-      image.src = url;
-      return image;
-    });
-
-    this.syncHeroHeightToLargestPortraitImage();
-  }
-
-  private syncHeroHeightToLargestPortraitImage(): void {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const portraitImageUrls: Set<string> = new Set<string>(
-      this.portraitHighlights.map(
-        (highlight: PortraitHighlight): string =>
-          new URL(highlight.image, window.location.href).href,
-      ),
-    );
-
-    const portraitImages: HTMLImageElement[] = this.preloadedImages.filter(
-      (image: HTMLImageElement): boolean => portraitImageUrls.has(image.src),
-    );
-
-    if (portraitImages.length === 0) {
-      return;
-    }
-
-    const finalizeAspectRatio = (): void => {
-      const minAspectRatio: number = portraitImages.reduce(
-        (minRatio: number, image: HTMLImageElement): number => {
-          if (image.naturalWidth === 0 || image.naturalHeight === 0) {
-            return minRatio;
-          }
-
-          const currentRatio: number = image.naturalWidth / image.naturalHeight;
-          return minRatio === 0 ? currentRatio : Math.min(minRatio, currentRatio);
-        },
-        0,
-      );
-
-      if (minAspectRatio > 0) {
-        this.tallestPortraitAspectRatio = minAspectRatio;
-        this.scheduleHeroSectionHeightUpdate();
-      }
-    };
-
-    let pendingLoads: number = portraitImages.length;
-    const onImageSettled = (): void => {
-      pendingLoads -= 1;
-      if (pendingLoads === 0) {
-        finalizeAspectRatio();
-      }
-    };
-
-    for (const image of portraitImages) {
-      if (image.complete) {
-        onImageSettled();
-        continue;
-      }
-
-      image.addEventListener('load', onImageSettled, { once: true });
-      image.addEventListener('error', onImageSettled, { once: true });
+    if (minAspectRatio > 0) {
+      this.tallestPortraitAspectRatio = minAspectRatio;
     }
   }
 

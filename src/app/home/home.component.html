@@ -64,13 +64,28 @@
             [title]="portraitHighlights.length > 1 ? 'Show next image' : 'Single image'"
           >
             <div class="portrait-media" [class.portrait-media-switching]="isPortraitSwitching">
-              <img
-                class="hero-feature-image"
-                [src]="currentPortraitHighlight.image"
-                width="560"
-                height="420"
-                [alt]="global.firstname + ' highlight'"
-              />
+              <picture>
+                <source
+                  type="image/avif"
+                  [attr.srcset]="currentPortraitHighlight.avifSrcset"
+                  sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 900px) min(560px, calc(100vw - 2rem)), 560px"
+                />
+                <source
+                  type="image/webp"
+                  [attr.srcset]="currentPortraitHighlight.webpSrcset"
+                  sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 900px) min(560px, calc(100vw - 2rem)), 560px"
+                />
+                <img
+                  class="hero-feature-image"
+                  [src]="currentPortraitHighlight.image"
+                  [attr.width]="currentPortraitHighlight.width"
+                  [attr.height]="currentPortraitHighlight.height"
+                  [alt]="currentPortraitHighlight.alt"
+                  fetchpriority="high"
+                  loading="eager"
+                  decoding="async"
+                />
+              </picture>
               @if (currentPortraitHighlightIndex === 0) {
                 <span class="portrait-click-hint">Click me!</span>
               }
@@ -148,7 +163,11 @@
               class="project-icon"
               [class.project-icon-circle]="project.CircleIcon !== false"
               [src]="project.icon"
+              [attr.width]="project.iconWidth ?? 108"
+              [attr.height]="project.iconHeight ?? 108"
               [alt]="project.title + ' icon'"
+              loading="lazy"
+              decoding="async"
             />
           }
 
