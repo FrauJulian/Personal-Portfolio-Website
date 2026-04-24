@@ -6,7 +6,7 @@
 
 ## 👂 Languages/Framework/Packages:
 
-- Angular v19
+- Angular v21
 - TypeScript
 - SCSS
 
