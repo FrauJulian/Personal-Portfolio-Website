@@ -149,6 +149,7 @@ hr {
   width: calc(var(--name-pride-reveal) * (100% + 0.14em));
   overflow: hidden;
   color: transparent;
+  background-size: 100% 100%;
   background: linear-gradient(
     to right,
     #e40303 0%,
@@ -163,10 +164,7 @@ hr {
     #004dff 83.33%,
     #750787 83.33%,
     #750787 100%
-  );
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-position: 0 50%;
+  ) no-repeat 0 50%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -296,6 +294,7 @@ hr {
   inset: -2px -8px -10px -2px;
   z-index: -2;
   filter: blur(1.6px) saturate(0.88);
+  background-size: 100% 100%;
   background: linear-gradient(
     to right,
     #e40303 0%,
@@ -310,9 +309,7 @@ hr {
     #004dff 83.33%,
     #750787 83.33%,
     #750787 100%
-  );
-  background-size: 100% 100%;
-  background-position: 0 50%;
+  ) 0 50%;
   transform: translate(2px, 2px);
 }
 
