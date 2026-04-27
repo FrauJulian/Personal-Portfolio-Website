@@ -25,3 +25,6 @@ jobs:
 
       - name: run Build Validation
         run: npm run check
+
+      - name: run Build Validation
+        run: npm run test
