@@ -35,11 +35,11 @@ export class ImprintComponent implements OnInit {
 
   private normalizeText(value: string): string {
     return value
-      .replaceAll('ÃŸ', 'ß')
-      .replaceAll('Ã¶', 'ö')
-      .replaceAll('Ã„', 'Ä')
-      .replaceAll('Ã¤', 'ä')
-      .replaceAll('Ãœ', 'Ü')
-      .replaceAll('Ã¼', 'ü');
+      .replaceAll('ß', 'ß')
+      .replaceAll('ö', 'ö')
+      .replaceAll('Ä', 'Ä')
+      .replaceAll('ä', 'ä')
+      .replaceAll('Ü', 'Ü')
+      .replaceAll('ü', 'ü');
   }
 }
