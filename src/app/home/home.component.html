@@ -66,11 +66,14 @@
             <div class="portrait-media" [class.portrait-media-switching]="isPortraitSwitching">
               <img
                 class="hero-feature-image"
-                [src]="currentPortraitHighlight.image"
+                [ngSrc]="currentPortraitHighlight.image"
                 [attr.srcset]="currentPortraitHighlight.imageSrcset"
                 [attr.sizes]="currentPortraitHighlight.imageSizes"
-                width="560"
-                height="420"
+                [width]="currentPortraitHighlight.imageWidth"
+                [height]="currentPortraitHighlight.imageHeight"
+                disableOptimizedSrcset
+                priority
+                decoding="async"
                 [alt]="currentPortraitHighlight.text + ' Image'"
               />
               @if (currentPortraitHighlightIndex === 0) {
@@ -144,9 +147,12 @@
             <img
               class="project-icon"
               [class.project-icon-circle]="project.CircleIcon !== false"
-              [src]="project.icon"
+              [ngSrc]="project.icon"
               [attr.srcset]="project.iconSrcset ?? null"
               [attr.sizes]="project.iconSizes ?? null"
+              width="216"
+              height="216"
+              disableOptimizedSrcset
               [alt]="project.title + ' icon'"
             />
           }

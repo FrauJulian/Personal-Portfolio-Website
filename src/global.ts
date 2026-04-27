@@ -13,6 +13,8 @@ export interface PortraitHighlight {
   image: string;
   imageSrcset: string;
   imageSizes: string;
+  imageWidth: number;
+  imageHeight: number;
   text: string;
 }
 
@@ -80,49 +82,61 @@ export const global: Global = {
     {
       image: 'assets/optimized/portrait/me.webp',
       imageSrcset:
-        'assets/optimized/portrait/me-320.webp 320w, assets/optimized/portrait/me-480.webp 480w, assets/optimized/portrait/me-640.webp 640w, assets/optimized/portrait/me.webp 900w',
+        'assets/optimized/portrait/me-320.webp 320w, assets/optimized/portrait/me-480.webp 480w, assets/optimized/portrait/me.webp 640w',
       imageSizes:
         '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+      imageWidth: 640,
+      imageHeight: 769,
       text: 'ME',
     },
     {
       image: 'assets/optimized/portrait/love.webp',
       imageSrcset:
-        'assets/optimized/portrait/love-320.webp 320w, assets/optimized/portrait/love-480.webp 480w, assets/optimized/portrait/love-640.webp 640w, assets/optimized/portrait/love.webp 900w',
+        'assets/optimized/portrait/love-320.webp 320w, assets/optimized/portrait/love-480.webp 480w, assets/optimized/portrait/love.webp 640w',
       imageSizes:
         '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+      imageWidth: 640,
+      imageHeight: 710,
       text: 'My Love',
     },
     {
       image: 'assets/optimized/portrait/scuba.webp',
       imageSrcset:
-        'assets/optimized/portrait/scuba-320.webp 320w, assets/optimized/portrait/scuba-480.webp 480w, assets/optimized/portrait/scuba-640.webp 640w, assets/optimized/portrait/scuba.webp 900w',
+        'assets/optimized/portrait/scuba-320.webp 320w, assets/optimized/portrait/scuba-480.webp 480w, assets/optimized/portrait/scuba.webp 640w',
       imageSizes:
         '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+      imageWidth: 640,
+      imageHeight: 480,
       text: 'Scuba Diving',
     },
     {
       image: 'assets/optimized/portrait/trains.webp',
       imageSrcset:
-        'assets/optimized/portrait/trains-320.webp 320w, assets/optimized/portrait/trains-480.webp 480w, assets/optimized/portrait/trains-640.webp 640w, assets/optimized/portrait/trains.webp 900w',
+        'assets/optimized/portrait/trains-320.webp 320w, assets/optimized/portrait/trains-480.webp 480w, assets/optimized/portrait/trains.webp 640w',
       imageSizes:
         '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+      imageWidth: 640,
+      imageHeight: 850,
       text: 'Trains',
     },
     {
       image: 'assets/optimized/portrait/traveling.webp',
       imageSrcset:
-        'assets/optimized/portrait/traveling-320.webp 320w, assets/optimized/portrait/traveling-480.webp 480w, assets/optimized/portrait/traveling-640.webp 640w, assets/optimized/portrait/traveling.webp 900w',
+        'assets/optimized/portrait/traveling-320.webp 320w, assets/optimized/portrait/traveling-480.webp 480w, assets/optimized/portrait/traveling.webp 640w',
       imageSizes:
         '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+      imageWidth: 640,
+      imageHeight: 480,
       text: 'Traveling',
     },
     {
       image: 'assets/optimized/portrait/culture.webp',
       imageSrcset:
-        'assets/optimized/portrait/culture-320.webp 320w, assets/optimized/portrait/culture-480.webp 480w, assets/optimized/portrait/culture-640.webp 640w, assets/optimized/portrait/culture.webp 900w',
+        'assets/optimized/portrait/culture-320.webp 320w, assets/optimized/portrait/culture-480.webp 480w, assets/optimized/portrait/culture.webp 640w',
       imageSizes:
         '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+      imageWidth: 640,
+      imageHeight: 482,
       text: 'Culture',
     },
   ],

@@ -1,5 +1,6 @@
 import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { Component, inject, NgZone } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 import { faArrowRight, faArrowDown, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import type { IconDefinition } from '@fortawesome/angular-fontawesome';
@@ -16,17 +17,13 @@ import { FooterComponent } from '../footer/footer.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FooterComponent, FaIconComponent],
+  imports: [FooterComponent, FaIconComponent, NgOptimizedImage],
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly zone = inject(NgZone);
-  private preloadedImages: HTMLImageElement[] = [];
-  private tallestPortraitAspectRatio: number | null = null;
-  private lockedHeroSectionMinHeight: number = 0;
   private scrollAnimationFrameId: number | null = null;
-  private heroHeightAnimationFrameId: number | null = null;
   private projectEntryAnimationFrameId: number | null = null;
   private aboutSectionAnimationFrameId: number | null = null;
   private readonly scheduleNameGradientUpdate: () => void = (): void => {
@@ -37,17 +34,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scrollAnimationFrameId = window.requestAnimationFrame((): void => {
       this.scrollAnimationFrameId = null;
       this.updateNameGradientProgress();
-    });
-  };
-  private readonly scheduleHeroSectionHeightUpdate: () => void = (): void => {
-    if (this.heroHeightAnimationFrameId !== null || typeof window === 'undefined') {
-      return;
-    }
-
-    this.heroHeightAnimationFrameId = window.requestAnimationFrame((): void => {
-      this.heroHeightAnimationFrameId = null;
-      this.lockedHeroSectionMinHeight = 0;
-      this.updateHeroSectionMinHeight();
     });
   };
   private readonly scheduleProjectEntryRevealUpdate: () => void = (): void => {
@@ -100,7 +86,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.preloadImageAssets();
     this.initNameGradientScrollAnimation();
 
     this.zone.runOutsideAngular((): void => {
@@ -199,91 +184,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.scrollToElementById('contact-links', this.getResponsiveScrollOffset(0.05));
   }
 
-  private preloadImageAssets(): void {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const projectIcons: string[] = this.projects
-      .map((project: PortfolioProject): string | undefined => project.icon)
-      .filter((icon: string | undefined): icon is string => Boolean(icon));
-
-    const uniqueImageUrls: string[] = Array.from(
-      new Set<string>([
-        ...this.portraitHighlights.map((highlight: PortraitHighlight): string => highlight.image),
-        ...projectIcons,
-      ]),
-    );
-
-    this.preloadedImages = uniqueImageUrls.map((url: string): HTMLImageElement => {
-      const image = new Image();
-      image.decoding = 'async';
-      image.loading = 'eager';
-      image.src = url;
-      return image;
-    });
-
-    this.syncHeroHeightToLargestPortraitImage();
-  }
-
-  private syncHeroHeightToLargestPortraitImage(): void {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const portraitImageUrls: Set<string> = new Set<string>(
-      this.portraitHighlights.map(
-        (highlight: PortraitHighlight): string =>
-          new URL(highlight.image, window.location.href).href,
-      ),
-    );
-
-    const portraitImages: HTMLImageElement[] = this.preloadedImages.filter(
-      (image: HTMLImageElement): boolean => portraitImageUrls.has(image.src),
-    );
-
-    if (portraitImages.length === 0) {
-      return;
-    }
-
-    const finalizeAspectRatio = (): void => {
-      const minAspectRatio: number = portraitImages.reduce(
-        (minRatio: number, image: HTMLImageElement): number => {
-          if (image.naturalWidth === 0 || image.naturalHeight === 0) {
-            return minRatio;
-          }
-
-          const currentRatio: number = image.naturalWidth / image.naturalHeight;
-          return minRatio === 0 ? currentRatio : Math.min(minRatio, currentRatio);
-        },
-        0,
-      );
-
-      if (minAspectRatio > 0) {
-        this.tallestPortraitAspectRatio = minAspectRatio;
-        this.scheduleHeroSectionHeightUpdate();
-      }
-    };
-
-    let pendingLoads: number = portraitImages.length;
-    const onImageSettled = (): void => {
-      pendingLoads -= 1;
-      if (pendingLoads === 0) {
-        finalizeAspectRatio();
-      }
-    };
-
-    for (const image of portraitImages) {
-      if (image.complete) {
-        onImageSettled();
-        continue;
-      }
-
-      image.addEventListener('load', onImageSettled, { once: true });
-      image.addEventListener('error', onImageSettled, { once: true });
-    }
-  }
-
   private initNameGradientScrollAnimation(): void {
     if (typeof window === 'undefined') {
       return;
@@ -291,9 +191,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     window.addEventListener('scroll', this.scheduleNameGradientUpdate, { passive: true });
     window.addEventListener('resize', this.scheduleNameGradientUpdate, { passive: true });
-    window.addEventListener('resize', this.scheduleHeroSectionHeightUpdate, { passive: true });
     this.scheduleNameGradientUpdate();
-    this.scheduleHeroSectionHeightUpdate();
   }
 
   private initProjectEntryRevealObserver(): void {
@@ -363,20 +261,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     window.removeEventListener('scroll', this.scheduleNameGradientUpdate);
     window.removeEventListener('resize', this.scheduleNameGradientUpdate);
-    window.removeEventListener('resize', this.scheduleHeroSectionHeightUpdate);
 
     if (this.scrollAnimationFrameId !== null) {
       window.cancelAnimationFrame(this.scrollAnimationFrameId);
       this.scrollAnimationFrameId = null;
     }
-    if (this.heroHeightAnimationFrameId !== null) {
-      window.cancelAnimationFrame(this.heroHeightAnimationFrameId);
-      this.heroHeightAnimationFrameId = null;
-    }
 
     document.documentElement.style.removeProperty('--name-pride-progress');
-    document.documentElement.style.removeProperty('--hero-section-min-height');
-    this.lockedHeroSectionMinHeight = 0;
   }
 
   private updateNameGradientProgress(): void {
@@ -403,57 +294,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         : acceleratedProgress;
 
     root.style.setProperty('--name-pride-progress', progress.toFixed(4));
-  }
-
-  private updateHeroSectionMinHeight(): void {
-    if (typeof window === 'undefined' || this.tallestPortraitAspectRatio === null) {
-      return;
-    }
-
-    const heroSection: HTMLElement | null = document.querySelector('.hero-section');
-    const heroCopy: HTMLElement | null = document.querySelector('.hero-copy');
-    const portraitHighlight: HTMLElement | null = document.querySelector('.portrait-highlight');
-    const portraitButton: HTMLElement | null = document.querySelector('.portrait-highlight-button');
-
-    if (
-      heroSection === null ||
-      heroCopy === null ||
-      portraitHighlight === null ||
-      portraitButton === null
-    ) {
-      return;
-    }
-
-    const buttonWidth: number = portraitButton.getBoundingClientRect().width;
-    if (buttonWidth <= 0) {
-      return;
-    }
-
-    const maxMediaHeight: number = buttonWidth / this.tallestPortraitAspectRatio;
-    const currentButtonHeight: number = portraitButton.getBoundingClientRect().height;
-    const currentHighlightHeight: number = portraitHighlight.getBoundingClientRect().height;
-    const staticHighlightOverhead: number = Math.max(
-      currentHighlightHeight - currentButtonHeight,
-      0,
-    );
-    const requiredHighlightHeight: number = maxMediaHeight + staticHighlightOverhead;
-    const requiredContentHeight: number = Math.max(
-      heroCopy.getBoundingClientRect().height,
-      requiredHighlightHeight,
-    );
-    const heroSectionStyles: CSSStyleDeclaration = window.getComputedStyle(heroSection);
-    const paddingTop: number = Number.parseFloat(heroSectionStyles.paddingTop) || 0;
-    const paddingBottom: number = Number.parseFloat(heroSectionStyles.paddingBottom) || 0;
-    const requiredSectionMinHeight: number = requiredContentHeight + paddingTop + paddingBottom;
-    this.lockedHeroSectionMinHeight = Math.max(
-      this.lockedHeroSectionMinHeight,
-      requiredSectionMinHeight,
-    );
-
-    document.documentElement.style.setProperty(
-      '--hero-section-min-height',
-      `${Math.ceil(this.lockedHeroSectionMinHeight)}px`,
-    );
   }
 
   private updateAboutSectionScrollProgress(): void {
