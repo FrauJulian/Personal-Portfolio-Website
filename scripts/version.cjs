@@ -20,7 +20,7 @@ function writeJson(location, value) {
 }
 
 function getSelectedMode() {
-  let selectedModes = process.argv.slice(2).filter((value) => MODES.has(value));
+  const selectedModes = process.argv.slice(2).filter((value) => MODES.has(value));
 
   if (selectedModes.length !== 1) {
     throw new Error('Use exactly one mode: --set, --ensure, --check or --place.');
@@ -30,7 +30,7 @@ function getSelectedMode() {
 }
 
 function getVersionParts(version) {
-  let parts = String(version).split('.');
+  const parts = String(version).split('.');
 
   if (parts.length < 3) {
     throw new Error(`Version "${version}" does not follow the expected major.minor.build format.`);
@@ -40,12 +40,12 @@ function getVersionParts(version) {
 }
 
 function getVersionPrefix(version) {
-  let [major, minor] = getVersionParts(version);
+  const [major, minor] = getVersionParts(version);
   return `${major}.${minor}.`;
 }
 
 function getBuildPart(version) {
-  let [, , buildPart] = getVersionParts(version);
+  const [, , buildPart] = getVersionParts(version);
   return buildPart;
 }
 
@@ -54,7 +54,7 @@ function hasPlaceholderVersion(version) {
 }
 
 function hasResolvedVersion(version) {
-  let buildPart = getBuildPart(version);
+  const buildPart = getBuildPart(version);
   return buildPart !== VERSION_PLACEHOLDER && RESOLVED_BUILD_PATTERN.test(buildPart);
 }
 
@@ -63,7 +63,7 @@ function getExplicitVersion() {
 }
 
 function getGitHash() {
-  let explicitHash = process.env.BUILD_GIT_HASH?.trim() || process.env.GITHUB_SHA?.trim();
+  const explicitHash = process.env.BUILD_GIT_HASH?.trim() || process.env.GITHUB_SHA?.trim();
 
   if (explicitHash) {
     return explicitHash.slice(0, 7);
@@ -81,18 +81,18 @@ function getGitHash() {
 }
 
 function getBuildNumber() {
-  let now = new Date();
-  let year = String(now.getFullYear()).slice(-2);
-  let startOfYear = new Date(now.getFullYear(), 0, 1);
-  let dayOfYear = Math.floor((now - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
-  let hours = String(now.getHours()).padStart(2, '0');
-  let minutes = String(now.getMinutes()).padStart(2, '0');
+  const now = new Date();
+  const year = String(now.getFullYear()).slice(-2);
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const dayOfYear = Math.floor((now - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
 
   return `${year}${String(dayOfYear).padStart(3, '0')}${hours}${minutes}`;
 }
 
 function resolveVersion(currentVersion) {
-  let explicitVersion = getExplicitVersion();
+  const explicitVersion = getExplicitVersion();
 
   if (explicitVersion) {
     return explicitVersion;
@@ -102,7 +102,7 @@ function resolveVersion(currentVersion) {
 }
 
 function isAlreadyEnsured(currentVersion) {
-  let explicitVersion = getExplicitVersion();
+  const explicitVersion = getExplicitVersion();
 
   if (explicitVersion) {
     return currentVersion === explicitVersion;
@@ -112,7 +112,7 @@ function isAlreadyEnsured(currentVersion) {
 }
 
 function writeResolvedVersion(resolvedVersion) {
-  let packageJson = readJson(PACKAGE_JSON_PATH);
+  const packageJson = readJson(PACKAGE_JSON_PATH);
   packageJson.version = resolvedVersion;
   writeJson(PACKAGE_JSON_PATH, packageJson);
 
@@ -120,7 +120,7 @@ function writeResolvedVersion(resolvedVersion) {
     return;
   }
 
-  let packageLock = readJson(PACKAGE_LOCK_PATH);
+  const packageLock = readJson(PACKAGE_LOCK_PATH);
   packageLock.version = resolvedVersion;
 
   if (packageLock.packages && packageLock.packages['']) {
@@ -161,7 +161,7 @@ function runEnsure(currentVersion) {
 }
 
 function runSet(currentVersion) {
-  let resolvedVersion = resolveVersion(currentVersion);
+  const resolvedVersion = resolveVersion(currentVersion);
   writeResolvedVersion(resolvedVersion);
   console.log(`Version set to: ${resolvedVersion}`);
 }
@@ -172,10 +172,10 @@ function runSetPlace() {
 }
 
 try {
-  let selectedMode = getSelectedMode();
-  let packageJson = readJson(PACKAGE_JSON_PATH);
-  let packageVersion = String(packageJson.version);
-  let currentVersion = String(packageJson.currentVersion);
+  const selectedMode = getSelectedMode();
+  const packageJson = readJson(PACKAGE_JSON_PATH);
+  const packageVersion = String(packageJson.version);
+  const currentVersion = String(packageJson.currentVersion);
 
   switch (selectedMode) {
     case '--check':

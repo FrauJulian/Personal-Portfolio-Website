@@ -4,11 +4,13 @@
 
 ![grafik](https://github.com/user-attachments/assets/65f1e491-62ab-4b16-a39c-5f04377ce5cb)
 
-## 👂 Languages/Framework/Packages:
+## 👂 Languages / Framework / Packages
 
-- Angular v21
+- Angular v21 (with SSR)
 - TypeScript
 - SCSS
+- Angular Material
+- FontAwesome
 
 ## 💻 Development
 
@@ -21,18 +23,12 @@ npm run dev
 ### Building
 
 ```bash
-npm run buildDevelopment
-```
-
-or for Production Build
-
-```bash
-npm run buildProduction
+npm run build
 ```
 
 This will compile your project and store the build artifacts in the `dist/`
-directory. By default, the production build optimizes your application for
-performance and speed.
+directory. The production build optimizes your application for performance and
+speed.
 
 ### Start compiled Project
 
@@ -40,28 +36,32 @@ performance and speed.
 npm run start
 ```
 
-## Running unit tests
+## 🔍 Code Quality
+
+### Lint & Format check
+
+```bash
+npm run check
+```
+
+### Auto-fix lint & format issues
+
+```bash
+npm run fix
+```
+
+## 🧪 Running Unit Tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test
 runner, use the following command:
 
 ```bash
-nom run test
+npm run test
 ```
-
-## Update Packages/Libraries
-
-```bash
-npm run updatePackageVersions
-```
-
-## 📋 Credits:
-
-~ made by [**FrauJulian**](https://fraujulian.xyz/).
 
 ## 🤝 Enjoy?
 
-Give it a star ⭐ on
-[github](https://github.com/FrauJulian/discord-audio-stream)!
+~ made by [**FrauJulian**](https://fraujulian.xyz/). Give it a star ⭐ on
+[GitHub](https://github.com/FrauJulian/Personal-Portfolio-Website)!
 
 ### Greetings from Austria! ⛰️

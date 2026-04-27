@@ -50,6 +50,8 @@ const config = [
 
       /* Base */
       'no-debugger': 'warn',
+      'no-var': 'error',
+      'prefer-const': ['error', { destructuring: 'all' }],
 
       /* TypeScript */
       'unused-imports/no-unused-imports': 'warn',
