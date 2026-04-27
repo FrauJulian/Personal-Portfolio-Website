@@ -67,6 +67,8 @@
               <img
                 class="hero-feature-image"
                 [src]="currentPortraitHighlight.image"
+                [attr.srcset]="currentPortraitHighlight.imageSrcset"
+                [attr.sizes]="currentPortraitHighlight.imageSizes"
                 width="560"
                 height="420"
                 [alt]="currentPortraitHighlight.text + ' Image'"
@@ -143,6 +145,8 @@
               class="project-icon"
               [class.project-icon-circle]="project.CircleIcon !== false"
               [src]="project.icon"
+              [attr.srcset]="project.iconSrcset ?? null"
+              [attr.sizes]="project.iconSizes ?? null"
               [alt]="project.title + ' icon'"
             />
           }

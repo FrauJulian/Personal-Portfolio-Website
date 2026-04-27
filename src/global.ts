@@ -4,11 +4,15 @@ export interface PortfolioProject {
   description: string;
   languages: string[];
   icon?: string;
+  iconSrcset?: string;
+  iconSizes?: string;
   CircleIcon?: boolean;
 }
 
 export interface PortraitHighlight {
   image: string;
+  imageSrcset: string;
+  imageSizes: string;
   text: string;
 }
 
@@ -75,26 +79,50 @@ export const global: Global = {
   portraitHighlights: [
     {
       image: 'assets/optimized/portrait/me.webp',
+      imageSrcset:
+        'assets/optimized/portrait/me-320.webp 320w, assets/optimized/portrait/me-480.webp 480w, assets/optimized/portrait/me-640.webp 640w, assets/optimized/portrait/me.webp 900w',
+      imageSizes:
+        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
       text: 'ME',
     },
     {
       image: 'assets/optimized/portrait/love.webp',
+      imageSrcset:
+        'assets/optimized/portrait/love-320.webp 320w, assets/optimized/portrait/love-480.webp 480w, assets/optimized/portrait/love-640.webp 640w, assets/optimized/portrait/love.webp 900w',
+      imageSizes:
+        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
       text: 'My Love',
     },
     {
       image: 'assets/optimized/portrait/scuba.webp',
+      imageSrcset:
+        'assets/optimized/portrait/scuba-320.webp 320w, assets/optimized/portrait/scuba-480.webp 480w, assets/optimized/portrait/scuba-640.webp 640w, assets/optimized/portrait/scuba.webp 900w',
+      imageSizes:
+        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
       text: 'Scuba Diving',
     },
     {
       image: 'assets/optimized/portrait/trains.webp',
+      imageSrcset:
+        'assets/optimized/portrait/trains-320.webp 320w, assets/optimized/portrait/trains-480.webp 480w, assets/optimized/portrait/trains-640.webp 640w, assets/optimized/portrait/trains.webp 900w',
+      imageSizes:
+        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
       text: 'Trains',
     },
     {
       image: 'assets/optimized/portrait/traveling.webp',
+      imageSrcset:
+        'assets/optimized/portrait/traveling-320.webp 320w, assets/optimized/portrait/traveling-480.webp 480w, assets/optimized/portrait/traveling-640.webp 640w, assets/optimized/portrait/traveling.webp 900w',
+      imageSizes:
+        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
       text: 'Traveling',
     },
     {
       image: 'assets/optimized/portrait/culture.webp',
+      imageSrcset:
+        'assets/optimized/portrait/culture-320.webp 320w, assets/optimized/portrait/culture-480.webp 480w, assets/optimized/portrait/culture-640.webp 640w, assets/optimized/portrait/culture.webp 900w',
+      imageSizes:
+        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
       text: 'Culture',
     },
   ],
@@ -106,6 +134,9 @@ export const global: Global = {
         'I currently work primarily for the viennese company SobIT GmbH. This company develops software for the healthcare industry. - Development of modern desktop, mobile, and web applications to support healthcare delivery.',
       languages: ['TypeScript', 'C#', 'WPF', 'YML', 'XAML'],
       icon: 'assets/optimized/logos/sobit.webp',
+      iconSrcset:
+        'assets/optimized/logos/sobit-64.webp 64w, assets/optimized/logos/sobit-128.webp 128w, assets/optimized/logos/sobit.webp 216w',
+      iconSizes: '(max-width: 700px) 64px, 108px',
       CircleIcon: false,
     },
     {
@@ -114,7 +145,10 @@ export const global: Global = {
       description:
         'A support system integrating various platforms and media to offer employees a unified overview.',
       languages: ['TypeScript'],
-      icon: 'https://gerlach-systems.de/IMAGES/SYNHOST/SYNHOST_DARK.png',
+      icon: 'assets/optimized/logos/synhost.webp',
+      iconSrcset:
+        'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
+      iconSizes: '(max-width: 700px) 64px, 108px',
       CircleIcon: false,
     },
     {
@@ -123,7 +157,10 @@ export const global: Global = {
       description:
         'A support system integrating various platforms and media to offer employees a unified overview.',
       languages: ['TypeScript'],
-      icon: 'https://gerlach-systems.de/IMAGES/SYNHOST/SYNHOST_DARK.png',
+      icon: 'assets/optimized/logos/synhost.webp',
+      iconSrcset:
+        'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
+      iconSizes: '(max-width: 700px) 64px, 108px',
       CircleIcon: false,
     },
     {
@@ -132,7 +169,10 @@ export const global: Global = {
       description:
         'A support system integrating various platforms and media to offer employees a unified overview.',
       languages: ['TypeScript'],
-      icon: 'https://gerlach-systems.de/IMAGES/SYNHOST/SYNHOST_DARK.png',
+      icon: 'assets/optimized/logos/synhost.webp',
+      iconSrcset:
+        'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
+      iconSizes: '(max-width: 700px) 64px, 108px',
       CircleIcon: false,
     },
   ],

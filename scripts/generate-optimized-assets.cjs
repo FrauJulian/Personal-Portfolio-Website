@@ -53,14 +53,46 @@ function getProfile(relativePath) {
   }
 
   if (normalizedRelativePath.startsWith('logos/')) {
-    return { maxWidth: 640, quality: 90, alphaQuality: 92, nearLossless: true };
+    return { maxWidth: 216, quality: 78, alphaQuality: 88, variants: [64, 128, 216] };
   }
 
   if (normalizedRelativePath.startsWith('portrait/')) {
-    return { maxWidth: 1600, quality: 84, alphaQuality: 92 };
+    return { maxWidth: 900, quality: 82, alphaQuality: 90, variants: [128, 320, 480, 640, 900] };
   }
 
   return { maxWidth: 1600, quality: 82, alphaQuality: 92 };
+}
+
+function getTargetRelativePath(relativePath, width) {
+  const parsedPath = path.parse(relativePath);
+  const fileName =
+    width === undefined ? `${parsedPath.name}.webp` : `${parsedPath.name}-${width}.webp`;
+  return path.join(parsedPath.dir, fileName);
+}
+
+async function createWebpBuffer(inputBuffer, profile, width) {
+  const image = sharp(inputBuffer, { animated: false }).rotate();
+  const metadata = await image.metadata();
+  const targetWidth = width ?? profile.maxWidth;
+
+  let pipeline = image;
+  if ((metadata.width ?? 0) > targetWidth) {
+    pipeline = pipeline.resize({
+      width: targetWidth,
+      fit: 'inside',
+      withoutEnlargement: true,
+    });
+  }
+
+  return pipeline
+    .webp({
+      quality: profile.quality,
+      alphaQuality: profile.alphaQuality,
+      effort: 6,
+      smartSubsample: true,
+      nearLossless: profile.nearLossless ?? false,
+    })
+    .toBuffer();
 }
 
 async function writeOptimizedAsset(sourceFilePath) {
@@ -68,7 +100,7 @@ async function writeOptimizedAsset(sourceFilePath) {
   const extension = path.extname(sourceFilePath).toLowerCase();
   const targetRelativePath = passthroughExtensions.has(extension)
     ? relativePath
-    : relativePath.replace(/\.[^.]+$/, '.webp');
+    : getTargetRelativePath(relativePath);
   const targetFilePath = path.join(targetRoot, targetRelativePath);
 
   fs.mkdirSync(path.dirname(targetFilePath), { recursive: true });
@@ -87,29 +119,16 @@ async function writeOptimizedAsset(sourceFilePath) {
   const profile = getProfile(relativePath);
   const inputBuffer = fs.readFileSync(sourceFilePath);
   const inputBytes = inputBuffer.byteLength;
-  const image = sharp(inputBuffer, { animated: false }).rotate();
-  const metadata = await image.metadata();
-
-  let pipeline = image;
-  if ((metadata.width ?? 0) > profile.maxWidth) {
-    pipeline = pipeline.resize({
-      width: profile.maxWidth,
-      fit: 'inside',
-      withoutEnlargement: true,
-    });
-  }
-
-  const outputBuffer = await pipeline
-    .webp({
-      quality: profile.quality,
-      alphaQuality: profile.alphaQuality,
-      effort: 6,
-      smartSubsample: true,
-      nearLossless: profile.nearLossless ?? false,
-    })
-    .toBuffer();
+  const outputBuffer = await createWebpBuffer(inputBuffer, profile);
 
   fs.writeFileSync(targetFilePath, outputBuffer);
+
+  for (const variantWidth of profile.variants ?? []) {
+    const variantRelativePath = getTargetRelativePath(relativePath, variantWidth);
+    const variantFilePath = path.join(targetRoot, variantRelativePath);
+    const variantBuffer = await createWebpBuffer(inputBuffer, profile, variantWidth);
+    fs.writeFileSync(variantFilePath, variantBuffer);
+  }
 
   return {
     sourceRelativePath: relativePath,

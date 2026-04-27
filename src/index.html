@@ -3,22 +3,66 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
+    <meta
+      name="description"
+      content="Portfolio of Julian Lechner, an Austrian full-stack developer building stable web, desktop, and business software."
+    />
     <base href="/" />
 
-    <link rel="icon" type="image/webp" href="assets/optimized/portrait/me.webp" />
+    <link rel="icon" type="image/webp" sizes="128x128" href="assets/optimized/portrait/me-128.webp" />
     <title>Lechner Julian</title>
   </head>
   <body>
     <app-root></app-root>
 
-    <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
     <script>
-      kofiWidgetOverlay.draw('fraujulian', {
-        type: 'floating-chat',
-        'floating-chat.donateButton.text': 'Tip me',
-        'floating-chat.donateButton.background-color': '#ff5f5f',
-        'floating-chat.donateButton.text-color': '#fff',
-      });
+      (() => {
+        const widgetTitle = 'Ko-fi donation chat';
+        let hasLoadedWidget = false;
+
+        const titleKofiFrames = () => {
+          document.querySelectorAll('iframe[id^="kofi-wo-container"]').forEach((frame) => {
+            frame.setAttribute('title', widgetTitle);
+          });
+        };
+
+        const drawWidget = () => {
+          window.kofiWidgetOverlay.draw('fraujulian', {
+            type: 'floating-chat',
+            'floating-chat.donateButton.text': 'Tip me',
+            'floating-chat.donateButton.background-color': '#ff5f5f',
+            'floating-chat.donateButton.text-color': '#fff',
+          });
+          window.setTimeout(titleKofiFrames, 300);
+        };
+
+        const loadWidget = () => {
+          if (hasLoadedWidget) {
+            return;
+          }
+
+          hasLoadedWidget = true;
+          const script = document.createElement('script');
+          script.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
+          script.async = true;
+          script.onload = drawWidget;
+          document.body.appendChild(script);
+        };
+
+        window.addEventListener(
+          'load',
+          () => {
+            const observer = new MutationObserver(titleKofiFrames);
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            window.addEventListener('pointerdown', loadWidget, { once: true, passive: true });
+            window.addEventListener('touchstart', loadWidget, { once: true, passive: true });
+            window.addEventListener('scroll', loadWidget, { once: true, passive: true });
+            window.addEventListener('keydown', loadWidget, { once: true });
+          },
+          { once: true },
+        );
+      })();
     </script>
   </body>
 </html>
