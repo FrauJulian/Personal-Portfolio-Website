@@ -8,6 +8,7 @@
 # Generierte Build- und Test-Ausgaben
 /dist
 /coverage
+/src/assets/optimized
 
 # Betriebssystem-Dateileichen
 .DS_Store

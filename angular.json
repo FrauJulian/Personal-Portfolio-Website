@@ -26,8 +26,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets",
-                "output": "assets"
+                "input": "src/assets/optimized",
+                "output": "assets/optimized"
               },
               {
                 "glob": "**/*",
@@ -108,8 +108,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets",
-                "output": "assets"
+                "input": "src/assets/optimized",
+                "output": "assets/optimized"
               },
               {
                 "glob": "**/*",

@@ -74,27 +74,27 @@ export const global: Global = {
   ],
   portraitHighlights: [
     {
-      image: 'assets/portrait/me.png',
+      image: 'assets/optimized/portrait/me.webp',
       text: 'ME',
     },
     {
-      image: 'assets/portrait/love.jpg',
+      image: 'assets/optimized/portrait/love.webp',
       text: 'My Love',
     },
     {
-      image: 'assets/portrait/scuba.jpg',
+      image: 'assets/optimized/portrait/scuba.webp',
       text: 'Scuba Diving',
     },
     {
-      image: 'assets/portrait/trains.jpg',
+      image: 'assets/optimized/portrait/trains.webp',
       text: 'Trains',
     },
     {
-      image: 'assets/portrait/traveling.jpg',
+      image: 'assets/optimized/portrait/traveling.webp',
       text: 'Traveling',
     },
     {
-      image: 'assets/portrait/culture.jpg',
+      image: 'assets/optimized/portrait/culture.webp',
       text: 'Culture',
     },
   ],
@@ -105,7 +105,7 @@ export const global: Global = {
       description:
         'I currently work primarily for the viennese company SobIT GmbH. This company develops software for the healthcare industry. - Development of modern desktop, mobile, and web applications to support healthcare delivery.',
       languages: ['TypeScript', 'C#', 'WPF', 'YML', 'XAML'],
-      icon: 'assets/logos/sobit.png',
+      icon: 'assets/optimized/logos/sobit.webp',
       CircleIcon: false,
     },
     {

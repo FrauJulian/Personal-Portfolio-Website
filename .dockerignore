@@ -14,6 +14,7 @@ dist
 .npm-cache
 coverage
 .eslintcache
+src/assets/optimized
 
 # Lokale Log- und Debug-Dateien
 npm-debug.log*

@@ -50,7 +50,7 @@ body {
     radial-gradient(circle at top left, rgba(217, 162, 140, 0.22), transparent 26%),
     radial-gradient(circle at bottom right, rgba(127, 78, 63, 0.28), transparent 28%),
     linear-gradient(180deg, rgba(9, 9, 12, 0.4), rgba(8, 8, 11, 0.82)),
-    url('assets/background.jpg') center / cover fixed no-repeat;
+    url('assets/optimized/background.webp') center / cover fixed no-repeat;
 }
 
 a {
@@ -916,6 +916,8 @@ hr {
 
 .footer-inner a {
   color: var(--text-primary);
+  margin-left: auto;
+  text-align: right;
 }
 
 @media (max-width: 900px) {
@@ -1009,8 +1011,8 @@ hr {
   }
 
   .footer-inner {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
   }
 
   .project-icon {

@@ -391,7 +391,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         ? Number.POSITIVE_INFINITY
         : portfolioEyebrow.getBoundingClientRect().top + window.scrollY;
     const isMobileViewport: boolean = window.innerWidth <= 700;
-    const mobileRevealDistance: number = window.innerHeight / 25;
+    const mobileRevealDistance: number = window.innerHeight / 15;
     const triggerDistance: number = isMobileViewport
       ? mobileRevealDistance
       : Math.max(portfolioTriggerY, 1);
