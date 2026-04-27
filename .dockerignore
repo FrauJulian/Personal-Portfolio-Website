@@ -2,6 +2,7 @@
 .git
 .github
 .husky
+.claude
 
 # Lokale Editor-/IDE-Dateien
 .idea

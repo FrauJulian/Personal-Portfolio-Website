@@ -4,6 +4,7 @@
 # Lokale Tool-Caches
 .npm-cache
 .eslintcache
+.claude
 
 # Generierte Build- und Test-Ausgaben
 /dist
