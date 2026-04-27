@@ -15,54 +15,14 @@
   <body>
     <app-root></app-root>
 
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
     <script>
-      (() => {
-        const widgetTitle = 'Ko-fi donation chat';
-        let hasLoadedWidget = false;
-
-        const titleKofiFrames = () => {
-          document.querySelectorAll('iframe[id^="kofi-wo-container"]').forEach((frame) => {
-            frame.setAttribute('title', widgetTitle);
-          });
-        };
-
-        const drawWidget = () => {
-          window.kofiWidgetOverlay.draw('fraujulian', {
-            type: 'floating-chat',
-            'floating-chat.donateButton.text': 'Tip me',
-            'floating-chat.donateButton.background-color': '#ff5f5f',
-            'floating-chat.donateButton.text-color': '#fff',
-          });
-          window.setTimeout(titleKofiFrames, 300);
-        };
-
-        const loadWidget = () => {
-          if (hasLoadedWidget) {
-            return;
-          }
-
-          hasLoadedWidget = true;
-          const script = document.createElement('script');
-          script.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
-          script.async = true;
-          script.onload = drawWidget;
-          document.body.appendChild(script);
-        };
-
-        window.addEventListener(
-          'load',
-          () => {
-            const observer = new MutationObserver(titleKofiFrames);
-            observer.observe(document.body, { childList: true, subtree: true });
-
-            window.addEventListener('pointerdown', loadWidget, { once: true, passive: true });
-            window.addEventListener('touchstart', loadWidget, { once: true, passive: true });
-            window.addEventListener('scroll', loadWidget, { once: true, passive: true });
-            window.addEventListener('keydown', loadWidget, { once: true });
-          },
-          { once: true },
-        );
-      })();
+      kofiWidgetOverlay.draw('fraujulian', {
+        'type': 'floating-chat',
+        'floating-chat.donateButton.text': 'Coffee',
+        'floating-chat.donateButton.background-color': '#ff5f5f',
+        'floating-chat.donateButton.text-color': '#fff'
+      });
     </script>
   </body>
 </html>

@@ -150,8 +150,8 @@
               [ngSrc]="project.icon"
               [attr.srcset]="project.iconSrcset ?? null"
               [attr.sizes]="project.iconSizes ?? null"
-              width="216"
-              height="216"
+              [width]="project.iconWidth ?? 216"
+              [height]="project.iconHeight ?? 216"
               disableOptimizedSrcset
               [alt]="project.title + ' icon'"
             />

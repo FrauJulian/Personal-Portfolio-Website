@@ -6,6 +6,8 @@ export interface PortfolioProject {
   icon?: string;
   iconSrcset?: string;
   iconSizes?: string;
+  iconWidth?: number;
+  iconHeight?: number;
   CircleIcon?: boolean;
 }
 
@@ -163,6 +165,8 @@ export const global: Global = {
       iconSrcset:
         'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
       iconSizes: '(max-width: 700px) 64px, 108px',
+      iconWidth: 108,
+      iconHeight: 64,
       CircleIcon: false,
     },
     {
@@ -199,6 +203,8 @@ export const global: Global = {
       iconSrcset:
         'assets/optimized/portrait/me-64.webp 64w, assets/optimized/portrait/me-128.webp 128w, assets/optimized/portrait/me.webp 216w',
       iconSizes: '(max-width: 700px) 64px, 108px',
+      iconWidth: 320,
+      iconHeight: 385,
       CircleIcon: true,
     },
     {

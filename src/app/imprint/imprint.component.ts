@@ -20,6 +20,8 @@ export class ImprintComponent implements OnInit {
   private readonly sanitizer = inject(DomSanitizer);
 
   protected readonly global: Global = global;
+  protected readonly displayStreet: string = this.normalizeText(global.address.street);
+  protected readonly displayCity: string = this.normalizeText(global.address.city);
 
   protected contactSafeMail!: SafeUrl;
   protected abuseSafeMail!: SafeUrl;
@@ -29,5 +31,15 @@ export class ImprintComponent implements OnInit {
   ngOnInit(): void {
     this.contactSafeMail = this.sanitizer.bypassSecurityTrustUrl(`mailto:${global.contactMail}`);
     this.abuseSafeMail = this.sanitizer.bypassSecurityTrustUrl(`mailto:${this.global.abuseMail}`);
+  }
+
+  private normalizeText(value: string): string {
+    return value
+      .replaceAll('ÃŸ', 'ß')
+      .replaceAll('Ã¶', 'ö')
+      .replaceAll('Ã„', 'Ä')
+      .replaceAll('Ã¤', 'ä')
+      .replaceAll('Ãœ', 'Ü')
+      .replaceAll('Ã¼', 'ü');
   }
 }
