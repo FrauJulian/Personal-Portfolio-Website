@@ -2,7 +2,7 @@
 
 ### [🙋‍♂️ Website Preview](https://fraujulian.xyz/)
 
-![grafik](https://github.com/user-attachments/assets/65f1e491-62ab-4b16-a39c-5f04377ce5cb)
+<img width="2551" height="1175" alt="image" src="https://github.com/user-attachments/assets/24657c0a-4f95-4573-8472-092984d6cc4e" />
 
 ## 👂 Languages / Framework / Packages
 
@@ -61,7 +61,7 @@ npm run test
 
 ## 🤝 Enjoy?
 
-~ made by [**FrauJulian**](https://fraujulian.xyz/). Give it a star ⭐ on
-[GitHub](https://github.com/FrauJulian/Personal-Portfolio-Website)!
+~ made by [**FrauJulian**](https://fraujulian.xyz/).   
+Give it a star ⭐ on [GitHub](https://github.com/FrauJulian/Personal-Portfolio-Website)!
 
 ### Greetings from Austria! ⛰️
