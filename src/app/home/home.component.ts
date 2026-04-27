@@ -391,15 +391,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         ? Number.POSITIVE_INFINITY
         : portfolioEyebrow.getBoundingClientRect().top + window.scrollY;
     const isMobileViewport: boolean = window.innerWidth <= 700;
-    const mobileRevealDistance: number = Math.max(window.innerHeight * 0.38, 180);
+    const mobileRevealDistance: number = window.innerHeight / 25;
     const triggerDistance: number = isMobileViewport
       ? mobileRevealDistance
       : Math.max(portfolioTriggerY, 1);
     const rawProgress: number = Math.min(window.scrollY / triggerDistance, 1);
-    const acceleratedProgress: number = Math.pow(rawProgress, isMobileViewport ? 0.62 : 0.66);
+    const acceleratedProgress: number = Math.pow(rawProgress, isMobileViewport ? 0.48 : 0.66);
     const progress: number =
       window.scrollY > 0
-        ? Math.max(acceleratedProgress, isMobileViewport ? 0.06 : 0.05)
+        ? Math.max(acceleratedProgress, isMobileViewport ? 0.18 : 0.05)
         : acceleratedProgress;
 
     root.style.setProperty('--name-pride-progress', progress.toFixed(4));

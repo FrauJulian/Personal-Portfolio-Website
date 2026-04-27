@@ -33,6 +33,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body,
@@ -44,6 +45,7 @@ html {
 body {
   font-family: 'Outfit', Arial, sans-serif;
   color: var(--text-primary);
+  overflow-x: clip;
   background:
     radial-gradient(circle at top left, rgba(217, 162, 140, 0.22), transparent 26%),
     radial-gradient(circle at bottom right, rgba(127, 78, 63, 0.28), transparent 28%),
