@@ -36,6 +36,15 @@ html {
   overflow-x: clip;
 }
 
+html.no-js {
+  #about,
+  #projects,
+  .hero-action-links,
+  .hero-meta {
+    display: none;
+  }
+}
+
 body,
 html {
   min-height: 100%;
