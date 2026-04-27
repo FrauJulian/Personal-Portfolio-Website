@@ -5,7 +5,16 @@ const sharp = require('sharp');
 const sourceRoot = path.join(process.cwd(), 'src', 'assets', 'unoptimized');
 const targetRoot = path.join(process.cwd(), 'src', 'assets', 'optimized');
 
-const rasterExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.tif', '.tiff']);
+const rasterExtensions = new Set([
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.webp',
+  '.avif',
+  '.gif',
+  '.tif',
+  '.tiff',
+]);
 const passthroughExtensions = new Set(['.svg']);
 
 function collectFilesRecursively(directoryPath) {
