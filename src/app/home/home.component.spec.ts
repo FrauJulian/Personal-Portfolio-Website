@@ -173,7 +173,9 @@ describe('HomeComponent', (): void => {
 
     it('should advance the portrait index after 125 ms', fakeAsync((): void => {
       const zone = TestBed.inject(NgZone);
-      zone.runOutsideAngular((): void => { comp.showNextPortraitHighlight(); });
+      zone.runOutsideAngular((): void => {
+        comp.showNextPortraitHighlight();
+      });
       tick(125);
       expect(comp.currentPortraitHighlightIndex).toBe(1);
       tick(125);
@@ -182,7 +184,9 @@ describe('HomeComponent', (): void => {
 
     it('should reset isPortraitSwitching to false after 250 ms', fakeAsync((): void => {
       const zone = TestBed.inject(NgZone);
-      zone.runOutsideAngular((): void => { comp.showNextPortraitHighlight(); });
+      zone.runOutsideAngular((): void => {
+        comp.showNextPortraitHighlight();
+      });
       tick(250);
       expect(comp.isPortraitSwitching).toBeFalse();
       discardPeriodicTasks();
@@ -191,7 +195,9 @@ describe('HomeComponent', (): void => {
     it('should wrap portrait index from the last position back to 0', fakeAsync((): void => {
       comp.currentPortraitHighlightIndex = global.portraitHighlights.length - 1;
       const zone = TestBed.inject(NgZone);
-      zone.runOutsideAngular((): void => { comp.showNextPortraitHighlight(); });
+      zone.runOutsideAngular((): void => {
+        comp.showNextPortraitHighlight();
+      });
       tick(125);
       expect(comp.currentPortraitHighlightIndex).toBe(0);
       tick(125);
@@ -315,8 +321,8 @@ describe('HomeComponent', (): void => {
       document.body.appendChild(aboutEl);
 
       const el = fixture.nativeElement as HTMLElement;
-      const btn = Array.from(el.querySelectorAll('button')).find((b): boolean =>
-        (b.textContent ?? '').trim() === 'About me',
+      const btn = Array.from(el.querySelectorAll('button')).find(
+        (b): boolean => (b.textContent ?? '').trim() === 'About me',
       );
       btn?.click();
       expect(scrollSpy).toHaveBeenCalled();
@@ -329,8 +335,8 @@ describe('HomeComponent', (): void => {
       document.body.appendChild(projectsEl);
 
       const el = fixture.nativeElement as HTMLElement;
-      const btn = Array.from(el.querySelectorAll('button')).find((b): boolean =>
-        (b.textContent ?? '').trim() === 'View projects',
+      const btn = Array.from(el.querySelectorAll('button')).find(
+        (b): boolean => (b.textContent ?? '').trim() === 'View projects',
       );
       btn?.click();
       expect(scrollSpy).toHaveBeenCalled();

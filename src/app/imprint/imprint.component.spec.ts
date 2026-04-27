@@ -177,7 +177,8 @@ describe('ImprintComponent', (): void => {
     });
 
     it('should complete 500 normalizeText calls within 20 ms', (): void => {
-      const input = 'Ulmenstra\u00DFe \u00F6sterreich \u00E4hnlich \u00FCberall \u00C4gypten \u00DCbung';
+      const input =
+        'Ulmenstra\u00DFe \u00F6sterreich \u00E4hnlich \u00FCberall \u00C4gypten \u00DCbung';
       const start = performance.now();
       for (let i = 0; i < 500; i++) {
         comp.normalizeText(input);
