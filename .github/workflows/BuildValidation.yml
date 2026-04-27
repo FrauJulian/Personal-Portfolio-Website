@@ -26,5 +26,7 @@ jobs:
       - name: run Build Validation
         run: npm run check
 
-      - name: run Build Validation
+      - name: run Tests
         run: npm run test
+        env:
+          CHROME_BIN: google-chrome
