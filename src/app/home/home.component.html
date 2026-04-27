@@ -163,7 +163,7 @@
                 <span class="project-link">{{ project.title }}</span>
               </div>
               <div class="project-languages" aria-label="Project languages">
-                @for (language of project.languages; track language + '-' + $index) {
+                @for (language of project.skills; track language + '-' + $index) {
                   <span class="project-language-chip">{{ language }}</span>
                 }
               </div>

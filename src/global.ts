@@ -2,7 +2,7 @@ export interface PortfolioProject {
   title: string;
   link: string;
   description: string;
-  languages: string[];
+  skills: string[];
   icon?: string;
   iconSrcset?: string;
   iconSizes?: string;
@@ -146,7 +146,7 @@ export const global: Global = {
       link: 'https://sobit.at/',
       description:
         'I currently work primarily for the viennese company SobIT GmbH. This company develops software for the healthcare industry. - Development of modern desktop, mobile, and web applications to support healthcare delivery.',
-      languages: ['TypeScript', 'C#', 'WPF', 'YML', 'XAML'],
+      skills: ['TypeScript', 'C#', 'WPF', 'YML', 'XAML'],
       icon: 'assets/optimized/logos/sobit.webp',
       iconSrcset:
         'assets/optimized/logos/sobit-64.webp 64w, assets/optimized/logos/sobit-128.webp 128w, assets/optimized/logos/sobit.webp 216w',
@@ -157,8 +157,8 @@ export const global: Global = {
       title: 'SynHost',
       link: 'https://www.synhost.de/',
       description:
-        'A support system integrating various platforms and media to offer employees a unified overview.',
-      languages: ['TypeScript'],
+        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
+      skills: ['TypeScript'],
       icon: 'assets/optimized/logos/synhost.webp',
       iconSrcset:
         'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
@@ -166,28 +166,52 @@ export const global: Global = {
       CircleIcon: false,
     },
     {
-      title: 'SynHost',
-      link: 'https://www.synhost.de/',
+      title: 'SynRadio',
+      link: 'https://www.synradio.de/',
       description:
-        'A support system integrating various platforms and media to offer employees a unified overview.',
-      languages: ['TypeScript'],
-      icon: 'assets/optimized/logos/synhost.webp',
+        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
+      skills: ['TypeScript', 'Angular', 'FFmpeg'],
+      icon: 'assets/optimized/logos/synradio.webp',
       iconSrcset:
-        'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
+        'assets/optimized/logos/synradio-64.webp 64w, assets/optimized/logos/synradio-128.webp 128w, assets/optimized/logos/synradio.webp 216w',
       iconSizes: '(max-width: 700px) 64px, 108px',
-      CircleIcon: false,
+      CircleIcon: true,
     },
     {
-      title: 'SynHost',
-      link: 'https://www.synhost.de/',
+      title: 'Discord Audio Stream Library',
+      link: 'https://github.com/FrauJulian/Discord-Audio-Stream',
       description:
-        'A support system integrating various platforms and media to offer employees a unified overview.',
-      languages: ['TypeScript'],
-      icon: 'assets/optimized/logos/synhost.webp',
+        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
+      skills: ['TypeScript'],
+      icon: 'assets/optimized/logos/discord.webp',
       iconSrcset:
-        'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
+        'assets/optimized/logos/discord-64.webp 64w, assets/optimized/logos/discord-128.webp 128w, assets/optimized/logos/discord.webp 216w',
       iconSizes: '(max-width: 700px) 64px, 108px',
-      CircleIcon: false,
+      CircleIcon: true,
+    },
+    {
+      title: 'Portfolio',
+      link: '#',
+      description:
+        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
+      skills: ['TypeScript', 'Angular'],
+      icon: 'assets/optimized/portrait/me.webp',
+      iconSrcset:
+        'assets/optimized/portrait/me-64.webp 64w, assets/optimized/portrait/me-128.webp 128w, assets/optimized/portrait/me.webp 216w',
+      iconSizes: '(max-width: 700px) 64px, 108px',
+      CircleIcon: true,
+    },
+    {
+      title: 'Tauchertreff-Mostviertel',
+      link: 'https://tauchertreff-mostviertel.at/',
+      description:
+        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
+      skills: ['TypeScript', 'Angular'],
+      icon: 'assets/optimized/logos/tauchertreff.webp',
+      iconSrcset:
+        'assets/optimized/logos/tauchertreff-64.webp 64w, assets/optimized/logos/tauchertreff-128.webp 128w, assets/optimized/logos/tauchertreff.webp 216w',
+      iconSizes: '(max-width: 700px) 64px, 108px',
+      CircleIcon: true,
     },
   ],
   address: {
