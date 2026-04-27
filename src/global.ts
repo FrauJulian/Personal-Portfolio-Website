@@ -148,7 +148,7 @@ export const global: Global = {
       link: 'https://sobit.at/',
       description:
         'I currently work primarily for the viennese company SobIT GmbH. This company develops software for the healthcare industry. - Development of modern desktop, mobile, and web applications to support healthcare delivery.',
-      skills: ['TypeScript', 'C#', 'WPF', 'YML', 'XAML'],
+      skills: ['TypeScript', 'C#', 'Microsoft SQL', 'WPF', 'YML/XML'],
       icon: 'assets/optimized/logos/sobit.webp',
       iconSrcset:
         'assets/optimized/logos/sobit-64.webp 64w, assets/optimized/logos/sobit-128.webp 128w, assets/optimized/logos/sobit.webp 216w',
@@ -159,8 +159,8 @@ export const global: Global = {
       title: 'SynHost',
       link: 'https://www.synhost.de/',
       description:
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
-      skills: ['TypeScript'],
+        'A hosting provider operated by GERLACH SYSTEMS, where I develop integrations and handle technical support.',
+      skills: ['TypeScript', 'MariaDB', 'YML'],
       icon: 'assets/optimized/logos/synhost.webp',
       iconSrcset:
         'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
@@ -173,8 +173,8 @@ export const global: Global = {
       title: 'SynRadio',
       link: 'https://www.synradio.de/',
       description:
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
-      skills: ['TypeScript', 'Angular', 'FFmpeg'],
+        'An online radio project, where I build and maintain the technical side of its digital presence — including the website, bots, and plugins for voice chats and games.',
+      skills: ['TypeScript', 'Angular', 'FFmpeg', 'YML'],
       icon: 'assets/optimized/logos/synradio.webp',
       iconSrcset:
         'assets/optimized/logos/synradio-64.webp 64w, assets/optimized/logos/synradio-128.webp 128w, assets/optimized/logos/synradio.webp 216w',
@@ -185,8 +185,8 @@ export const global: Global = {
       title: 'Discord Audio Stream Library',
       link: 'https://github.com/FrauJulian/Discord-Audio-Stream',
       description:
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
-      skills: ['TypeScript'],
+        'A TypeScript library for Discord that simplifies audio playback, with a focus on stable 24/7 streaming without interruptions.',
+      skills: ['TypeScript', 'YML'],
       icon: 'assets/optimized/logos/discord.webp',
       iconSrcset:
         'assets/optimized/logos/discord-64.webp 64w, assets/optimized/logos/discord-128.webp 128w, assets/optimized/logos/discord.webp 216w',
@@ -197,8 +197,8 @@ export const global: Global = {
       title: 'Portfolio',
       link: '#',
       description:
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
-      skills: ['TypeScript', 'Angular'],
+        'This portfolio website you’re currently viewing is one of my actively maintained projects.',
+      skills: ['TypeScript', 'Angular', 'YML'],
       icon: 'assets/optimized/portrait/me.webp',
       iconSrcset:
         'assets/optimized/portrait/me-64.webp 64w, assets/optimized/portrait/me-128.webp 128w, assets/optimized/portrait/me.webp 216w',
@@ -211,8 +211,8 @@ export const global: Global = {
       title: 'Tauchertreff-Mostviertel',
       link: 'https://tauchertreff-mostviertel.at/',
       description:
-        'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ',
-      skills: ['TypeScript', 'Angular'],
+        'I also support my local diving club by building and running its digital infrastructure — email, website, cloud services, and everything around it.',
+      skills: ['TypeScript', 'MariaDB', 'Angular', 'YML'],
       icon: 'assets/optimized/logos/tauchertreff.webp',
       iconSrcset:
         'assets/optimized/logos/tauchertreff-64.webp 64w, assets/optimized/logos/tauchertreff-128.webp 128w, assets/optimized/logos/tauchertreff.webp 216w',
