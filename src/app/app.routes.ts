@@ -1,10 +1,16 @@
 import type { Routes } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-import { ImprintComponent } from './imprint/imprint.component';
-
 export const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
-  { path: 'imprint', component: ImprintComponent, pathMatch: 'full' },
+  {
+    path: '',
+    loadComponent: () => import('./home/home.component').then((module) => module.HomeComponent),
+    pathMatch: 'full',
+  },
+  {
+    path: 'imprint',
+    loadComponent: () =>
+      import('./imprint/imprint.component').then((module) => module.ImprintComponent),
+    pathMatch: 'full',
+  },
   { path: '**', redirectTo: '' },
 ];

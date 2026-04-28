@@ -34,7 +34,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["node_modules/@angular/material/prebuilt-themes/rose-red.css", "src/styles.scss"],
+            "styles": ["src/styles.scss"],
             "scripts": [],
             "server": "src/main.server.ts",
             "prerender": true,
@@ -119,7 +119,7 @@
                 "output": "public"
               }
             ],
-            "styles": ["node_modules/@angular/material/prebuilt-themes/rose-red.css", "src/styles.scss"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }

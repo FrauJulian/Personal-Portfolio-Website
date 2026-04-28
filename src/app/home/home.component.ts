@@ -269,9 +269,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const startY: number = viewportHeight * 0.98;
     const endY: number = viewportHeight * 0.56;
     const totalDistance: number = Math.max(startY - endY, 1);
-    projectEntries.forEach((entry: HTMLElement): void => {
-      const entryRect: DOMRect = entry.getBoundingClientRect();
-      const rawProgress: number = (startY - entryRect.top) / totalDistance;
+    const entriesWithTop: Array<{ entry: HTMLElement; top: number }> = Array.from(
+      projectEntries,
+      (entry: HTMLElement) => ({
+        entry,
+        top: entry.getBoundingClientRect().top,
+      }),
+    );
+    entriesWithTop.forEach(({ entry, top }): void => {
+      const rawProgress: number = (startY - top) / totalDistance;
       const clampedProgress: number = Math.min(Math.max(rawProgress, 0), 1);
       entry.style.setProperty('--project-entry-progress', clampedProgress.toFixed(4));
     });
