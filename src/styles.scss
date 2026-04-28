@@ -1084,6 +1084,7 @@ hr {
 }
 
 .language-card {
+  position: relative;
   display: grid;
   gap: 1rem;
   width: min(100%, 520px);
@@ -1103,6 +1104,7 @@ hr {
 .language-copy {
   display: grid;
   gap: 0;
+  padding-right: 3.4rem;
 }
 
 .language-card h2,
@@ -1186,6 +1188,10 @@ hr {
 }
 
 .language-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1;
   width: 2.8rem;
   height: 2.8rem;
   border: 1px solid var(--border-soft);
@@ -1269,6 +1275,7 @@ hr {
     width: min(100%, 460px);
     gap: 0.9rem;
     padding: 0.95rem;
+    padding-top: 1.15rem;
   }
 
   .language-card-header {
@@ -1290,5 +1297,24 @@ hr {
   .language-switcher {
     right: 0.75rem;
     top: 0.75rem;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.65rem 0.4rem 0.4rem;
+  }
+
+  .language-switcher-tag {
+    min-width: 1.95rem;
+    min-height: 1.65rem;
+    padding: 0.14rem 0.55rem;
+    font-size: 0.68rem;
+  }
+
+  .language-switcher-copy strong {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+  }
+
+  .language-switcher-copy span {
+    font-size: 0.78rem;
   }
 }

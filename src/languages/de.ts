@@ -10,7 +10,7 @@ export const deLanguage: LanguagePack = {
     languageGerman: 'Deutsch',
   },
   footer: {
-    noscriptMessage: 'Bitte aktiviere JavaScript für die vollständige Nutzung.',
+    noscriptMessage: 'Bitte aktiviere JavaScript für den vollen Funktionsumfang.',
     imprintLink: 'Impressum',
   },
   home: {
@@ -20,25 +20,25 @@ export const deLanguage: LanguagePack = {
     contactTitle: 'Kontakt',
     viewProjects: 'Projekte ansehen',
     aboutMe: 'Über mich',
-    nextHighlightAriaLabel: 'Nächstes Highlight-Bild anzeigen',
+    nextHighlightAriaLabel: 'Nächstes Bild anzeigen',
     nextHighlightTitle: 'Nächstes Bild anzeigen',
     singleHighlightTitle: 'Einzelnes Bild',
     portraitAltSuffix: 'Bild',
     clickHint: 'Klick mich!',
     aboutEyebrow: 'Über mich',
     aboutParagraphs: [
-      'Ich heiße {{firstname}}, die meisten nennen mich Julie. Ich bin {{age}} Jahre alt und komme aus Österreich. Ein großer Teil meines Alltags passiert unterwegs – meistens im Zug, zwischen Terminen, Büros und Zeit mit meiner Familie.',
+      'Ich heiße {{firstname}}, viele nennen mich auch Julie. Ich bin {{age}} Jahre alt und komme aus Österreich. Ein großer Teil meines Alltags passiert unterwegs – meistens im Zug, zwischen Terminen, Büros und meiner Familie.',
       'Digitale Sicherheit und Privatsphäre sind mir sehr wichtig. Ich baue Systeme mit möglichst kleiner Angriffsfläche, sinnvollen Standards und starkem Fokus auf Datenschutz.',
       'Ich arbeite mit modernen Web-Technologien und an geschäftskritischen Systemen. Mein Fokus liegt auf klaren, stabilen Lösungen, die im Alltag funktionieren und echten Nutzen liefern.',
     ],
-    detailToggleOpen: 'Erweitertes Profil lesen',
-    detailToggleClose: 'Erweitertes Profil ausblenden',
+    detailToggleOpen: 'Mehr lesen',
+    detailToggleClose: 'Weniger lesen',
     detailParagraphs: [
       'Was mich wirklich interessiert, ist moderner Code: sauber strukturiert, wartbar und mit Blick auf Performance gebaut.',
       'Abseits von Software ist Tauchen mein größtes Hobby. Die Stille unter Wasser zieht mich immer wieder zurück in Österreichs Seen.',
       'Hauptsächlich arbeite ich für die SobIT GmbH in Wien, zusätzlich zu Freelance-Projekten für Unternehmen, Organisationen und private Kunden.',
     ],
-    getInTouch: 'Kontakt aufnehmen',
+    getInTouch: 'Kontaktiere mich!',
     projectsEyebrow: 'Aktuelle Jobs & Projekte',
     openProjectPrefix: 'Projekt öffnen',
     projectLanguagesAriaLabel: 'Projekt-Technologien',
@@ -194,7 +194,7 @@ export const deLanguage: LanguagePack = {
       title: 'SynHost',
       link: 'https://www.synhost.de/',
       description:
-        'Ein Hosting-Dienstleister unter der Verwaltung von GERLACH SYSTEMS, für den ich Schnittstellen entwickle und technischen Support mache.',
+        'Ein Hosting-Dienstleister unter der Verwaltung von GERLACH SYSTEMS, für die ich Schnittstellen zwischen einzelnen Systemen entwickle und technischen Support erledige.',
       skills: ['TypeScript', 'MariaDB', 'YML'],
       icon: 'assets/optimized/logos/synhost.webp',
       iconSrcset:
@@ -208,7 +208,7 @@ export const deLanguage: LanguagePack = {
       title: 'SynRadio',
       link: 'https://www.synradio.de/',
       description:
-        'Ein Internetradio-Projekt, bei dem ich die technische Seite der digitalen Präsenz entwickle und betreue — inklusive Website, Bots und Plugins für Sprachchats und Spiele.',
+        'Ein Internetradio-Projekt, auch unter der Verwaltung von GERLACH SYSTEMS, bei dem ich die technische Umsetzung der digitalen Präsenz entwickle und betreue — Website, Bots und Plugins für Sprachchats und Spiele.',
       skills: ['TypeScript', 'Angular', 'FFmpeg', 'YML'],
       icon: 'assets/optimized/logos/synradio.webp',
       iconSrcset:

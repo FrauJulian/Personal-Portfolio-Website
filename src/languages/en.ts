@@ -20,19 +20,19 @@ export const enLanguage: LanguagePack = {
     contactTitle: 'Contact me',
     viewProjects: 'View projects',
     aboutMe: 'About me',
-    nextHighlightAriaLabel: 'Show next highlight image',
+    nextHighlightAriaLabel: 'Show next image',
     nextHighlightTitle: 'Show next image',
     singleHighlightTitle: 'Single image',
     portraitAltSuffix: 'Image',
     clickHint: 'Click me!',
     aboutEyebrow: 'About me',
     aboutParagraphs: [
-      'My name is {{firstname}}, though most people call me Julie. I am {{age}} and based in Austria. A large part of my day happens on the move, usually on trains, going between meetings, offices, and time with my family.',
+      'My name is {{firstname}}, many people also call me Julie. I am {{age}} and based in Austria. A large part of my day happens on the move, usually on trains, going between meetings, offices, and my family.',
       'I care deeply about digital security and privacy. I design systems with minimal exposure, sensible defaults, and a strong focus on data protection.',
       'I work with modern web technologies and on business-critical systems. I focus on clear, stable solutions that hold up in day-to-day use and deliver value.',
     ],
-    detailToggleOpen: 'Read extended profile',
-    detailToggleClose: 'Hide extended profile',
+    detailToggleOpen: 'Read more',
+    detailToggleClose: 'Read less',
     detailParagraphs: [
       'What really interests me is modern code: well-structured, maintainable, and built with performance in mind.',
       "Outside of software, my main hobby is scuba diving. The silence underwater keeps pulling me back into Austria's lakes.",
@@ -208,7 +208,7 @@ export const enLanguage: LanguagePack = {
       title: 'SynRadio',
       link: 'https://www.synradio.de/',
       description:
-        'An online radio project, where I build and maintain the technical side of its digital presence — including the website, bots, and plugins for voice chats and games.',
+        'An online radio project, also operated by GERLACH SYSTEMS, where I build and maintain the technical side of its digital presence — including the website, bots, and plugins for voice chats and games.',
       skills: ['TypeScript', 'Angular', 'FFmpeg', 'YML'],
       icon: 'assets/optimized/logos/synradio.webp',
       iconSrcset:
