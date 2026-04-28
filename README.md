@@ -61,7 +61,8 @@ npm run test
 
 ## 🤝 Enjoy?
 
-~ made by [**FrauJulian**](https://fraujulian.xyz/).   
-Give it a star ⭐ on [GitHub](https://github.com/FrauJulian/Personal-Portfolio-Website)!
+~ made by [**FrauJulian**](https://fraujulian.xyz/).  
+Give it a star ⭐ on
+[GitHub](https://github.com/FrauJulian/Personal-Portfolio-Website)!
 
 ### Greetings from Austria! ⛰️
