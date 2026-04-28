@@ -2,53 +2,44 @@
   <section class="hero-section panel">
     <div class="hero-copy">
       <div class="hero-copy-main">
-        <p id="portfolio-eyebrow" class="eyebrow">Portfolio</p>
+        <p id="portfolio-eyebrow" class="eyebrow">{{ content().home.portfolioEyebrow }}</p>
         <h1>
           <span class="hero-name-part" [attr.data-name]="global.firstname">{{ global.firstname }}</span>
           <span class="hero-name-part" [attr.data-name]="global.lastname">{{ global.lastname }}</span>
         </h1>
-        <p class="hero-intro">
-          Building reliable systems, clean interfaces, and practical digital solutions that actually hold up in production.
-        </p>
+        <p class="hero-intro">{{ content().home.heroIntro }}</p>
       </div>
 
       <div class="hero-actions">
         <div class="hero-contact-block">
-          <p class="hero-contact-title">Contact me</p>
-
+          <p class="hero-contact-title">{{ content().home.contactTitle }}</p>
           <div id="contact-links" class="contact-area hero-contact-area">
-            <a [href]="contactSafeMail" aria-label="Send mail">
-              <fa-icon class="fab" [icon]="faEnvelope" size="lg"></fa-icon>
-            </a>
-
-            <a href="tel:{{ global.hrefContactPhone }}" aria-label="Call phone number">
-              <fa-icon class="fab" [icon]="faPhone" size="lg"></fa-icon>
-            </a>
-
-            <a href="https://discord.com/users/860206216893693973" aria-label="Discord profile">
-              <fa-icon class="fab" [icon]="faDiscord" size="lg"></fa-icon>
-            </a>
-
-            <a href="https://github.com/fraujulian" aria-label="GitHub profile">
-              <fa-icon class="fab" [icon]="faGithub" size="lg"></fa-icon>
-            </a>
-
-            <a href="https://www.linkedin.com/in/julian-lechner-98b377356/" aria-label="LinkedIn profile">
-              <fa-icon class="fab" [icon]="faLinkedin" size="lg"></fa-icon>
-            </a>
+            <a [href]="contactMailHref" aria-label="Send mail"><fa-icon class="fab" [icon]="faEnvelope" size="lg"></fa-icon></a>
+            <a href="tel:{{ global.hrefContactPhone }}" aria-label="Call phone number"
+              ><fa-icon class="fab" [icon]="faPhone" size="lg"></fa-icon
+            ></a>
+            <a href="https://discord.com/users/860206216893693973" aria-label="Discord profile"
+              ><fa-icon class="fab" [icon]="faDiscord" size="lg"></fa-icon
+            ></a>
+            <a href="https://github.com/fraujulian" aria-label="GitHub profile"
+              ><fa-icon class="fab" [icon]="faGithub" size="lg"></fa-icon
+            ></a>
+            <a href="https://www.linkedin.com/in/julian-lechner-98b377356/" aria-label="LinkedIn profile"
+              ><fa-icon class="fab" [icon]="faLinkedin" size="lg"></fa-icon
+            ></a>
           </div>
         </div>
 
         <div class="hero-action-links">
-          <button class="action-link" type="button" (click)="scrollToProjectsSection()">View projects</button>
-          <button class="action-link" type="button" (click)="scrollToAboutSection()">About me</button>
+          <button class="action-link" type="button" (click)="scrollToProjectsSection()">{{ content().home.viewProjects }}</button>
+          <button class="action-link" type="button" (click)="scrollToAboutSection()">{{ content().home.aboutMe }}</button>
         </div>
       </div>
 
       <div class="hero-meta">
         <div>
-          <span class="meta-label">{{ currentBioEntry.label }}</span>
-          <strong>{{ currentBioEntry.value }}</strong>
+          <span class="meta-label">{{ currentBioEntry.label }}</span
+          ><strong>{{ currentBioEntry.value }}</strong>
         </div>
       </div>
     </div>
@@ -60,8 +51,8 @@
             type="button"
             class="portrait-highlight-button"
             (click)="showNextPortraitHighlight()"
-            [attr.aria-label]="'Show next highlight image'"
-            [title]="portraitHighlights.length > 1 ? 'Show next image' : 'Single image'"
+            [attr.aria-label]="content().home.nextHighlightAriaLabel"
+            [title]="portraitHighlights.length > 1 ? content().home.nextHighlightTitle : content().home.singleHighlightTitle"
           >
             <div class="portrait-media" [class.portrait-media-switching]="isPortraitSwitching">
               <img
@@ -74,10 +65,10 @@
                 disableOptimizedSrcset
                 priority
                 decoding="async"
-                [alt]="currentPortraitHighlight.text + ' Image'"
+                [alt]="currentPortraitHighlight.text + ' ' + content().home.portraitAltSuffix"
               />
               @if (currentPortraitHighlightIndex === 0) {
-                <span class="portrait-click-hint">Click me!</span>
+                <span class="portrait-click-hint">{{ content().home.clickHint }}</span>
               }
               <span class="portrait-caption">{{ currentPortraitHighlight.text }}</span>
             </div>
@@ -89,47 +80,27 @@
 
   <section id="about" class="story-section panel about-scroll-anim-enabled">
     <div class="section-heading">
-      <p class="eyebrow">About me</p>
+      <p class="eyebrow">{{ content().home.aboutEyebrow }}</p>
     </div>
-
     <div class="story-grid">
       <div class="story-copy">
-        <p>
-          My name is {{ global.firstname }}, though most people call me Julie. I’m {{ age }} and based in Austria. A large part of my day
-          happens on the move — usually on trains, going between meetings, offices, and time with my family.
-        </p>
-        <p>
-          I care deeply about digital security and privacy. I design systems with minimal exposure, sensible defaults, and a strong focus on
-          data protection. Anonymity, secure communication, and reducing unnecessary data collection aren’t extras for me — they’re baseline
-          requirements for my personal infrastructure.
-        </p>
-        <p>
-          I work with modern web technologies and on business-critical systems. I don’t care much for unnecessary complexity — I focus on
-          clear, stable solutions that actually hold up in day-to-day use and deliver real value.
-        </p>
+        <p>{{ interpolate(content().home.aboutParagraphs[0]) }}</p>
+        <p>{{ content().home.aboutParagraphs[1] }}</p>
+        <p>{{ content().home.aboutParagraphs[2] }}</p>
       </div>
-
       <div class="story-detail">
         <button class="detail-toggle" type="button" (click)="toggleBio()">
-          <span>{{ isLongBioShown ? 'Hide extended profile' : 'Read extended profile' }}</span>
-          <fa-icon [icon]="isLongBioShown ? faArrowDown : faArrowRight"></fa-icon>
+          <span>{{ isLongBioShown ? content().home.detailToggleClose : content().home.detailToggleOpen }}</span
+          ><fa-icon [icon]="isLongBioShown ? faArrowDown : faArrowRight"></fa-icon>
         </button>
-
         @if (isLongBioMounted) {
           <div class="detail-panel" [class.detail-panel-enter]="isLongBioShown" [class.detail-panel-leave]="!isLongBioShown">
-            <p>
-              What really interests me is modern code — well-structured, maintainable, and built with performance in mind. No unnecessary
-              bloat, just clean, readable solutions that reliably work under real-world conditions… in theory 😁
-            </p>
-            <p>
-              Outside of software, my main hobby is scuba diving. The silence underwater and the focus on the present moment keep pulling me
-              back into Austria’s dark, cold lakes.
-            </p>
-            <p>
-              Right now, I mainly work for SobIT GmbH in Vienna, alongside freelance projects for companies, organizations, and private
-              clients. No gimmicks — just software that does what it’s supposed to do, built properly.
-            </p>
-            <button class="inline-link inline-link-button" type="button" (click)="scrollToContactLinks()">Get in touch</button>
+            <p>{{ content().home.detailParagraphs[0] }}</p>
+            <p>{{ content().home.detailParagraphs[1] }}</p>
+            <p>{{ content().home.detailParagraphs[2] }}</p>
+            <button class="inline-link inline-link-button" type="button" (click)="scrollToContactLinks()">
+              {{ content().home.getInTouch }}
+            </button>
           </div>
         }
       </div>
@@ -138,9 +109,8 @@
 
   <section id="projects" class="projects-section">
     <div class="section-heading section-heading-centered">
-      <p class="eyebrow">current Jobs & Projects</p>
+      <p class="eyebrow">{{ content().home.projectsEyebrow }}</p>
     </div>
-
     <div class="project-list">
       @for (project of projects; track project.link + '-' + $index; let i = $index) {
         <a
@@ -149,7 +119,7 @@
           [class.project-entry-from-right]="i % 2 === 0"
           [class.project-entry-from-left]="i % 2 === 1"
           [href]="project.link"
-          [attr.aria-label]="'Open project ' + project.title"
+          [attr.aria-label]="content().home.openProjectPrefix + ' ' + project.title"
           [attr.data-project-index]="i"
         >
           @if (project.icon) {
@@ -165,19 +135,17 @@
               [alt]="project.title + ' icon'"
             />
           }
-
           <div class="project-copy">
             <div class="project-header">
               <div class="project-title-wrap">
                 <span class="project-link">{{ project.title }}</span>
               </div>
-              <div class="project-languages" aria-label="Project languages">
+              <div class="project-languages" [attr.aria-label]="content().home.projectLanguagesAriaLabel">
                 @for (language of project.skills; track language + '-' + $index) {
                   <span class="project-language-chip">{{ language }}</span>
                 }
               </div>
             </div>
-
             <p class="project-description">{{ project.description }}</p>
           </div>
         </a>

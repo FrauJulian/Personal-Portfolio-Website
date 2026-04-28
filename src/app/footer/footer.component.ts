@@ -1,14 +1,19 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { Global } from '../../global';
 import { global } from '../../global';
+import { LanguageService } from '../services/language.service';
 
 @Component({
   selector: 'app-footer',
+  standalone: true,
   imports: [RouterLink],
   templateUrl: './footer.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
-  protected readonly global: Global = global;
-  protected readonly currentYear: number = new Date().getFullYear();
+  private readonly languageService = inject(LanguageService);
+
+  protected readonly content = this.languageService.content;
+  protected readonly global = global;
+  protected readonly currentYear = new Date().getFullYear();
 }

@@ -8,7 +8,11 @@ import type { Subscription } from 'rxjs';
 
 import { HomeComponent } from './home.component';
 import { global } from '../../global';
-import type { BioTextEntry, PortraitHighlight } from '../../global';
+import { enLanguage } from '../../languages/en';
+import type {
+  LanguageBioTextEntry,
+  LanguagePortraitHighlight,
+} from '../../languages/language.types';
 
 describe('HomeComponent', (): void => {
   let fixture: ComponentFixture<HomeComponent>;
@@ -34,8 +38,8 @@ describe('HomeComponent', (): void => {
     scrollToAboutSection(): void;
     scrollToProjectsSection(): void;
     scrollToContactLinks(): void;
-    currentBioEntry: BioTextEntry;
-    currentPortraitHighlight: PortraitHighlight | null;
+    currentBioEntry: LanguageBioTextEntry;
+    currentPortraitHighlight: LanguagePortraitHighlight | null;
   }
 
   let comp: ComponentAccess;
@@ -93,12 +97,12 @@ describe('HomeComponent', (): void => {
   describe('currentBioEntry getter', (): void => {
     it('should return the first bioTextsList entry at index 0', (): void => {
       comp.currentIndex = 0;
-      expect(comp.currentBioEntry).toEqual(global.bioTextsList[0]);
+      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[0]);
     });
 
     it('should return the correct entry when index changes', (): void => {
       comp.currentIndex = 3;
-      expect(comp.currentBioEntry).toEqual(global.bioTextsList[3]);
+      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[3]);
     });
 
     it('should return the fallback entry when index is out of range', (): void => {
@@ -119,12 +123,12 @@ describe('HomeComponent', (): void => {
     });
 
     it('should correctly wrap from the last entry back to 0 using modulo', (): void => {
-      const last = global.bioTextsList.length - 1;
+      const last = enLanguage.bioTextsList.length - 1;
       comp.currentIndex = last;
-      expect(comp.currentBioEntry).toEqual(global.bioTextsList[last]);
-      comp.currentIndex = (last + 1) % global.bioTextsList.length;
+      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[last]);
+      comp.currentIndex = (last + 1) % enLanguage.bioTextsList.length;
       expect(comp.currentIndex).toBe(0);
-      expect(comp.currentBioEntry).toEqual(global.bioTextsList[0]);
+      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[0]);
     });
   });
 
@@ -133,7 +137,7 @@ describe('HomeComponent', (): void => {
   describe('currentPortraitHighlight getter', (): void => {
     it('should return the highlight at the current index', (): void => {
       comp.currentPortraitHighlightIndex = 0;
-      expect(comp.currentPortraitHighlight).toEqual(global.portraitHighlights[0]);
+      expect(comp.currentPortraitHighlight).toEqual(enLanguage.portraitHighlights[0]);
     });
 
     it('should return null when index is out of range', (): void => {
@@ -159,7 +163,7 @@ describe('HomeComponent', (): void => {
     });
 
     it('should not call setTimeout when only one portrait exists', (): void => {
-      const highlights = (comp as unknown as { portraitHighlights: PortraitHighlight[] })
+      const highlights = (comp as unknown as { portraitHighlights: LanguagePortraitHighlight[] })
         .portraitHighlights;
       const saved = [...highlights]; // snapshot before mutation
       highlights.splice(1, saved.length - 1); // reduce to a single entry
@@ -193,7 +197,7 @@ describe('HomeComponent', (): void => {
     }));
 
     it('should wrap portrait index from the last position back to 0', fakeAsync((): void => {
-      comp.currentPortraitHighlightIndex = global.portraitHighlights.length - 1;
+      comp.currentPortraitHighlightIndex = enLanguage.portraitHighlights.length - 1;
       const zone = TestBed.inject(NgZone);
       zone.runOutsideAngular((): void => {
         comp.showNextPortraitHighlight();
@@ -400,15 +404,15 @@ describe('HomeComponent', (): void => {
       expect(el.querySelector('#projects')).not.toBeNull();
     });
 
-    it('should render one project entry per global.projects entry', (): void => {
+    it('should render one project entry per localized project entry', (): void => {
       const el = fixture.nativeElement as HTMLElement;
       const entries = el.querySelectorAll('.project-entry');
-      expect(entries.length).toBe(global.projects.length);
+      expect(entries.length).toBe(enLanguage.projects.length);
     });
 
     it('should render all project titles', (): void => {
       const el = fixture.nativeElement as HTMLElement;
-      global.projects.forEach((project): void => {
+      enLanguage.projects.forEach((project): void => {
         expect(el.textContent).toContain(project.title);
       });
     });

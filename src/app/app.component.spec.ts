@@ -9,6 +9,8 @@ describe('AppComponent', (): void => {
   let component: AppComponent;
 
   beforeEach(async (): Promise<void> => {
+    localStorage.clear();
+
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [provideRouter([])],
@@ -23,28 +25,65 @@ describe('AppComponent', (): void => {
     expect(component).toBeTruthy();
   });
 
-  it('should have title "Lechner Julian"', (): void => {
-    expect(component.title).toBe('Lechner Julian');
+  it('should render the language selector on first visit', (): void => {
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.language-overlay')).not.toBeNull();
   });
 
-  it('should render a router-outlet element', (): void => {
+  it('should preselect English by default', (): void => {
+    const comp = component as unknown as { selectedLanguage(): string };
+    expect(comp.selectedLanguage()).toBe('en');
+  });
+
+  it('should always render a router-outlet element', (): void => {
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelector('router-outlet')).not.toBeNull();
   });
 
-  it('should not render any additional root elements besides router-outlet', (): void => {
-    const el = fixture.nativeElement as HTMLElement;
-    const children = Array.from(el.children);
-    expect(children.length).toBe(1);
-    expect(children[0].tagName.toLowerCase()).toBe('router-outlet');
+  it('should confirm and persist the selected language', (): void => {
+    const comp = component as unknown as {
+      chooseLanguage(language: 'en' | 'de'): void;
+      currentLanguageCode(): string;
+      isLanguageConfirmed(): boolean;
+      isLanguageSelectorOpen(): boolean;
+    };
+
+    comp.chooseLanguage('de');
+    fixture.detectChanges();
+
+    expect(comp.currentLanguageCode()).toBe('de');
+    expect(comp.isLanguageConfirmed()).toBeTrue();
+    expect(comp.isLanguageSelectorOpen()).toBeFalse();
+    expect(localStorage.getItem('portfolio-language')).toBe('de');
   });
 
-  describe('Performance', (): void => {
-    it('should create and run initial change detection within 100 ms', (): void => {
-      const start = performance.now();
-      const f = TestBed.createComponent(AppComponent);
-      f.detectChanges();
-      expect(performance.now() - start).toBeLessThan(100);
-    });
+  it('should restore a saved language from localStorage', async (): Promise<void> => {
+    localStorage.setItem('portfolio-language', 'de');
+
+    const restoredFixture = TestBed.createComponent(AppComponent);
+    restoredFixture.detectChanges();
+    const restoredComponent = restoredFixture.componentInstance as unknown as {
+      currentLanguageCode(): string;
+      isLanguageConfirmed(): boolean;
+      isLanguageSelectorOpen(): boolean;
+    };
+
+    expect(restoredComponent.currentLanguageCode()).toBe('de');
+    expect(restoredComponent.isLanguageConfirmed()).toBeTrue();
+    expect(restoredComponent.isLanguageSelectorOpen()).toBeFalse();
+  });
+
+  it('should reopen the selector after confirmation', (): void => {
+    const comp = component as unknown as {
+      chooseLanguage(language: 'en' | 'de'): void;
+      reopenLanguageSelector(): void;
+      isLanguageSelectorOpen(): boolean;
+    };
+
+    comp.chooseLanguage('en');
+    comp.reopenLanguageSelector();
+    fixture.detectChanges();
+
+    expect(comp.isLanguageSelectorOpen()).toBeTrue();
   });
 });

@@ -2,43 +2,34 @@
   <section class="hero-section panel legal-hero">
     <div class="hero-copy">
       <div class="hero-copy-main">
-        <p class="eyebrow">Legal</p>
-        <h1>Imprint & Privacy</h1>
-        <p class="hero-intro legal-intro">
-          Legal information for this website under Austrian law, including privacy information for websites operated by
-          {{ global.firstname }} {{ global.lastname }}
-          (Lechner Systems).
-        </p>
+        <p class="eyebrow">{{ content().imprint.legalEyebrow }}</p>
+        <h1>{{ content().imprint.title }}</h1>
+        <p class="hero-intro legal-intro">{{ bind(content().imprint.intro) }}</p>
       </div>
-
       <div class="hero-actions">
-        <a class="back-link" routerLink="">
-          <fa-icon [icon]="faArrowLeft"></fa-icon>
-          <span>Back to portfolio</span>
-        </a>
+        <a class="back-link" routerLink=""
+          ><fa-icon [icon]="faArrowLeft"></fa-icon><span>{{ content().imprint.backToPortfolio }}</span></a
+        >
       </div>
     </div>
 
     <div class="hero-visual">
       <div class="portrait-highlight legal-contact-box">
-        <p class="hero-contact-title">Provider</p>
+        <p class="hero-contact-title">{{ content().imprint.provider }}</p>
         <p class="legal-provider-name">{{ global.firstname }} {{ global.lastname }} / Lechner Systems</p>
-        <p>{{ displayStreet }} {{ global.address.houseNumber }}</p>
-        <p>{{ global.address.zip }} {{ displayCity }}</p>
+        <p>{{ global.address.street }} {{ global.address.houseNumber }}</p>
+        <p>{{ global.address.zip }} {{ global.address.city }}</p>
         <p>{{ global.address.country }}</p>
         <hr />
-        <p class="hero-contact-title">Direct Contact</p>
+        <p class="hero-contact-title">{{ content().imprint.directContact }}</p>
         <p>
-          Phone:
-          <a class="inline-link" href="tel:{{ global.hrefContactPhone }}">{{ global.contactPhone }}</a>
+          {{ content().imprint.phone }}: <a class="inline-link" href="tel:{{ global.hrefContactPhone }}">{{ global.contactPhone }}</a>
         </p>
         <p>
-          Contact:
-          <a class="inline-link" [href]="contactSafeMail">{{ global.contactMail }}</a>
+          {{ content().imprint.contact }}: <a class="inline-link" [href]="contactMailHref">{{ global.contactMail }}</a>
         </p>
         <p>
-          Abuse:
-          <a class="inline-link" [href]="abuseSafeMail">{{ global.abuseMail }}</a>
+          {{ content().imprint.abuse }}: <a class="inline-link" [href]="abuseMailHref">{{ global.abuseMail }}</a>
         </p>
       </div>
     </div>
@@ -46,113 +37,63 @@
 
   <section class="story-section panel legal-section">
     <div class="section-heading">
-      <p class="eyebrow">Scope</p>
-      <h2>Scope Of These Notices</h2>
+      <p class="eyebrow">{{ content().imprint.scopeEyebrow }}</p>
+      <h2>{{ content().imprint.scopeTitle }}</h2>
     </div>
-
     <div class="story-grid">
       <div class="story-copy">
-        <p>
-          These notices apply to this website and, unless a more specific notice is published there, to other websites operated by Julian
-          Lechner under the name Lechner Systems.
-        </p>
+        <p>{{ content().imprint.scopeLeft }}</p>
       </div>
-
       <div class="story-detail">
-        <p>
-          This website provides information about projects, technical services, contact options, and professional work in software
-          engineering, IT, and related digital services.
-        </p>
+        <p>{{ content().imprint.scopeRight }}</p>
       </div>
     </div>
   </section>
-
   <section class="story-section panel legal-section">
     <div class="section-heading compact">
-      <p class="eyebrow">Privacy</p>
-      <h2>Privacy And Data Processing</h2>
+      <p class="eyebrow">{{ content().imprint.privacyEyebrow }}</p>
+      <h2>{{ content().imprint.privacyTitle }}</h2>
     </div>
-
     <div class="story-grid">
       <div class="story-copy">
-        <p>
-          The controller for data processing within the meaning of the GDPR is {{ global.firstname }} {{ global.lastname }}, reachable at
-          <a class="inline-link" [href]="contactSafeMail">{{ global.contactMail }}</a> and by phone at
-          <a class="inline-link" href="tel:{{ global.hrefContactPhone }}">{{ global.contactPhone }}</a
-          >.
-        </p>
-        <p>
-          As currently implemented in this web project, this website does not use its own tracking, analytics cookies, marketing cookies, or
-          long-term personal usage profiling.
-        </p>
-        <p>
-          For informational website access, technically necessary connection and server data may be processed for operation, IT security,
-          abuse prevention, and troubleshooting.
-        </p>
+        <p>{{ bind(content().imprint.privacyLeftParagraphs[0]) }}</p>
+        <p>{{ content().imprint.privacyLeftParagraphs[1] }}</p>
+        <p>{{ content().imprint.privacyLeftParagraphs[2] }}</p>
       </div>
-
       <div class="story-detail">
-        <p>
-          If you contact me by email or phone, the data you provide is processed to handle your request and maintain communication.
-          Applicable legal bases may include Article 6(1)(b), 6(1)(c), and 6(1)(f) GDPR, depending on context.
-        </p>
-        <p>
-          Personal data is disclosed only where legally required, needed for the establishment, exercise, or defence of legal claims, or
-          explicitly initiated by you.
-        </p>
-        <p>Data is stored only as long as required for communication, request handling, and legal retention duties.</p>
+        <p>{{ content().imprint.privacyRightParagraphs[0] }}</p>
+        <p>{{ content().imprint.privacyRightParagraphs[1] }}</p>
+        <p>{{ content().imprint.privacyRightParagraphs[2] }}</p>
       </div>
     </div>
   </section>
-
   <section class="story-section panel legal-section">
     <div class="section-heading compact">
-      <p class="eyebrow">Rights</p>
-      <h2>Data Subject Rights And Complaints</h2>
+      <p class="eyebrow">{{ content().imprint.rightsEyebrow }}</p>
+      <h2>{{ content().imprint.rightsTitle }}</h2>
     </div>
-
     <div class="story-grid">
       <div class="story-copy">
-        <p>
-          Subject to statutory requirements, data subjects have the right of access, rectification, erasure, restriction of processing, data
-          portability, and objection.
-        </p>
+        <p>{{ content().imprint.rightsLeft }}</p>
       </div>
-
       <div class="story-detail">
-        <p>
-          Complaints can be submitted to the Austrian Data Protection Authority: Barichgasse 40-42, 1030 Vienna, email
-          <a class="inline-link" href="mailto:dsb@dsb.gv.at">dsb&#64;dsb.gv.at</a>, website
-          <a class="inline-link" href="https://dsb.gv.at/">dsb.gv.at</a>.
-        </p>
+        <p>{{ content().imprint.rightsRight }}</p>
       </div>
     </div>
   </section>
-
   <section class="story-section panel legal-section">
     <div class="section-heading compact">
-      <p class="eyebrow">Copyright</p>
-      <h2>Copyright, External Links, And Applicable Law</h2>
+      <p class="eyebrow">{{ content().imprint.copyrightEyebrow }}</p>
+      <h2>{{ content().imprint.copyrightTitle }}</h2>
     </div>
-
     <div class="story-grid">
       <div class="story-copy">
-        <p>
-          All content on this website, including texts, images, graphics, photographs, layouts, source code, and other works, is protected
-          by copyright unless stated otherwise. All rights remain reserved.
-        </p>
-        <p>Any use beyond statutory exceptions requires prior written consent of the respective rights holder.</p>
+        <p>{{ content().imprint.copyrightLeftParagraphs[0] }}</p>
+        <p>{{ content().imprint.copyrightLeftParagraphs[1] }}</p>
       </div>
-
       <div class="story-detail">
-        <p>
-          This website may contain links to third-party websites. Their operators are solely responsible for those contents, and no
-          liability is accepted for external links to the extent permitted by law.
-        </p>
-        <p>
-          Austrian law applies exclusively, excluding conflict-of-law rules that would refer to another legal system, unless mandatory
-          consumer protection provisions require otherwise.
-        </p>
+        <p>{{ content().imprint.copyrightRightParagraphs[0] }}</p>
+        <p>{{ content().imprint.copyrightRightParagraphs[1] }}</p>
       </div>
     </div>
   </section>

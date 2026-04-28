@@ -1,1 +1,65 @@
-<router-outlet></router-outlet>
+<div class="app-content" [attr.aria-hidden]="isLanguageSelectorOpen() ? 'true' : null" [attr.inert]="isLanguageSelectorOpen() ? '' : null">
+  <router-outlet></router-outlet>
+</div>
+
+@if (isLanguageConfirmed()) {
+  <button
+    type="button"
+    class="language-switcher"
+    [attr.aria-label]="content().app.changeLanguageAriaLabel"
+    [title]="content().app.changeLanguageAriaLabel"
+    (click)="reopenLanguageSelector()"
+  >
+    <span class="language-switcher-tag">{{ currentLanguageCode().toUpperCase() }}</span>
+    <span class="language-switcher-copy">
+      <strong>{{ content().app.changeLanguage }}</strong>
+      <span>{{ languageSwitcherLabel() }}</span>
+    </span>
+  </button>
+}
+
+@if (isLanguageSelectorOpen()) {
+  <div
+    class="language-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="language-title"
+    (click)="closeLanguageSelectorOnBackdrop($event)"
+  >
+    <section class="language-card panel">
+      <div class="language-card-header">
+        <div class="language-copy">
+          <h2 id="language-title">{{ dialogContent().app.selectorTitle }}</h2>
+        </div>
+
+        @if (isLanguageConfirmed()) {
+          <button
+            type="button"
+            class="language-close"
+            [attr.aria-label]="dialogContent().app.closeSelector"
+            (click)="closeLanguageSelector()"
+          >
+            x
+          </button>
+        }
+      </div>
+
+      <div class="language-options" role="radiogroup" [attr.aria-label]="dialogContent().app.selectorTitle">
+        @for (option of languageOptions; track option.code) {
+          <button
+            type="button"
+            class="language-option"
+            role="radio"
+            [attr.aria-checked]="selectedLanguage() === option.code"
+            [attr.autofocus]="selectedLanguage() === option.code ? '' : null"
+            [class.language-option-active]="selectedLanguage() === option.code"
+            (click)="chooseLanguage(option.code)"
+          >
+            <span class="language-option-accent">{{ option.accent }}</span>
+            <strong>{{ getLanguageLabel(option.code) }}</strong>
+          </button>
+        }
+      </div>
+    </section>
+  </div>
+}

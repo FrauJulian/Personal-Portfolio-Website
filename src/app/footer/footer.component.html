@@ -1,7 +1,7 @@
 <noscript>
   <div class="page-shell footer-shell">
     <div class="panel noscript-panel">
-      <h2 id="loading-text" class="warning-text">Please enable JavaScript for the full experience.</h2>
+      <h2 id="loading-text" class="warning-text">{{ content().footer.noscriptMessage }}</h2>
     </div>
   </div>
 </noscript>
@@ -9,6 +9,6 @@
 <footer class="site-footer">
   <div class="footer-inner">
     <p>&copy; 2023 - {{ currentYear }} {{ global.firstname }} {{ global.lastname }}</p>
-    <a routerLink="/imprint">Imprint</a>
+    <a routerLink="/imprint">{{ content().footer.imprintLink }}</a>
   </div>
 </footer>
