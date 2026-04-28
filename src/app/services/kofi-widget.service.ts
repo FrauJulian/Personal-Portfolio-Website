@@ -8,11 +8,14 @@ export class KofiWidgetService {
 
   private readonly widgetScriptUrl = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
   private readonly widgetIframeTitle = 'Ko-fi support chat';
-  private readonly fallbackDelayMs = 10000;
+  private readonly fallbackDelayMs = 2500;
+  private readonly mobileBreakpointPx = 700;
+  private readonly mobileViewportOffsetPx = 24;
 
   private loadTimeoutId: number | null = null;
   private loadIdleCallbackId: number | null = null;
   private loadListenerAbortController: AbortController | null = null;
+  private resizeListenerAbortController: AbortController | null = null;
   private iframeObserver: MutationObserver | null = null;
   private isWidgetScheduled = false;
   private isWidgetLoaded = false;
@@ -85,10 +88,50 @@ export class KofiWidgetService {
     }
   }
 
-  teardown(): void {
+  prioritizeLoad(): void {
+    if (!isPlatformBrowser(this.platformId) || this.isWidgetLoaded || this.isWidgetDrawn) {
+      return;
+    }
+
     const windowRef = this.document.defaultView;
+    if (windowRef === null) {
+      return;
+    }
 
     this.clearStartListeners();
+    this.clearPendingLoadTimers();
+
+    const loadWidget = (): void => {
+      this.loadIdleCallbackId = null;
+      this.loadTimeoutId = null;
+      void this.loadWidget();
+    };
+
+    if (typeof windowRef.requestIdleCallback === 'function') {
+      this.loadIdleCallbackId = windowRef.requestIdleCallback(loadWidget, { timeout: 1200 });
+      return;
+    }
+
+    this.loadTimeoutId = windowRef.setTimeout(loadWidget, 200);
+  }
+
+  teardown(): void {
+    this.clearStartListeners();
+    this.resizeListenerAbortController?.abort();
+    this.resizeListenerAbortController = null;
+    this.clearPendingLoadTimers();
+
+    this.iframeObserver?.disconnect();
+    this.iframeObserver = null;
+  }
+
+  private clearStartListeners(): void {
+    this.loadListenerAbortController?.abort();
+    this.loadListenerAbortController = null;
+  }
+
+  private clearPendingLoadTimers(): void {
+    const windowRef = this.document.defaultView;
 
     if (windowRef !== null && this.loadTimeoutId !== null) {
       windowRef.clearTimeout(this.loadTimeoutId);
@@ -103,14 +146,6 @@ export class KofiWidgetService {
       windowRef.cancelIdleCallback(this.loadIdleCallbackId);
       this.loadIdleCallbackId = null;
     }
-
-    this.iframeObserver?.disconnect();
-    this.iframeObserver = null;
-  }
-
-  private clearStartListeners(): void {
-    this.loadListenerAbortController?.abort();
-    this.loadListenerAbortController = null;
   }
 
   private async loadWidget(): Promise<void> {
@@ -190,7 +225,9 @@ export class KofiWidgetService {
 
     this.isWidgetDrawn = true;
     this.ensureAccessibleIframeTitles();
+    this.applyResponsiveWidgetLayout();
     this.observeInjectedIframes();
+    this.observeViewportChanges();
   }
 
   private ensureAccessibleIframeTitles(): void {
@@ -201,6 +238,75 @@ export class KofiWidgetService {
       });
   }
 
+  private applyResponsiveWidgetLayout(): void {
+    const windowRef = this.document.defaultView;
+    if (windowRef === null) {
+      return;
+    }
+
+    const isMobileViewport: boolean = windowRef.innerWidth <= this.mobileBreakpointPx;
+    const mobileWidthPx: number = Math.max(windowRef.innerWidth - this.mobileViewportOffsetPx, 280);
+    const mobileHeightPx: number = Math.max(
+      Math.min(Math.round(windowRef.innerHeight * 0.68), 520),
+      360,
+    );
+
+    this.document
+      .querySelectorAll<HTMLElement>('[id*="kofi-widget-overlay"]')
+      .forEach((overlay: HTMLElement): void => {
+        if (isMobileViewport) {
+          overlay.style.left = '12px';
+          overlay.style.right = '12px';
+          overlay.style.bottom = '12px';
+          overlay.style.width = 'auto';
+          overlay.style.maxWidth = `${mobileWidthPx}px`;
+        } else {
+          overlay.style.removeProperty('left');
+          overlay.style.removeProperty('right');
+          overlay.style.removeProperty('width');
+          overlay.style.removeProperty('max-width');
+        }
+      });
+
+    this.document
+      .querySelectorAll<HTMLElement>(
+        '.floatingchat-container-wrap, .floatingchat-container-wrap-mobi',
+      )
+      .forEach((container: HTMLElement): void => {
+        if (isMobileViewport) {
+          container.style.width = `${mobileWidthPx}px`;
+          container.style.maxWidth = 'calc(100vw - 24px)';
+          container.style.left = '0';
+          container.style.right = '0';
+        } else {
+          container.style.removeProperty('width');
+          container.style.removeProperty('max-width');
+          container.style.removeProperty('left');
+          container.style.removeProperty('right');
+        }
+      });
+
+    this.document
+      .querySelectorAll<HTMLIFrameElement>('iframe[id^="kofi-wo-container"]')
+      .forEach((iframe: HTMLIFrameElement): void => {
+        iframe.title = this.widgetIframeTitle;
+
+        if (isMobileViewport) {
+          iframe.style.width = `${mobileWidthPx}px`;
+          iframe.style.maxWidth = 'calc(100vw - 24px)';
+          iframe.style.height = `${mobileHeightPx}px`;
+          iframe.style.maxHeight = '68vh';
+          iframe.style.borderRadius = '18px';
+        } else {
+          iframe.style.removeProperty('width');
+          iframe.style.removeProperty('max-width');
+          iframe.style.removeProperty('height');
+          iframe.style.removeProperty('max-height');
+          iframe.style.removeProperty('border-radius');
+        }
+      });
+  }
+
   private observeInjectedIframes(): void {
     if (this.iframeObserver !== null) {
       return;
@@ -208,11 +314,37 @@ export class KofiWidgetService {
 
     this.iframeObserver = new MutationObserver((): void => {
       this.ensureAccessibleIframeTitles();
+      this.applyResponsiveWidgetLayout();
     });
 
     this.iframeObserver.observe(this.document.body, {
       childList: true,
       subtree: true,
     });
+  }
+
+  private observeViewportChanges(): void {
+    if (this.resizeListenerAbortController !== null) {
+      return;
+    }
+
+    const windowRef = this.document.defaultView;
+    if (windowRef === null) {
+      return;
+    }
+
+    this.resizeListenerAbortController = new AbortController();
+    const listenerOptions: AddEventListenerOptions = {
+      passive: true,
+      signal: this.resizeListenerAbortController.signal,
+    };
+
+    windowRef.addEventListener(
+      'resize',
+      (): void => {
+        this.applyResponsiveWidgetLayout();
+      },
+      listenerOptions,
+    );
   }
 }

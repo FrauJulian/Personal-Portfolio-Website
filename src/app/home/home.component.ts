@@ -1,5 +1,5 @@
 import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
-import { ChangeDetectionStrategy, Component, inject, NgZone } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, NgZone } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { faArrowRight, faArrowDown, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
@@ -8,9 +8,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import type { Subscription } from 'rxjs';
 import { interval } from 'rxjs';
 
+import { deLanguage } from '../../languages/de';
+import { enLanguage } from '../../languages/en';
 import { global } from '../../global';
 import type {
   LanguageBioTextEntry,
+  LanguagePack,
   LanguagePortraitHighlight,
   LanguageProject,
 } from '../../languages/language.types';
@@ -27,7 +30,9 @@ import { LanguageService } from '../services/language.service';
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly zone = inject(NgZone);
   private readonly languageService = inject(LanguageService);
-  protected readonly content = this.languageService.content;
+  protected readonly content = computed<LanguagePack>(() =>
+    this.languageService.languageCode() === 'de' ? deLanguage : enLanguage,
+  );
 
   private scrollAnimationFrameId: number | null = null;
   private projectEntryAnimationFrameId: number | null = null;
@@ -174,14 +179,27 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   protected scrollToContactLinks(): void {
     this.scrollToElementById('contact-links', this.getResponsiveScrollOffset(0.05));
   }
+
+  private shouldEnableScrollEffects(): boolean {
+    if (typeof window === 'undefined') return false;
+
+    const isSmallViewport: boolean = window.innerWidth <= 700;
+    const prefersReducedMotion: boolean = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    const isCoarsePointer: boolean = window.matchMedia('(pointer: coarse)').matches;
+
+    return !isSmallViewport && !prefersReducedMotion && !isCoarsePointer;
+  }
+
   private initNameGradientScrollAnimation(): void {
-    if (typeof window === 'undefined') return;
+    if (!this.shouldEnableScrollEffects()) return;
     window.addEventListener('scroll', this.scheduleNameGradientUpdate, { passive: true });
     window.addEventListener('resize', this.scheduleNameGradientUpdate, { passive: true });
     this.scheduleNameGradientUpdate();
   }
   private initProjectEntryRevealObserver(): void {
-    if (typeof window === 'undefined') return;
+    if (!this.shouldEnableScrollEffects()) return;
     window.addEventListener('scroll', this.scheduleProjectEntryRevealUpdate, { passive: true });
     window.addEventListener('resize', this.scheduleProjectEntryRevealUpdate, { passive: true });
     this.scheduleProjectEntryRevealUpdate();
@@ -199,7 +217,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   private initAboutSectionScrollAnimation(): void {
-    if (typeof window === 'undefined') return;
+    if (!this.shouldEnableScrollEffects()) return;
     window.addEventListener('scroll', this.scheduleAboutSectionScrollAnimationUpdate, {
       passive: true,
     });

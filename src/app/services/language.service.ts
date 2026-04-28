@@ -1,8 +1,36 @@
 import { Injectable, computed, signal } from '@angular/core';
 
-import { deLanguage } from '../../languages/de';
-import { enLanguage } from '../../languages/en';
-import type { LanguageCode, LanguagePack } from '../../languages/language.types';
+import type { LanguageCode, LanguageShellPack } from '../../languages/language.types';
+
+const enShellLanguage: LanguageShellPack = {
+  app: {
+    selectorTitle: 'Select language',
+    changeLanguage: 'Language',
+    changeLanguageAriaLabel: 'Change language',
+    closeSelector: 'Close language selection',
+    languageEnglish: 'English',
+    languageGerman: 'German',
+  },
+  footer: {
+    noscriptMessage: 'Please enable JavaScript for the full experience.',
+    imprintLink: 'Imprint',
+  },
+};
+
+const deShellLanguage: LanguageShellPack = {
+  app: {
+    selectorTitle: 'Sprache wählen',
+    changeLanguage: 'Sprache',
+    changeLanguageAriaLabel: 'Sprache wechseln',
+    closeSelector: 'Sprachauswahl schliessen',
+    languageEnglish: 'Englisch',
+    languageGerman: 'Deutsch',
+  },
+  footer: {
+    noscriptMessage: 'Bitte aktiviere JavaScript für die volle Darstellung.',
+    imprintLink: 'Impressum',
+  },
+};
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
@@ -12,7 +40,9 @@ export class LanguageService {
 
   readonly languageCode = this.currentLanguageCode.asReadonly();
   readonly isLanguageConfirmed = this.languageConfirmed.asReadonly();
-  readonly content = computed<LanguagePack>(() => this.getPack(this.currentLanguageCode()));
+  readonly content = computed<LanguageShellPack>(() =>
+    this.getShellPack(this.currentLanguageCode()),
+  );
 
   initializeFromStorage(): LanguageCode {
     if (typeof window === 'undefined') {
@@ -37,7 +67,7 @@ export class LanguageService {
     }
   }
 
-  getPack(code: LanguageCode): LanguagePack {
-    return code === 'de' ? deLanguage : enLanguage;
+  getShellPack(code: LanguageCode): LanguageShellPack {
+    return code === 'de' ? deShellLanguage : enShellLanguage;
   }
 }

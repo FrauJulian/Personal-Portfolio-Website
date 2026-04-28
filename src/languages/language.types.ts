@@ -93,3 +93,5 @@ export interface LanguagePack {
   portraitHighlights: LanguagePortraitHighlight[];
   projects: LanguageProject[];
 }
+
+export type LanguageShellPack = Pick<LanguagePack, 'app' | 'footer'>;

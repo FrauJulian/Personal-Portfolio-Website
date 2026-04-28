@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { code: 'de', accent: 'DE' },
   ];
   protected readonly dialogContent = computed(() =>
-    this.languageService.getPack(this.selectedLanguage()),
+    this.languageService.getShellPack(this.selectedLanguage()),
   );
   protected readonly languageSwitcherLabel = computed(() =>
     this.getLanguageLabel(this.currentLanguageCode(), this.content()),
@@ -66,6 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
   protected confirmLanguage(): void {
     this.languageService.confirmLanguage(this.selectedLanguage());
     this.isLanguageSelectorOpen.set(false);
+    this.kofiWidgetService.prioritizeLoad();
   }
 
   protected reopenLanguageSelector(): void {
@@ -80,6 +81,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.selectedLanguage.set(this.currentLanguageCode());
     this.isLanguageSelectorOpen.set(false);
+    this.kofiWidgetService.prioritizeLoad();
   }
 
   protected closeLanguageSelectorOnBackdrop(event: MouseEvent): void {
