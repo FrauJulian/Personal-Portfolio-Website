@@ -1,5 +1,12 @@
 import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
-import { ChangeDetectionStrategy, Component, computed, inject, NgZone } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  NgZone,
+  signal,
+} from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { faArrowRight, faArrowDown, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
@@ -62,8 +69,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly global = global;
   protected readonly age = this.calculateAge(global.birthdate);
   protected readonly contactMailHref = `mailto:${global.contactMail}`;
-  protected isLongBioShown = false;
-  protected isLongBioMounted = false;
   protected readonly faArrowRight: IconDefinition = faArrowRight;
   protected readonly faArrowDown: IconDefinition = faArrowDown;
   protected readonly faEnvelope: IconDefinition = faEnvelope;
@@ -72,13 +77,45 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly faGithub: IconDefinition = faGithub;
   readonly faLinkedin: IconDefinition = faLinkedin;
 
-  protected currentPortraitHighlightIndex = 0;
-  protected isPortraitSwitching = false;
-  protected currentIndex = 0;
   protected readonly fallbackBioEntry: LanguageBioTextEntry = { label: 'my stack', value: '' };
+  private readonly isLongBioShownState = signal(false);
+  private readonly isLongBioMountedState = signal(false);
+  private readonly currentPortraitHighlightIndexState = signal(0);
+  private readonly isPortraitSwitchingState = signal(false);
+  private readonly currentIndexState = signal(0);
   private sub!: Subscription;
   private bioHideTimeoutId: number | null = null;
 
+  protected get isLongBioShown(): boolean {
+    return this.isLongBioShownState();
+  }
+  protected set isLongBioShown(value: boolean) {
+    this.isLongBioShownState.set(value);
+  }
+  protected get isLongBioMounted(): boolean {
+    return this.isLongBioMountedState();
+  }
+  protected set isLongBioMounted(value: boolean) {
+    this.isLongBioMountedState.set(value);
+  }
+  protected get currentPortraitHighlightIndex(): number {
+    return this.currentPortraitHighlightIndexState();
+  }
+  protected set currentPortraitHighlightIndex(value: number) {
+    this.currentPortraitHighlightIndexState.set(value);
+  }
+  protected get isPortraitSwitching(): boolean {
+    return this.isPortraitSwitchingState();
+  }
+  protected set isPortraitSwitching(value: boolean) {
+    this.isPortraitSwitchingState.set(value);
+  }
+  protected get currentIndex(): number {
+    return this.currentIndexState();
+  }
+  protected set currentIndex(value: number) {
+    this.currentIndexState.set(value);
+  }
   protected get portraitHighlights(): LanguagePortraitHighlight[] {
     return this.content().portraitHighlights;
   }
@@ -86,11 +123,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.content().projects;
   }
   protected get currentPortraitHighlight(): LanguagePortraitHighlight | null {
-    return this.portraitHighlights[this.currentPortraitHighlightIndex] ?? null;
+    return this.portraitHighlights[this.currentPortraitHighlightIndexState()] ?? null;
   }
   protected get currentBioEntry(): LanguageBioTextEntry {
     return (
-      this.content().bioTextsList[this.currentIndex] ?? {
+      this.content().bioTextsList[this.currentIndexState()] ?? {
         label: this.content().home.fallbackBioLabel,
         value: '',
       }
