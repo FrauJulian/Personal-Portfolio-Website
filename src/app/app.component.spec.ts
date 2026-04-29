@@ -25,14 +25,19 @@ describe('AppComponent', (): void => {
     expect(component).toBeTruthy();
   });
 
-  it('should render the language selector on first visit', (): void => {
+  it('should keep the language selector closed on first visit', (): void => {
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.language-overlay')).not.toBeNull();
+    expect(el.querySelector('.language-overlay')).toBeNull();
   });
 
   it('should preselect English by default', (): void => {
     const comp = component as unknown as { selectedLanguage(): string };
     expect(comp.selectedLanguage()).toBe('en');
+  });
+
+  it('should render the language switcher on first visit', (): void => {
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('.language-switcher')).not.toBeNull();
   });
 
   it('should always render a router-outlet element', (): void => {

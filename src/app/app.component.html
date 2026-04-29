@@ -2,21 +2,19 @@
   <router-outlet></router-outlet>
 </div>
 
-@if (isLanguageConfirmed()) {
-  <button
-    type="button"
-    class="language-switcher"
-    [attr.aria-label]="content().app.changeLanguageAriaLabel"
-    [title]="content().app.changeLanguageAriaLabel"
-    (click)="reopenLanguageSelector()"
-  >
-    <span class="language-switcher-tag">{{ currentLanguageCode().toUpperCase() }}</span>
-    <span class="language-switcher-copy">
-      <strong>{{ content().app.changeLanguage }}</strong>
-      <span>{{ languageSwitcherLabel() }}</span>
-    </span>
-  </button>
-}
+<button
+  type="button"
+  class="language-switcher"
+  [attr.aria-label]="content().app.changeLanguageAriaLabel"
+  [title]="content().app.changeLanguageAriaLabel"
+  (click)="reopenLanguageSelector()"
+>
+  <span class="language-switcher-tag">{{ currentLanguageCode().toUpperCase() }}</span>
+  <span class="language-switcher-copy">
+    <strong>{{ content().app.changeLanguage }}</strong>
+    <span>{{ languageSwitcherLabel() }}</span>
+  </span>
+</button>
 
 @if (isLanguageSelectorOpen()) {
   <div
@@ -32,16 +30,14 @@
           <h2 id="language-title">{{ dialogContent().app.selectorTitle }}</h2>
         </div>
 
-        @if (isLanguageConfirmed()) {
-          <button
-            type="button"
-            class="language-close"
-            [attr.aria-label]="dialogContent().app.closeSelector"
-            (click)="closeLanguageSelector()"
-          >
-            x
-          </button>
-        }
+        <button
+          type="button"
+          class="language-close"
+          [attr.aria-label]="dialogContent().app.closeSelector"
+          (click)="closeLanguageSelector()"
+        >
+          ×
+        </button>
       </div>
 
       <div class="language-options" role="radiogroup" [attr.aria-label]="dialogContent().app.selectorTitle">

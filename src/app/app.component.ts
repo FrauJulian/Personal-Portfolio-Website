@@ -12,7 +12,6 @@ import { RouterOutlet } from '@angular/router';
 
 import type { LanguageCode } from '../languages/language.types';
 import type { LanguageOption } from './app.types';
-import { KofiWidgetService } from './services/kofi-widget.service';
 import { LanguageService } from './services/language.service';
 
 @Component({
@@ -24,13 +23,12 @@ import { LanguageService } from './services/language.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
-  private readonly kofiWidgetService = inject(KofiWidgetService);
   private readonly languageService = inject(LanguageService);
 
   protected readonly content = this.languageService.content;
   protected readonly currentLanguageCode = this.languageService.languageCode;
   protected readonly isLanguageConfirmed = this.languageService.isLanguageConfirmed;
-  protected readonly isLanguageSelectorOpen = signal(true);
+  protected readonly isLanguageSelectorOpen = signal(false);
   protected readonly selectedLanguage = signal<LanguageCode>('en');
   protected readonly languageOptions: readonly LanguageOption[] = [
     { code: 'en', accent: 'EN' },
@@ -54,8 +52,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const initialLanguage = this.languageService.initializeFromStorage();
     this.selectedLanguage.set(initialLanguage);
-    this.isLanguageSelectorOpen.set(!this.isLanguageConfirmed());
-    this.kofiWidgetService.scheduleLoad();
   }
 
   protected chooseLanguage(language: LanguageCode): void {
@@ -66,7 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
   protected confirmLanguage(): void {
     this.languageService.confirmLanguage(this.selectedLanguage());
     this.isLanguageSelectorOpen.set(false);
-    this.kofiWidgetService.prioritizeLoad();
   }
 
   protected reopenLanguageSelector(): void {
@@ -75,13 +70,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   protected closeLanguageSelector(): void {
-    if (!this.isLanguageConfirmed()) {
-      return;
-    }
-
     this.selectedLanguage.set(this.currentLanguageCode());
     this.isLanguageSelectorOpen.set(false);
-    this.kofiWidgetService.prioritizeLoad();
   }
 
   protected closeLanguageSelectorOnBackdrop(event: MouseEvent): void {
@@ -95,7 +85,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.kofiWidgetService.teardown();
     this.document.body.style.overflow = '';
     this.document.documentElement.style.overflow = '';
   }

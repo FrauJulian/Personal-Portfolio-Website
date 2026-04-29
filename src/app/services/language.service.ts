@@ -36,7 +36,7 @@ const deShellLanguage: LanguageShellPack = {
 export class LanguageService {
   private static readonly storageKey = 'portfolio-language';
   private readonly currentLanguageCode = signal<LanguageCode>('en');
-  private readonly languageConfirmed = signal(false);
+  private readonly languageConfirmed = signal(true);
 
   readonly languageCode = this.currentLanguageCode.asReadonly();
   readonly isLanguageConfirmed = this.languageConfirmed.asReadonly();
@@ -52,7 +52,6 @@ export class LanguageService {
     const storedLanguage = window.localStorage.getItem(LanguageService.storageKey);
     if (storedLanguage === 'de' || storedLanguage === 'en') {
       this.currentLanguageCode.set(storedLanguage);
-      this.languageConfirmed.set(true);
     }
 
     return this.currentLanguageCode();
