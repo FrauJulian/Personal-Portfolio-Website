@@ -8,10 +8,6 @@ import {
   signal,
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
-import { faArrowRight, faArrowDown, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import type { IconDefinition } from '@fortawesome/angular-fontawesome';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -23,11 +19,21 @@ import type {
 } from '../../languages/language.types';
 import { FooterComponent } from '../footer/footer.component';
 import { LanguageService } from '../services/language.service';
+import { IconComponent } from '../shared/icon/icon.component';
+import {
+  arrowDownIcon,
+  arrowRightIcon,
+  discordIcon,
+  envelopeIcon,
+  githubIcon,
+  linkedinIcon,
+  phoneIcon,
+} from '../shared/icon/icons';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FooterComponent, FaIconComponent, NgOptimizedImage],
+  imports: [FooterComponent, IconComponent, NgOptimizedImage],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -65,13 +71,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly global = global;
   protected readonly age = this.calculateAge(global.birthdate);
   protected readonly contactMailHref = `mailto:${global.contactMail}`;
-  protected readonly faArrowRight: IconDefinition = faArrowRight;
-  protected readonly faArrowDown: IconDefinition = faArrowDown;
-  protected readonly faEnvelope: IconDefinition = faEnvelope;
-  protected readonly faPhone: IconDefinition = faPhone;
-  protected readonly faDiscord: IconDefinition = faDiscord;
-  protected readonly faGithub: IconDefinition = faGithub;
-  protected readonly faLinkedin: IconDefinition = faLinkedin;
+  protected readonly arrowRightIcon = arrowRightIcon;
+  protected readonly arrowDownIcon = arrowDownIcon;
+  protected readonly envelopeIcon = envelopeIcon;
+  protected readonly phoneIcon = phoneIcon;
+  protected readonly discordIcon = discordIcon;
+  protected readonly githubIcon = githubIcon;
+  protected readonly linkedinIcon = linkedinIcon;
 
   private readonly isLongBioShownState = signal(false);
   private readonly isLongBioMountedState = signal(false);

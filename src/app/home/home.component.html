@@ -14,18 +14,16 @@
         <div class="hero-contact-block">
           <p class="hero-contact-title">{{ content().home.contactTitle }}</p>
           <div id="contact-links" class="contact-area hero-contact-area">
-            <a [href]="contactMailHref" aria-label="Send mail"><fa-icon class="fab" [icon]="faEnvelope" size="lg"></fa-icon></a>
+            <a [href]="contactMailHref" aria-label="Send mail"><app-icon [icon]="envelopeIcon" size="lg"></app-icon></a>
             <a href="tel:{{ global.hrefContactPhone }}" aria-label="Call phone number"
-              ><fa-icon class="fab" [icon]="faPhone" size="lg"></fa-icon
+              ><app-icon [icon]="phoneIcon" size="lg"></app-icon
             ></a>
             <a href="https://discord.com/users/860206216893693973" aria-label="Discord profile"
-              ><fa-icon class="fab" [icon]="faDiscord" size="lg"></fa-icon
+              ><app-icon [icon]="discordIcon" size="lg"></app-icon
             ></a>
-            <a href="https://github.com/fraujulian" aria-label="GitHub profile"
-              ><fa-icon class="fab" [icon]="faGithub" size="lg"></fa-icon
-            ></a>
+            <a href="https://github.com/fraujulian" aria-label="GitHub profile"><app-icon [icon]="githubIcon" size="lg"></app-icon></a>
             <a href="https://www.linkedin.com/in/julian-lechner-98b377356/" aria-label="LinkedIn profile"
-              ><fa-icon class="fab" [icon]="faLinkedin" size="lg"></fa-icon
+              ><app-icon [icon]="linkedinIcon" size="lg"></app-icon
             ></a>
           </div>
         </div>
@@ -90,7 +88,7 @@
       <div class="story-detail">
         <button class="detail-toggle" type="button" (click)="toggleBio()">
           <span>{{ isLongBioShown ? content().home.detailToggleClose : content().home.detailToggleOpen }}</span
-          ><fa-icon [icon]="isLongBioShown ? faArrowDown : faArrowRight"></fa-icon>
+          ><app-icon [icon]="isLongBioShown ? arrowDownIcon : arrowRightIcon"></app-icon>
         </button>
         @if (isLongBioMounted) {
           <div class="detail-panel" [class.detail-panel-enter]="isLongBioShown" [class.detail-panel-leave]="!isLongBioShown">

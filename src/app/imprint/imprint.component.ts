@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import type { IconDefinition } from '@fortawesome/angular-fontawesome';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { global } from '../../global';
 import { FooterComponent } from '../footer/footer.component';
 import { LanguageService } from '../services/language.service';
+import { IconComponent } from '../shared/icon/icon.component';
+import { arrowLeftIcon } from '../shared/icon/icons';
 
 @Component({
   selector: 'app-imprint',
   standalone: true,
-  imports: [FooterComponent, FaIconComponent, RouterLink],
+  imports: [FooterComponent, IconComponent, RouterLink],
   templateUrl: './imprint.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -20,7 +19,7 @@ export class ImprintComponent {
 
   protected readonly content = this.languageService.content;
   protected readonly global = global;
-  protected readonly faArrowLeft: IconDefinition = faArrowLeft;
+  protected readonly arrowLeftIcon = arrowLeftIcon;
   protected readonly contactMailHref = `mailto:${global.contactMail}`;
   protected readonly abuseMailHref = `mailto:${global.abuseMail}`;
 
