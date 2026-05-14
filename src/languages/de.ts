@@ -119,9 +119,9 @@ export const deLanguage: LanguagePack = {
     {
       image: 'assets/optimized/portrait/me.webp',
       imageSrcset:
-        'assets/optimized/portrait/me-320.webp 320w, assets/optimized/portrait/me-480.webp 480w, assets/optimized/portrait/me.webp 640w',
+        'assets/optimized/portrait/me-320.webp 320w, assets/optimized/portrait/me-384.webp 384w, assets/optimized/portrait/me-480.webp 480w, assets/optimized/portrait/me.webp 640w',
       imageSizes:
-        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+        '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
       imageWidth: 640,
       imageHeight: 769,
       text: 'Ich',
@@ -129,9 +129,9 @@ export const deLanguage: LanguagePack = {
     {
       image: 'assets/optimized/portrait/love.webp',
       imageSrcset:
-        'assets/optimized/portrait/love-320.webp 320w, assets/optimized/portrait/love-480.webp 480w, assets/optimized/portrait/love.webp 640w',
+        'assets/optimized/portrait/love-320.webp 320w, assets/optimized/portrait/love-384.webp 384w, assets/optimized/portrait/love-480.webp 480w, assets/optimized/portrait/love.webp 640w',
       imageSizes:
-        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+        '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
       imageWidth: 640,
       imageHeight: 710,
       text: 'Meine Liebe',
@@ -139,9 +139,9 @@ export const deLanguage: LanguagePack = {
     {
       image: 'assets/optimized/portrait/scuba.webp',
       imageSrcset:
-        'assets/optimized/portrait/scuba-320.webp 320w, assets/optimized/portrait/scuba-480.webp 480w, assets/optimized/portrait/scuba.webp 640w',
+        'assets/optimized/portrait/scuba-320.webp 320w, assets/optimized/portrait/scuba-384.webp 384w, assets/optimized/portrait/scuba-480.webp 480w, assets/optimized/portrait/scuba.webp 640w',
       imageSizes:
-        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+        '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
       imageWidth: 640,
       imageHeight: 480,
       text: 'Tauchen',
@@ -149,9 +149,9 @@ export const deLanguage: LanguagePack = {
     {
       image: 'assets/optimized/portrait/trains.webp',
       imageSrcset:
-        'assets/optimized/portrait/trains-320.webp 320w, assets/optimized/portrait/trains-480.webp 480w, assets/optimized/portrait/trains.webp 640w',
+        'assets/optimized/portrait/trains-320.webp 320w, assets/optimized/portrait/trains-384.webp 384w, assets/optimized/portrait/trains-480.webp 480w, assets/optimized/portrait/trains.webp 640w',
       imageSizes:
-        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+        '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
       imageWidth: 640,
       imageHeight: 850,
       text: 'Züge',
@@ -159,9 +159,9 @@ export const deLanguage: LanguagePack = {
     {
       image: 'assets/optimized/portrait/traveling.webp',
       imageSrcset:
-        'assets/optimized/portrait/traveling-320.webp 320w, assets/optimized/portrait/traveling-480.webp 480w, assets/optimized/portrait/traveling.webp 640w',
+        'assets/optimized/portrait/traveling-320.webp 320w, assets/optimized/portrait/traveling-384.webp 384w, assets/optimized/portrait/traveling-480.webp 480w, assets/optimized/portrait/traveling.webp 640w',
       imageSizes:
-        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+        '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
       imageWidth: 640,
       imageHeight: 480,
       text: 'Reisen',
@@ -169,9 +169,9 @@ export const deLanguage: LanguagePack = {
     {
       image: 'assets/optimized/portrait/culture.webp',
       imageSrcset:
-        'assets/optimized/portrait/culture-320.webp 320w, assets/optimized/portrait/culture-480.webp 480w, assets/optimized/portrait/culture.webp 640w',
+        'assets/optimized/portrait/culture-320.webp 320w, assets/optimized/portrait/culture-384.webp 384w, assets/optimized/portrait/culture-480.webp 480w, assets/optimized/portrait/culture.webp 640w',
       imageSizes:
-        '(max-width: 700px) calc(100vw - 2rem), (max-width: 900px) min(100vw - 6rem, 560px), 560px',
+        '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
       imageWidth: 640,
       imageHeight: 482,
       text: 'Kultur',

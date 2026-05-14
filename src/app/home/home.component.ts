@@ -137,7 +137,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.initNameGradientScrollAnimation();
+    this.zone.runOutsideAngular((): void => {
+      this.initNameGradientScrollAnimation();
+    });
     this.zone.runOutsideAngular((): void => {
       interval(1000)
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -151,8 +153,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.initProjectEntryRevealObserver();
-    this.initAboutSectionScrollAnimation();
+    this.zone.runOutsideAngular((): void => {
+      this.initProjectEntryRevealObserver();
+      this.initAboutSectionScrollAnimation();
+    });
   }
   ngOnDestroy(): void {
     if (this.bioHideTimeoutId !== null) {
@@ -231,13 +235,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.shouldEnableScrollEffects()) return;
     window.addEventListener('scroll', this.scheduleNameGradientUpdate, { passive: true });
     window.addEventListener('resize', this.scheduleNameGradientUpdate, { passive: true });
-    this.scheduleNameGradientUpdate();
   }
   private initProjectEntryRevealObserver(): void {
     if (!this.shouldEnableScrollEffects()) return;
     window.addEventListener('scroll', this.scheduleProjectEntryRevealUpdate, { passive: true });
     window.addEventListener('resize', this.scheduleProjectEntryRevealUpdate, { passive: true });
-    this.scheduleProjectEntryRevealUpdate();
   }
   private destroyProjectEntryRevealObserver(): void {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
@@ -259,7 +261,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     window.addEventListener('resize', this.scheduleAboutSectionScrollAnimationUpdate, {
       passive: true,
     });
-    this.scheduleAboutSectionScrollAnimationUpdate();
   }
   private destroyAboutSectionScrollAnimation(): void {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;

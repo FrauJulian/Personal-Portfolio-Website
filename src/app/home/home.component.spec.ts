@@ -434,7 +434,7 @@ describe('HomeComponent', (): void => {
       spyOn(window, 'matchMedia').and.callFake(
         (query: string): MediaQueryList =>
           ({
-            matches: query === '(prefers-reduced-motion: reduce)' ? false : true,
+            matches: query !== '(prefers-reduced-motion: reduce)',
           }) as MediaQueryList,
       );
 

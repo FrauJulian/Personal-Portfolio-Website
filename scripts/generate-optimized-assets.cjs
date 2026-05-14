@@ -57,7 +57,7 @@ function getProfile(relativePath) {
   }
 
   if (normalizedRelativePath.startsWith('portrait/')) {
-    return { maxWidth: 640, quality: 82, alphaQuality: 90, variants: [128, 320, 480] };
+    return { maxWidth: 640, quality: 82, alphaQuality: 90, variants: [128, 320, 384, 480] };
   }
 
   return { maxWidth: 1600, quality: 82, alphaQuality: 92 };
