@@ -233,22 +233,21 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const prefersReducedMotion: boolean = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
-    const usesTouchScrolling: boolean = window.matchMedia(
-      '(hover: none) and (pointer: coarse)',
-    ).matches;
 
-    return !prefersReducedMotion && !usesTouchScrolling;
+    return !prefersReducedMotion;
   }
 
   private initNameGradientScrollAnimation(): void {
     if (!this.shouldEnableScrollEffects()) return;
     window.addEventListener('scroll', this.scheduleNameGradientUpdate, { passive: true });
     window.addEventListener('resize', this.scheduleNameGradientUpdate, { passive: true });
+    this.scheduleNameGradientUpdate();
   }
   private initProjectEntryRevealObserver(): void {
     if (!this.shouldEnableScrollEffects()) return;
     window.addEventListener('scroll', this.scheduleProjectEntryRevealUpdate, { passive: true });
     window.addEventListener('resize', this.scheduleProjectEntryRevealUpdate, { passive: true });
+    this.scheduleProjectEntryRevealUpdate();
   }
   private destroyProjectEntryRevealObserver(): void {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
@@ -270,6 +269,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     window.addEventListener('resize', this.scheduleAboutSectionScrollAnimationUpdate, {
       passive: true,
     });
+    this.scheduleAboutSectionScrollAnimationUpdate();
   }
   private destroyAboutSectionScrollAnimation(): void {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;

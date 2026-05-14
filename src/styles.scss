@@ -1229,25 +1229,26 @@ hr {
 
 @media (hover: none) and (pointer: coarse) {
   body {
+    position: relative;
+    isolation: isolate;
+    background: transparent;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background:
       radial-gradient(circle at top left, rgba(217, 162, 140, 0.18), transparent 28%),
       radial-gradient(circle at bottom right, rgba(127, 78, 63, 0.24), transparent 32%),
       linear-gradient(180deg, rgba(9, 9, 12, 0.72), rgba(8, 8, 11, 0.96)),
-      url('assets/optimized/background.webp') center top / cover no-repeat;
+      url('assets/optimized/background.webp') center / cover fixed no-repeat;
   }
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .about-scroll-anim-enabled .story-copy,
-  .about-scroll-anim-enabled .story-detail,
-  .project-entry,
-  .project-entry.project-entry-from-right,
-  .project-entry.project-entry-from-left {
-    opacity: 1;
-    transform: none;
-    will-change: auto;
-  }
-
   .action-link:hover,
   .detail-toggle:hover,
   .back-link:hover,

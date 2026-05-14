@@ -442,7 +442,7 @@ describe('HomeComponent', (): void => {
       expect(comp.shouldEnableScrollEffects()).toBeTrue();
     });
 
-    it('should disable scroll effects on coarse touch pointers', (): void => {
+    it('should keep scroll effects enabled on coarse touch pointers when motion is allowed', (): void => {
       spyOn(window, 'matchMedia').and.callFake(
         (query: string): MediaQueryList =>
           ({
@@ -450,7 +450,7 @@ describe('HomeComponent', (): void => {
           }) as MediaQueryList,
       );
 
-      expect(comp.shouldEnableScrollEffects()).toBeFalse();
+      expect(comp.shouldEnableScrollEffects()).toBeTrue();
     });
 
     it('should disable scroll effects when reduced motion is requested', (): void => {
