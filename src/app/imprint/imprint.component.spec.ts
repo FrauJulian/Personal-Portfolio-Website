@@ -1,7 +1,6 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import type { SafeUrl } from '@angular/platform-browser';
 
 import { ImprintComponent } from './imprint.component';
 import { global } from '../../global';
@@ -10,15 +9,11 @@ describe('ImprintComponent', (): void => {
   let fixture: ComponentFixture<ImprintComponent>;
   let component: ImprintComponent;
 
-  interface ComponentAccess {
-    contactSafeMail: SafeUrl;
-    abuseSafeMail: SafeUrl;
-    displayStreet: string;
-    displayCity: string;
-    normalizeText(value: string): string;
+  interface BindAccess {
+    bind(value: string): string;
   }
 
-  let comp: ComponentAccess;
+  const bind = (value: string): string => (component as unknown as BindAccess).bind(value);
 
   beforeEach(async (): Promise<void> => {
     await TestBed.configureTestingModule({
@@ -28,7 +23,6 @@ describe('ImprintComponent', (): void => {
 
     fixture = TestBed.createComponent(ImprintComponent);
     component = fixture.componentInstance;
-    comp = component as unknown as ComponentAccess;
     fixture.detectChanges();
   });
 
@@ -36,91 +30,72 @@ describe('ImprintComponent', (): void => {
     expect(component).toBeTruthy();
   });
 
-  describe('SafeUrl initialization (ngOnInit)', (): void => {
-    it('should initialize contactSafeMail', (): void => {
-      expect(comp.contactSafeMail).toBeDefined();
+  describe('mail links', (): void => {
+    it('should render the contact email as a mailto link', (): void => {
+      const el = fixture.nativeElement as HTMLElement;
+      const link = el.querySelector(`a[href="mailto:${global.contactMail}"]`);
+
+      expect(link).not.toBeNull();
+      expect(link?.textContent).toContain(global.contactMail);
     });
 
-    it('should initialize abuseSafeMail', (): void => {
-      expect(comp.abuseSafeMail).toBeDefined();
-    });
+    it('should render the abuse email as a mailto link', (): void => {
+      const el = fixture.nativeElement as HTMLElement;
+      const link = el.querySelector(`a[href="mailto:${global.abuseMail}"]`);
 
-    it('should embed the contact email in contactSafeMail', (): void => {
-      expect(String(comp.contactSafeMail)).toContain(global.contactMail);
-    });
-
-    it('should embed the abuse email in abuseSafeMail', (): void => {
-      expect(String(comp.abuseSafeMail)).toContain(global.abuseMail);
-    });
-
-    it('should use a mailto: scheme for contactSafeMail', (): void => {
-      expect(String(comp.contactSafeMail)).toContain('mailto:');
-    });
-
-    it('should use a mailto: scheme for abuseSafeMail', (): void => {
-      expect(String(comp.abuseSafeMail)).toContain('mailto:');
+      expect(link).not.toBeNull();
+      expect(link?.textContent).toContain(global.abuseMail);
     });
   });
 
-  describe('normalizeText', (): void => {
+  describe('bind', (): void => {
     it('should return a string', (): void => {
-      expect(typeof comp.normalizeText('test')).toBe('string');
+      expect(typeof bind('test')).toBe('string');
     });
 
     it('should leave plain ASCII text unchanged', (): void => {
-      expect(comp.normalizeText('Hello World')).toBe('Hello World');
+      expect(bind('Hello World')).toBe('Hello World');
     });
 
-    it('should replace the ß HTML entity', (): void => {
-      const result = comp.normalizeText('Stra\u00DFe');
-      expect(result).toContain('\u00DF');
+    it('should replace the firstname placeholder', (): void => {
+      expect(bind('{{firstname}}')).toBe(global.firstname);
     });
 
-    it('should replace the ö HTML entity', (): void => {
-      const result = comp.normalizeText('P\u00F6chlarn');
-      expect(result).toContain('\u00F6');
+    it('should replace the lastname placeholder', (): void => {
+      expect(bind('{{lastname}}')).toBe(global.lastname);
     });
 
-    it('should replace the ä HTML entity', (): void => {
-      const result = comp.normalizeText('st\u00E4dtisch');
-      expect(result).toContain('\u00E4');
+    it('should replace the contact mail placeholder', (): void => {
+      expect(bind('{{contactMail}}')).toBe(global.contactMail);
     });
 
-    it('should replace the ü HTML entity', (): void => {
-      const result = comp.normalizeText('M\u00FCnchen');
-      expect(result).toContain('\u00FC');
+    it('should replace the contact phone placeholder', (): void => {
+      expect(bind('{{contactPhone}}')).toBe(global.contactPhone);
     });
 
-    it('should replace the Ä HTML entity', (): void => {
-      const result = comp.normalizeText('\u00C4gypten');
-      expect(result).toContain('\u00C4');
-    });
-
-    it('should replace the Ü HTML entity', (): void => {
-      const result = comp.normalizeText('\u00DCbung');
-      expect(result).toContain('\u00DC');
+    it('should replace multiple placeholders in one value', (): void => {
+      expect(bind('{{firstname}} {{lastname}}')).toBe(`${global.firstname} ${global.lastname}`);
     });
 
     it('should handle an empty string', (): void => {
-      expect(comp.normalizeText('')).toBe('');
+      expect(bind('')).toBe('');
     });
   });
 
-  describe('Address display properties', (): void => {
-    it('should produce a displayStreet that is a non-empty string', (): void => {
-      expect(comp.displayStreet.length).toBeGreaterThan(0);
+  describe('Address display', (): void => {
+    it('should render the street and house number', (): void => {
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.textContent).toContain(`${global.address.street} ${global.address.houseNumber}`);
     });
 
-    it('should produce a displayCity that is a non-empty string', (): void => {
-      expect(comp.displayCity.length).toBeGreaterThan(0);
+    it('should render the zip and city', (): void => {
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.textContent).toContain(`${global.address.zip} ${global.address.city}`);
     });
 
-    it('should not leave unresolved HTML entities in displayStreet', (): void => {
-      expect(comp.displayStreet).not.toMatch(/&[a-z]+;/);
-    });
-
-    it('should not leave unresolved HTML entities in displayCity', (): void => {
-      expect(comp.displayCity).not.toMatch(/&[a-z]+;/);
+    it('should not leave unresolved placeholders in the rendered page', (): void => {
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.textContent).not.toContain('{{');
     });
   });
 
@@ -176,12 +151,11 @@ describe('ImprintComponent', (): void => {
       expect(performance.now() - start).toBeLessThan(100);
     });
 
-    it('should complete 500 normalizeText calls within 20 ms', (): void => {
-      const input =
-        'Ulmenstra\u00DFe \u00F6sterreich \u00E4hnlich \u00FCberall \u00C4gypten \u00DCbung';
+    it('should complete 500 bind calls within 20 ms', (): void => {
+      const input = '{{firstname}} {{lastname}} {{contactMail}} {{contactPhone}}';
       const start = performance.now();
       for (let i = 0; i < 500; i++) {
-        comp.normalizeText(input);
+        bind(input);
       }
       expect(performance.now() - start).toBeLessThan(20);
     });
