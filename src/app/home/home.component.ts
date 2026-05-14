@@ -227,8 +227,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const prefersReducedMotion: boolean = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
+    const usesTouchScrolling: boolean = window.matchMedia(
+      '(hover: none) and (pointer: coarse)',
+    ).matches;
 
-    return !prefersReducedMotion;
+    return !prefersReducedMotion && !usesTouchScrolling;
   }
 
   private initNameGradientScrollAnimation(): void {

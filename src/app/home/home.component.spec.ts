@@ -429,16 +429,28 @@ describe('HomeComponent', (): void => {
   // ── RAF debouncing (performance) ───────────────────────────────────────────
 
   describe('Performance', (): void => {
-    it('should keep scroll effects enabled on small viewports when motion is allowed', (): void => {
-      spyOnProperty(window, 'innerWidth').and.returnValue(390);
+    it('should keep scroll effects enabled on desktop pointers when motion is allowed', (): void => {
       spyOn(window, 'matchMedia').and.callFake(
         (query: string): MediaQueryList =>
           ({
-            matches: query !== '(prefers-reduced-motion: reduce)',
+            matches:
+              query !== '(prefers-reduced-motion: reduce)' &&
+              query !== '(hover: none) and (pointer: coarse)',
           }) as MediaQueryList,
       );
 
       expect(comp.shouldEnableScrollEffects()).toBeTrue();
+    });
+
+    it('should disable scroll effects on coarse touch pointers', (): void => {
+      spyOn(window, 'matchMedia').and.callFake(
+        (query: string): MediaQueryList =>
+          ({
+            matches: query === '(hover: none) and (pointer: coarse)',
+          }) as MediaQueryList,
+      );
+
+      expect(comp.shouldEnableScrollEffects()).toBeFalse();
     });
 
     it('should disable scroll effects when reduced motion is requested', (): void => {
