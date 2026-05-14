@@ -4,7 +4,6 @@ import { provideRouter } from '@angular/router';
 import { IMAGE_LOADER } from '@angular/common';
 import type { ImageLoaderConfig } from '@angular/common';
 import { NgZone } from '@angular/core';
-import type { Subscription } from 'rxjs';
 
 import { HomeComponent } from './home.component';
 import { global } from '../../global';
@@ -25,7 +24,6 @@ describe('HomeComponent', (): void => {
     isLongBioMounted: boolean;
     isPortraitSwitching: boolean;
     currentPortraitHighlightIndex: number;
-    sub: Subscription;
     bioHideTimeoutId: number | null;
     scrollAnimationFrameId: number | null;
     projectEntryAnimationFrameId: number | null;
@@ -113,14 +111,13 @@ describe('HomeComponent', (): void => {
     });
   });
 
-  describe('interval-driven bio cycling (subscription)', (): void => {
+  describe('interval-driven bio cycling', (): void => {
     it('should start with currentIndex 0', (): void => {
       expect(comp.currentIndex).toBe(0);
     });
 
-    it('should be backed by an active RxJS Subscription', (): void => {
-      expect(comp.sub).toBeDefined();
-      expect(comp.sub.closed).toBeFalse();
+    it('should expose a valid bio entry for the current index', (): void => {
+      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[0]);
     });
 
     it('should correctly wrap from the last entry back to 0 using modulo', (): void => {
@@ -352,10 +349,13 @@ describe('HomeComponent', (): void => {
   // ── Lifecycle cleanup ──────────────────────────────────────────────────────
 
   describe('ngOnDestroy', (): void => {
-    it('should unsubscribe the interval subscription on destroy', fakeAsync((): void => {
-      expect(comp.sub.closed).toBeFalse();
+    it('should clear pending portrait switch timers on destroy', fakeAsync((): void => {
+      comp.showNextPortraitHighlight();
+      const clearSpy = spyOn(window, 'clearTimeout').and.callThrough();
+
       fixture.destroy();
-      expect(comp.sub.closed).toBeTrue();
+
+      expect(clearSpy).toHaveBeenCalled();
       discardPeriodicTasks();
     }));
 

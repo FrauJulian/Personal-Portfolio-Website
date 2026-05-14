@@ -10,7 +10,7 @@ export interface LanguageProject {
   iconSizes?: string;
   iconWidth?: number;
   iconHeight?: number;
-  CircleIcon?: boolean;
+  circleIcon?: boolean;
 }
 
 export interface LanguageBioTextEntry {

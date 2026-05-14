@@ -2,7 +2,7 @@ import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  DestroyRef,
   inject,
   NgZone,
   signal,
@@ -12,15 +12,12 @@ import { faArrowRight, faArrowDown, faEnvelope, faPhone } from '@fortawesome/fre
 import { faDiscord, faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import type { IconDefinition } from '@fortawesome/angular-fontawesome';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import type { Subscription } from 'rxjs';
 import { interval } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { deLanguage } from '../../languages/de';
-import { enLanguage } from '../../languages/en';
 import { global } from '../../global';
 import type {
   LanguageBioTextEntry,
-  LanguagePack,
   LanguagePortraitHighlight,
   LanguageProject,
 } from '../../languages/language.types';
@@ -35,11 +32,10 @@ import { LanguageService } from '../services/language.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly zone = inject(NgZone);
   private readonly languageService = inject(LanguageService);
-  protected readonly content = computed<LanguagePack>(() =>
-    this.languageService.languageCode() === 'de' ? deLanguage : enLanguage,
-  );
+  protected readonly content = this.languageService.content;
 
   private scrollAnimationFrameId: number | null = null;
   private projectEntryAnimationFrameId: number | null = null;
@@ -73,18 +69,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly faArrowDown: IconDefinition = faArrowDown;
   protected readonly faEnvelope: IconDefinition = faEnvelope;
   protected readonly faPhone: IconDefinition = faPhone;
-  readonly faDiscord: IconDefinition = faDiscord;
-  readonly faGithub: IconDefinition = faGithub;
-  readonly faLinkedin: IconDefinition = faLinkedin;
+  protected readonly faDiscord: IconDefinition = faDiscord;
+  protected readonly faGithub: IconDefinition = faGithub;
+  protected readonly faLinkedin: IconDefinition = faLinkedin;
 
-  protected readonly fallbackBioEntry: LanguageBioTextEntry = { label: 'my stack', value: '' };
   private readonly isLongBioShownState = signal(false);
   private readonly isLongBioMountedState = signal(false);
   private readonly currentPortraitHighlightIndexState = signal(0);
   private readonly isPortraitSwitchingState = signal(false);
   private readonly currentIndexState = signal(0);
-  private sub!: Subscription;
   private bioHideTimeoutId: number | null = null;
+  private portraitSwitchTimeoutId: number | null = null;
+  private portraitSwitchDoneTimeoutId: number | null = null;
 
   protected get isLongBioShown(): boolean {
     return this.isLongBioShownState();
@@ -143,12 +139,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.initNameGradientScrollAnimation();
     this.zone.runOutsideAngular((): void => {
-      this.sub = interval(1000).subscribe((): void => {
-        this.zone.run((): void => {
-          const len = this.content().bioTextsList.length;
-          this.currentIndex = len > 0 ? (this.currentIndex + 1) % len : 0;
+      interval(1000)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((): void => {
+          this.zone.run((): void => {
+            const len = this.content().bioTextsList.length;
+            this.currentIndex = len > 0 ? (this.currentIndex + 1) % len : 0;
+          });
         });
-      });
     });
   }
 
@@ -157,11 +155,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initAboutSectionScrollAnimation();
   }
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
     if (this.bioHideTimeoutId !== null) {
       window.clearTimeout(this.bioHideTimeoutId);
       this.bioHideTimeoutId = null;
     }
+    this.clearPortraitSwitchTimeouts();
     this.destroyNameGradientScrollAnimation();
     this.destroyProjectEntryRevealObserver();
     this.destroyAboutSectionScrollAnimation();
@@ -199,12 +197,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   protected showNextPortraitHighlight(): void {
     if (this.portraitHighlights.length <= 1 || this.isPortraitSwitching) return;
     this.isPortraitSwitching = true;
-    setTimeout((): void => {
+    this.portraitSwitchTimeoutId = window.setTimeout((): void => {
       this.currentPortraitHighlightIndex =
         (this.currentPortraitHighlightIndex + 1) % this.portraitHighlights.length;
+      this.portraitSwitchTimeoutId = null;
     }, 125);
-    setTimeout((): void => {
+    this.portraitSwitchDoneTimeoutId = window.setTimeout((): void => {
       this.isPortraitSwitching = false;
+      this.portraitSwitchDoneTimeoutId = null;
     }, 250);
   }
   protected scrollToAboutSection(): void {
@@ -280,6 +280,17 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.scrollAnimationFrameId = null;
     }
     document.documentElement.style.removeProperty('--name-pride-progress');
+  }
+  private clearPortraitSwitchTimeouts(): void {
+    if (typeof window === 'undefined') return;
+    if (this.portraitSwitchTimeoutId !== null) {
+      window.clearTimeout(this.portraitSwitchTimeoutId);
+      this.portraitSwitchTimeoutId = null;
+    }
+    if (this.portraitSwitchDoneTimeoutId !== null) {
+      window.clearTimeout(this.portraitSwitchDoneTimeoutId);
+      this.portraitSwitchDoneTimeoutId = null;
+    }
   }
   private updateNameGradientProgress(): void {
     if (typeof window === 'undefined') return;

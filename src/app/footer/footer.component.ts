@@ -13,7 +13,7 @@ import { LanguageService } from '../services/language.service';
 export class FooterComponent {
   private readonly languageService = inject(LanguageService);
 
-  protected readonly content = this.languageService.content;
+  protected readonly content = this.languageService.shellContent;
   protected readonly global = global;
   protected readonly currentYear = new Date().getFullYear();
 }

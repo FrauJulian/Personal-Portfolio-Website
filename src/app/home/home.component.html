@@ -124,7 +124,7 @@
           @if (project.icon) {
             <img
               class="project-icon"
-              [class.project-icon-circle]="project.CircleIcon !== false"
+              [class.project-icon-circle]="project.circleIcon !== false"
               [ngSrc]="project.icon"
               [attr.srcset]="project.iconSrcset ?? null"
               [attr.sizes]="project.iconSizes ?? null"

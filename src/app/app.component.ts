@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
   private readonly languageService = inject(LanguageService);
 
-  protected readonly content = this.languageService.content;
+  protected readonly content = this.languageService.shellContent;
   protected readonly currentLanguageCode = this.languageService.languageCode;
   protected readonly isLanguageConfirmed = this.languageService.isLanguageConfirmed;
   protected readonly isLanguageSelectorOpen = signal(false);

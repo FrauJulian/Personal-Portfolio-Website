@@ -188,7 +188,7 @@ export const deLanguage: LanguagePack = {
       iconSrcset:
         'assets/optimized/logos/sobit-64.webp 64w, assets/optimized/logos/sobit-128.webp 128w, assets/optimized/logos/sobit.webp 216w',
       iconSizes: '(max-width: 700px) 64px, 108px',
-      CircleIcon: false,
+      circleIcon: false,
     },
     {
       title: 'SynHost',
@@ -202,7 +202,7 @@ export const deLanguage: LanguagePack = {
       iconSizes: '(max-width: 700px) 64px, 108px',
       iconWidth: 108,
       iconHeight: 64,
-      CircleIcon: false,
+      circleIcon: false,
     },
     {
       title: 'SynRadio',
@@ -214,7 +214,7 @@ export const deLanguage: LanguagePack = {
       iconSrcset:
         'assets/optimized/logos/synradio-64.webp 64w, assets/optimized/logos/synradio-128.webp 128w, assets/optimized/logos/synradio.webp 216w',
       iconSizes: '(max-width: 700px) 64px, 108px',
-      CircleIcon: true,
+      circleIcon: true,
     },
     {
       title: 'Discord Audio Stream Library',
@@ -226,7 +226,7 @@ export const deLanguage: LanguagePack = {
       iconSrcset:
         'assets/optimized/logos/discord-64.webp 64w, assets/optimized/logos/discord-128.webp 128w, assets/optimized/logos/discord.webp 216w',
       iconSizes: '(max-width: 700px) 64px, 108px',
-      CircleIcon: true,
+      circleIcon: true,
     },
     {
       title: 'Portfolio',
@@ -240,7 +240,7 @@ export const deLanguage: LanguagePack = {
       iconSizes: '(max-width: 700px) 64px, 108px',
       iconWidth: 320,
       iconHeight: 385,
-      CircleIcon: true,
+      circleIcon: true,
     },
     {
       title: 'Tauchertreff-Mostviertel',
@@ -252,7 +252,7 @@ export const deLanguage: LanguagePack = {
       iconSrcset:
         'assets/optimized/logos/tauchertreff-64.webp 64w, assets/optimized/logos/tauchertreff-128.webp 128w, assets/optimized/logos/tauchertreff.webp 216w',
       iconSizes: '(max-width: 700px) 64px, 108px',
-      CircleIcon: true,
+      circleIcon: true,
     },
   ],
 };
