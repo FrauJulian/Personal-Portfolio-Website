@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { global } from '../../global';
-import { LanguageService } from '../services/language.service';
+import { ShellLanguageService } from '../services/shell-language.service';
 
 @Component({
   selector: 'app-footer',
@@ -11,9 +11,9 @@ import { LanguageService } from '../services/language.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
-  private readonly languageService = inject(LanguageService);
+  private readonly shellLanguageService = inject(ShellLanguageService);
 
-  protected readonly content = this.languageService.shellContent;
+  protected readonly content = this.shellLanguageService.content;
   protected readonly global = global;
   protected readonly currentYear = new Date().getFullYear();
 }

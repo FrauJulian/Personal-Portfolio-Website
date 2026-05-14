@@ -1,17 +1,16 @@
 import { Injectable, computed, inject } from '@angular/core';
 
-import { deLanguage } from '../../languages/de';
-import { enLanguage } from '../../languages/en';
-import type { LanguageCode, LanguagePack } from '../../languages/language.types';
+import { deShellLanguage, enShellLanguage } from '../../languages/shell';
+import type { LanguageCode, LanguageShellPack } from '../../languages/language.types';
 import { LanguagePreferenceService } from './language-preference.service';
 
 @Injectable({ providedIn: 'root' })
-export class LanguageService {
+export class ShellLanguageService {
   private readonly languagePreferenceService = inject(LanguagePreferenceService);
 
   readonly languageCode = this.languagePreferenceService.languageCode;
   readonly isLanguageConfirmed = this.languagePreferenceService.isLanguageConfirmed;
-  readonly content = computed<LanguagePack>(() => this.getPack(this.languageCode()));
+  readonly content = computed<LanguageShellPack>(() => this.getPack(this.languageCode()));
 
   initializeFromStorage(): LanguageCode {
     return this.languagePreferenceService.initializeFromStorage();
@@ -21,7 +20,7 @@ export class LanguageService {
     this.languagePreferenceService.confirmLanguage(code);
   }
 
-  getPack(code: LanguageCode): LanguagePack {
-    return code === 'de' ? deLanguage : enLanguage;
+  getPack(code: LanguageCode): LanguageShellPack {
+    return code === 'de' ? deShellLanguage : enShellLanguage;
   }
 }
