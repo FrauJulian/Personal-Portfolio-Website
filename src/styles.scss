@@ -887,24 +887,32 @@ hr {
   gap: var(--space-5);
 }
 
+.legal-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr);
+}
+
 .legal-hero .back-link {
   margin-bottom: 0;
 }
 
 .legal-hero h1 {
-  font-size: clamp(2.6rem, 6vw, 4.6rem);
-  max-width: 12ch;
+  font-size: clamp(2.7rem, 6vw, 5.1rem);
+  max-width: 11ch;
 }
 
 .legal-intro {
-  max-width: 46rem;
+  max-width: 38rem;
   margin: var(--space-4) 0 0;
-  font-size: 1.05rem;
+  font-size: clamp(1.02rem, 1.7vw, 1.16rem);
   line-height: 1.8;
 }
 
 .legal-section {
   margin-top: var(--space-5);
+}
+
+.legal-section .story-grid {
+  align-items: start;
 }
 
 .legal-provider-name {
@@ -919,6 +927,7 @@ hr {
   display: grid;
   gap: 0.5rem;
   width: 100%;
+  align-self: stretch;
   justify-items: start;
   text-align: left;
 }
@@ -927,6 +936,10 @@ hr {
   margin: 0;
   color: var(--text-muted);
   line-height: 1.6;
+}
+
+.legal-contact-box .hero-contact-title {
+  text-align: left;
 }
 
 .site-footer {
@@ -1003,6 +1016,19 @@ hr {
     justify-content: flex-start;
     max-width: none;
   }
+
+  .legal-hero {
+    gap: var(--space-4);
+  }
+
+  .legal-hero .hero-copy {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .legal-hero .hero-actions {
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 700px) {
@@ -1023,6 +1049,10 @@ hr {
     padding: clamp(1rem, 4vw, 1.2rem);
   }
 
+  .imprint-page {
+    gap: var(--space-4);
+  }
+
   .hero-copy h1,
   .legal-hero h1 {
     max-width: none;
@@ -1035,6 +1065,42 @@ hr {
 
   .hero-copy {
     display: contents;
+  }
+
+  .legal-hero .hero-copy {
+    display: grid;
+  }
+
+  .legal-hero h1 {
+    font-size: clamp(2.35rem, 11vw, 3.55rem);
+    line-height: 0.98;
+  }
+
+  .legal-intro {
+    margin-top: var(--space-3);
+    font-size: 1rem;
+    line-height: 1.68;
+  }
+
+  .legal-section {
+    margin-top: var(--space-4);
+    padding: clamp(1rem, 4vw, 1.2rem);
+    border-radius: var(--radius-lg);
+  }
+
+  .legal-section .story-grid {
+    gap: var(--space-3);
+  }
+
+  .legal-contact-box {
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-soft);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .legal-contact-box p {
+    line-height: 1.5;
   }
 
   .hero-copy-main {

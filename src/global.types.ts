@@ -3,6 +3,7 @@ export interface ImprintData {
   houseNumber: number;
   zip: number;
   city: string;
+  state: string;
   country: string;
 }
 
