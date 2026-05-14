@@ -1,5 +1,5 @@
 services:
-  app:
+  portfolio:
     image: docker.lechner-systems.at/lechnersystems/portfolio:${IMAGE_TAG}
     build:
       context: .
@@ -7,5 +7,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    dns:
+      - 192.168.100.2
+      - 192.168.100.6
     ports:
       - ${MAIN_PORT}:3000

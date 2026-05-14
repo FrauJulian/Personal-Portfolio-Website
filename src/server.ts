@@ -10,9 +10,16 @@ import bootstrap from './main.server';
 const serverDistFolder: string = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder: string = resolve(serverDistFolder, '../browser');
 const indexHtml: string = join(serverDistFolder, 'index.server.html');
+const allowedHosts: readonly string[] = [
+  'fraujulian.xyz',
+  'www.fraujulian.xyz',
+  'test.fraujulian.xyz',
+  'localhost',
+  '127.0.0.1',
+];
 
 const app: Express = express();
-const commonEngine: CommonEngine = new CommonEngine();
+const commonEngine: CommonEngine = new CommonEngine({ allowedHosts });
 
 app.use(
   express.static(browserDistFolder, {
