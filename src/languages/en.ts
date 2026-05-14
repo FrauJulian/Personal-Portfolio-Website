@@ -16,7 +16,7 @@ export const enLanguage: LanguagePack = {
   home: {
     portfolioEyebrow: 'Portfolio',
     heroIntro:
-      'Building reliable systems, clean interfaces, and practical digital solutions that actually hold up in production.',
+      'I build reliable systems, clean interfaces, and practical digital solutions that actually hold up in production.',
     contactTitle: 'Contact me',
     viewProjects: 'View projects',
     aboutMe: 'About me',
@@ -27,7 +27,7 @@ export const enLanguage: LanguagePack = {
     clickHint: 'Click me!',
     aboutEyebrow: 'About me',
     aboutParagraphs: [
-      'My name is {{firstname}}, many people also call me Julie. I am {{age}} and based in Austria. A large part of my day happens on the move, usually on trains, going between meetings, offices, and my family.',
+      'My name is {{firstname}}, many people also call me Julie. I am {{age}} and based in Austria. A large part of my day happens on the move, usually on trains.',
       'I care deeply about digital security and privacy. I design systems with minimal exposure, sensible defaults, and a strong focus on data protection.',
       'I work with modern web technologies and on business-critical systems. I focus on clear, stable solutions that hold up in day-to-day use and deliver value.',
     ],
@@ -35,10 +35,10 @@ export const enLanguage: LanguagePack = {
     detailToggleClose: 'Read less',
     detailParagraphs: [
       'What really interests me is modern code: well-structured, maintainable, and built with performance in mind.',
-      "Outside of software, my main hobby is scuba diving. The silence underwater keeps pulling me back into Austria's lakes.",
-      'I mainly work for SobIT GmbH in Vienna, alongside freelance projects for companies, organizations, and private clients.',
+      "Outside of software, my main hobby is scuba diving. The thought of complete stillness underwater keeps drawing me back into the depths of Austria’s lakes.",
+      'I mainly work for SobIT GmbH in Vienna, alongside long term projects for companies, organizations, and private clients.',
     ],
-    getInTouch: 'Get in touch',
+    getInTouch: 'Get in touch!',
     projectsEyebrow: 'Current Jobs & Projects',
     openProjectPrefix: 'Open project',
     projectLanguagesAriaLabel: 'Project languages',
@@ -134,7 +134,7 @@ export const enLanguage: LanguagePack = {
         '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
       imageWidth: 640,
       imageHeight: 710,
-      text: 'My Love',
+      text: 'Love',
     },
     {
       image: 'assets/optimized/portrait/scuba.webp',
@@ -182,7 +182,7 @@ export const enLanguage: LanguagePack = {
       title: 'SobIT GmbH',
       link: 'https://sobit.at/',
       description:
-        'I currently work primarily for the viennese company SobIT GmbH. This company develops software for the healthcare industry. - Development of modern desktop, mobile, and web applications to support healthcare delivery.',
+        'I primarily work for SobIT GmbH, a Vienna-based subsidiary of Wiener Sozialdienste. We develop software for the healthcare sector, focusing on modern desktop, mobile, and web applications that support mobile care services.',
       skills: ['TypeScript', 'C#', 'Microsoft SQL', 'WPF', 'YML/XML'],
       icon: 'assets/optimized/logos/sobit.webp',
       iconSrcset:
@@ -194,7 +194,7 @@ export const enLanguage: LanguagePack = {
       title: 'SynHost',
       link: 'https://www.synhost.de/',
       description:
-        'A hosting provider operated by GERLACH SYSTEMS, where I develop integrations and handle technical support.',
+        'A hosting service provider of GERLACH SYSTEMS, for whom I develop interfaces between individual systems and provide technical support.',
       skills: ['TypeScript', 'MariaDB', 'YML'],
       icon: 'assets/optimized/logos/synhost.webp',
       iconSrcset:
@@ -230,9 +230,9 @@ export const enLanguage: LanguagePack = {
     },
     {
       title: 'Portfolio',
-      link: '#',
+      link: '',
       description:
-        'This portfolio website you’re currently viewing is one of my actively maintained projects.',
+        'This portfolio website you’re currently viewing is one of my actively maintained projects. 😁',
       skills: ['TypeScript', 'Angular', 'YML'],
       icon: 'assets/optimized/portrait/me.webp',
       iconSrcset:
@@ -246,7 +246,7 @@ export const enLanguage: LanguagePack = {
       title: 'Tauchertreff-Mostviertel',
       link: 'https://tauchertreff-mostviertel.at/',
       description:
-        'I also support my local diving club by building and running its digital infrastructure — email, website, cloud services, and everything around it.',
+        'I also support my local diving club by developing, setting up, and operating its digital infrastructure — including email, the website, cloud services, and everything that comes with it.',
       skills: ['TypeScript', 'MariaDB', 'Angular', 'YML'],
       icon: 'assets/optimized/logos/tauchertreff.webp',
       iconSrcset:

@@ -10,39 +10,39 @@ export const deLanguage: LanguagePack = {
     languageGerman: 'Deutsch',
   },
   footer: {
-    noscriptMessage: 'Bitte aktiviere JavaScript für den vollen Funktionsumfang.',
+    noscriptMessage: 'Bitte aktiviere JavaScript um alles zu sehen.',
     imprintLink: 'Impressum',
   },
   home: {
     portfolioEyebrow: 'Portfolio',
     heroIntro:
-      'Ich entwickle zuverlässige Systeme, saubere Interfaces und praktische digitale Lösungen, die auch produktiv wirklich halten.',
-    contactTitle: 'Kontakt',
-    viewProjects: 'Projekte ansehen',
+      'Ich entwickle zuverlässige Systeme, übersichtliche Benutzeroberflächen und praktische digitale Lösungen, die sich in realen Kundensystemen bewähren.',
+    contactTitle: 'Kontaktiere mich',
+    viewProjects: 'Projekte',
     aboutMe: 'Über mich',
     nextHighlightAriaLabel: 'Nächstes Bild anzeigen',
     nextHighlightTitle: 'Nächstes Bild anzeigen',
     singleHighlightTitle: 'Einzelnes Bild',
     portraitAltSuffix: 'Bild',
-    clickHint: 'Klick mich!',
+    clickHint: 'Klicke hier!',
     aboutEyebrow: 'Über mich',
     aboutParagraphs: [
-      'Ich heiße {{firstname}}, viele nennen mich auch Julie. Ich bin {{age}} Jahre alt und komme aus Österreich. Ein großer Teil meines Alltags passiert unterwegs – meistens im Zug, zwischen Terminen, Büros und meiner Familie.',
-      'Digitale Sicherheit und Privatsphäre sind mir sehr wichtig. Ich baue Systeme mit möglichst kleiner Angriffsfläche, sinnvollen Standards und starkem Fokus auf Datenschutz.',
-      'Ich arbeite mit modernen Web-Technologien und an geschäftskritischen Systemen. Mein Fokus liegt auf klaren, stabilen Lösungen, die im Alltag funktionieren und echten Nutzen liefern.',
+      'Ich heiße {{firstname}}, viele nennen mich auch Julie. Ich bin {{age}} Jahre alt und komme aus Österreich. Viel von meinem Alltag spielt sich unterwegs ab – meistens im Zug.',
+      'Digitale Sicherheit und Privatsphäre sind mir sehr wichtig. Ich baue Systeme, die Angriffsflächen minimieren, bewährte Standards nutzen und Datenschutz konsequent berücksichtigen.',
+      'Ich arbeite mit modernen Web-Technologien an geschäftskritischen Systemen. Mein Fokus liegt auf klaren, stabilen Lösungen, die zuverlässig funktionieren und echten Nutzen schaffen.',
     ],
     detailToggleOpen: 'Mehr lesen',
     detailToggleClose: 'Weniger lesen',
     detailParagraphs: [
-      'Was mich wirklich interessiert, ist moderner Code: sauber strukturiert, wartbar und mit Blick auf Performance gebaut.',
-      'Abseits von Software ist Tauchen mein größtes Hobby. Die Stille unter Wasser zieht mich immer wieder zurück in Österreichs Seen.',
-      'Hauptsächlich arbeite ich für die SobIT GmbH in Wien, zusätzlich zu Freelance-Projekten für Unternehmen, Organisationen und private Kunden.',
+      'Mein Fokus liegt auf modernem Code: sauber strukturiert, wartbar und auf Performance ausgelegt.',
+      'Abseits von Software und Sicherheit ist Tauchen mein größtes Hobby. Der Gedanke an nichts unter Wasser zieht mich immer wieder zurück in die Tiefe der österreichischen Seen.',
+      'Hauptsächlich arbeite ich für die SobIT GmbH in Wien, zusätzlich zu langfristigen Projekten für Unternehmen, Organisationen und private Kunden.',
     ],
     getInTouch: 'Kontaktiere mich!',
     projectsEyebrow: 'Aktuelle Jobs & Projekte',
     openProjectPrefix: 'Projekt öffnen',
     projectLanguagesAriaLabel: 'Projekt-Technologien',
-    fallbackBioLabel: 'mein Stack',
+    fallbackBioLabel: 'Tech Stack',
   },
   imprint: {
     legalEyebrow: 'Rechtliches',
@@ -111,9 +111,9 @@ export const deLanguage: LanguagePack = {
     { label: 'DevOps', value: 'Docker' },
     { label: 'DevOps', value: 'Ubuntu' },
     { label: 'DevOps', value: 'Arch' },
-    { label: 'Deklarativ', value: 'XAML' },
-    { label: 'Deklarativ', value: 'YAML' },
-    { label: 'Deklarativ', value: 'Markdown' },
+    { label: 'Deklarative Sprachen', value: 'XAML' },
+    { label: 'Deklarative Sprachen', value: 'YAML' },
+    { label: 'Deklarative Sprachen', value: 'Markdown' },
   ],
   portraitHighlights: [
     {
@@ -134,7 +134,7 @@ export const deLanguage: LanguagePack = {
         '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
       imageWidth: 640,
       imageHeight: 710,
-      text: 'Meine Liebe',
+      text: 'Liebe',
     },
     {
       image: 'assets/optimized/portrait/scuba.webp',
@@ -182,7 +182,7 @@ export const deLanguage: LanguagePack = {
       title: 'SobIT GmbH',
       link: 'https://sobit.at/',
       description:
-        'Ich arbeite aktuell hauptsächlich für die Wiener Firma SobIT GmbH. Das Unternehmen entwickelt Software für den Gesundheitsbereich. - Entwicklung moderner Desktop-, Mobile- und Webanwendungen zur Unterstützung der Gesundheitsversorgung.',
+        'Ich arbeite hauptsächlich für das wiener Unternehmen namens SobIT GmbH. Die Firma ist ein Tochter-Unternehmen des Wiener Sozialdienste. Wir entwickeln Software für den Gesundheitsbereich. - Entwicklung moderner Desktop-, Mobile- und Webanwendungen zur Unterstützung der Mobilen Pflege.',
       skills: ['TypeScript', 'C#', 'Microsoft SQL', 'WPF', 'YML/XML'],
       icon: 'assets/optimized/logos/sobit.webp',
       iconSrcset:
@@ -194,7 +194,7 @@ export const deLanguage: LanguagePack = {
       title: 'SynHost',
       link: 'https://www.synhost.de/',
       description:
-        'Ein Hosting-Dienstleister unter der Verwaltung von GERLACH SYSTEMS, für die ich Schnittstellen zwischen einzelnen Systemen entwickle und technischen Support erledige.',
+        'Ein Hosting-Dienstleister von GERLACH SYSTEMS, für die ich Schnittstellen zwischen einzelnen Systemen entwickle und technischen Support mache.',
       skills: ['TypeScript', 'MariaDB', 'YML'],
       icon: 'assets/optimized/logos/synhost.webp',
       iconSrcset:
@@ -208,7 +208,7 @@ export const deLanguage: LanguagePack = {
       title: 'SynRadio',
       link: 'https://www.synradio.de/',
       description:
-        'Ein Internetradio-Projekt, auch unter der Verwaltung von GERLACH SYSTEMS, bei dem ich die technische Umsetzung der digitalen Präsenz entwickle und betreue — Website, Bots und Plugins für Sprachchats und Spiele.',
+        'Ein Internetradio, auch unter der Verwaltung von GERLACH SYSTEMS, für den ich die technische Umsetzung und Betreuung der digitalen Plattformen übernehme — Website, Bots und Plugins für Sprachchats und Spiele.',
       skills: ['TypeScript', 'Angular', 'FFmpeg', 'YML'],
       icon: 'assets/optimized/logos/synradio.webp',
       iconSrcset:
@@ -232,7 +232,7 @@ export const deLanguage: LanguagePack = {
       title: 'Portfolio',
       link: '#',
       description:
-        'Diese Portfolio-Website, die du gerade anschaust, ist eines meiner aktiv gepflegten Projekte.',
+        'Diese Portfolio-Website, die du gerade anschaust, ist eines meiner aktiv gepflegten Projekte. 😁',
       skills: ['TypeScript', 'Angular', 'YML'],
       icon: 'assets/optimized/portrait/me.webp',
       iconSrcset:
@@ -246,7 +246,7 @@ export const deLanguage: LanguagePack = {
       title: 'Tauchertreff-Mostviertel',
       link: 'https://tauchertreff-mostviertel.at/',
       description:
-        'Ich unterstütze außerdem meinen lokalen Tauchverein, indem ich die digitale Infrastruktur aufbaue und betreibe — E-Mail, Website, Cloud-Dienste und alles, was dazugehört.',
+        'Ich unterstütze außerdem meinen lokalen Tauchverein, indem ich die digitale Infrastruktur entwickle, aufbaue und auch betreibe — E-Mail, Website, Cloud-Dienste und alles, was dazugehört.',
       skills: ['TypeScript', 'MariaDB', 'Angular', 'YML'],
       icon: 'assets/optimized/logos/tauchertreff.webp',
       iconSrcset:
