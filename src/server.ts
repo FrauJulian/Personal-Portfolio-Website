@@ -14,15 +14,14 @@ const indexHtml: string = join(serverDistFolder, 'index.server.html');
 const app: Express = express();
 const commonEngine: CommonEngine = new CommonEngine();
 
-app.get(
-  '**',
+app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
     index: 'index.html',
   }),
 );
 
-app.get('**', (req: Request, res: Response, next: NextFunction): void => {
+app.get('/{*splat}', (req: Request, res: Response, next: NextFunction): void => {
   const { protocol, originalUrl, baseUrl, headers } = req;
 
   commonEngine
@@ -34,7 +33,7 @@ app.get('**', (req: Request, res: Response, next: NextFunction): void => {
       providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
     })
     .then((html: string): Response => res.send(html))
-    .catch((err: Error): void => next(err.stack));
+    .catch((err: Error): void => next(err));
 });
 
 if (isMainModule(import.meta.url)) {
