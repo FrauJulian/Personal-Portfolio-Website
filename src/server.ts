@@ -38,8 +38,7 @@ app.get('**', (req: Request, res: Response, next: NextFunction): void => {
 });
 
 if (isMainModule(import.meta.url)) {
-  const envPort: number = Number.parseInt(process.env['MAIN_PORT'] ?? '', 10);
-  const port: number = Number.isFinite(envPort) ? envPort : 3000;
+  const port: number = 3000;
 
   app.listen(port, (): void => {
     console.log(`Listening on port ${port}`);
