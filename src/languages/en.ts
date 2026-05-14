@@ -35,7 +35,7 @@ export const enLanguage: LanguagePack = {
     detailToggleClose: 'Read less',
     detailParagraphs: [
       'What really interests me is modern code: well-structured, maintainable, and built with performance in mind.',
-      "Outside of software, my main hobby is scuba diving. The thought of complete stillness underwater keeps drawing me back into the depths of Austria’s lakes.",
+      'Outside of software, my main hobby is scuba diving. The thought of complete stillness underwater keeps drawing me back into the depths of Austria’s lakes.',
       'I mainly work for SobIT GmbH in Vienna, alongside long term projects for companies, organizations, and private clients.',
     ],
     getInTouch: 'Get in touch!',
