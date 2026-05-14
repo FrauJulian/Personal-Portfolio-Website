@@ -57,13 +57,12 @@
             <div class="portrait-media" [class.portrait-media-switching]="isPortraitSwitching">
               <img
                 class="hero-feature-image"
-                [ngSrc]="currentPortraitHighlight.image"
+                [src]="currentPortraitHighlight.image"
                 [attr.srcset]="currentPortraitHighlight.imageSrcset"
                 [attr.sizes]="currentPortraitHighlight.imageSizes"
                 [width]="currentPortraitHighlight.imageWidth"
                 [height]="currentPortraitHighlight.imageHeight"
-                disableOptimizedSrcset
-                priority
+                fetchpriority="high"
                 decoding="async"
                 [alt]="currentPortraitHighlight.text + ' ' + content().home.portraitAltSuffix"
               />

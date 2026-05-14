@@ -1010,14 +1010,6 @@ hr {
     scroll-behavior: auto;
   }
 
-  body {
-    background:
-      radial-gradient(circle at top left, rgba(217, 162, 140, 0.18), transparent 28%),
-      radial-gradient(circle at bottom right, rgba(127, 78, 63, 0.24), transparent 32%),
-      linear-gradient(180deg, rgba(9, 9, 12, 0.72), rgba(8, 8, 11, 0.96)),
-      url('assets/optimized/background.webp') center top / cover no-repeat;
-  }
-
   .page-shell,
   .footer-inner {
     width: min(calc(100% - 2rem), var(--page-max-width));
@@ -1162,25 +1154,21 @@ hr {
     backdrop-filter: none;
   }
 
-  .project-entry,
-  .about-scroll-anim-enabled .story-copy,
-  .about-scroll-anim-enabled .story-detail {
-    opacity: 1;
-    transform: none;
-    will-change: auto;
-  }
-
-  .project-entry {
-    transition:
-      border-color var(--transition-fast),
-      background var(--transition-fast);
-  }
-
   .projects-section,
   .story-section,
   .legal-section {
     content-visibility: auto;
     contain-intrinsic-size: 1px 720px;
+  }
+}
+
+@media (max-width: 700px) and (hover: none) and (pointer: coarse) {
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(217, 162, 140, 0.18), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(127, 78, 63, 0.24), transparent 32%),
+      linear-gradient(180deg, rgba(9, 9, 12, 0.72), rgba(8, 8, 11, 0.96)),
+      url('assets/optimized/background.webp') center / cover fixed no-repeat;
   }
 }
 

@@ -220,13 +220,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private shouldEnableScrollEffects(): boolean {
     if (typeof window === 'undefined') return false;
 
-    const isSmallViewport: boolean = window.innerWidth <= 700;
     const prefersReducedMotion: boolean = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
-    const isCoarsePointer: boolean = window.matchMedia('(pointer: coarse)').matches;
 
-    return !isSmallViewport && !prefersReducedMotion && !isCoarsePointer;
+    return !prefersReducedMotion;
   }
 
   private initNameGradientScrollAnimation(): void {

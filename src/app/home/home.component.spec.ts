@@ -33,6 +33,7 @@ describe('HomeComponent', (): void => {
     scheduleNameGradientUpdate(): void;
     scheduleProjectEntryRevealUpdate(): void;
     scheduleAboutSectionScrollAnimationUpdate(): void;
+    shouldEnableScrollEffects(): boolean;
     toggleBio(): void;
     showNextPortraitHighlight(): void;
     scrollToAboutSection(): void;
@@ -428,6 +429,29 @@ describe('HomeComponent', (): void => {
   // ── RAF debouncing (performance) ───────────────────────────────────────────
 
   describe('Performance', (): void => {
+    it('should keep scroll effects enabled on small viewports when motion is allowed', (): void => {
+      spyOnProperty(window, 'innerWidth').and.returnValue(390);
+      spyOn(window, 'matchMedia').and.callFake(
+        (query: string): MediaQueryList =>
+          ({
+            matches: query === '(prefers-reduced-motion: reduce)' ? false : true,
+          }) as MediaQueryList,
+      );
+
+      expect(comp.shouldEnableScrollEffects()).toBeTrue();
+    });
+
+    it('should disable scroll effects when reduced motion is requested', (): void => {
+      spyOn(window, 'matchMedia').and.callFake(
+        (query: string): MediaQueryList =>
+          ({
+            matches: query === '(prefers-reduced-motion: reduce)',
+          }) as MediaQueryList,
+      );
+
+      expect(comp.shouldEnableScrollEffects()).toBeFalse();
+    });
+
     it('should create and run initial change detection within 200 ms', (): void => {
       const start = performance.now();
       const f = TestBed.createComponent(HomeComponent);
