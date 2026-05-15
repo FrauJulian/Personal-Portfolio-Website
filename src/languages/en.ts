@@ -18,6 +18,10 @@ export const enLanguage: LanguagePack = {
     heroIntro:
       'I build reliable systems, clean interfaces, and practical digital solutions that actually hold up in production.',
     contactTitle: 'Contact me',
+    openPgpTitle: 'OpenPGP',
+    openPgpDescription: 'Download my public key for encrypted communication.',
+    openPgpDownload: 'Download public key',
+    openPgpFingerprintLabel: 'Fingerprint',
     viewProjects: 'View projects',
     aboutMe: 'About me',
     nextHighlightAriaLabel: 'Show next image',

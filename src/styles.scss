@@ -317,6 +317,61 @@ hr {
   aspect-ratio: 1;
 }
 
+.openpgp-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-4);
+  align-items: center;
+  margin-top: var(--space-4);
+  padding: 1.25rem 1.4rem;
+}
+
+.openpgp-copy,
+.openpgp-actions {
+  min-width: 0;
+}
+
+.openpgp-copy {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.openpgp-description,
+.openpgp-fingerprint {
+  margin: 0;
+}
+
+.openpgp-description {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.openpgp-actions {
+  display: grid;
+  gap: 0.7rem;
+  justify-items: end;
+}
+
+.openpgp-download-link {
+  width: 100%;
+  min-width: min(100%, 15rem);
+}
+
+.openpgp-fingerprint {
+  display: grid;
+  gap: 0.2rem;
+  text-align: right;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.openpgp-fingerprint strong {
+  color: var(--text-primary);
+  line-height: 1.55;
+  letter-spacing: 0.06em;
+  word-break: break-word;
+}
+
 .action-link {
   display: inline-flex;
   align-items: center;
@@ -1198,6 +1253,19 @@ hr {
   }
 
   .hero-meta {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .openpgp-section {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .openpgp-actions,
+  .openpgp-fingerprint {
+    width: 100%;
     justify-items: center;
     text-align: center;
   }

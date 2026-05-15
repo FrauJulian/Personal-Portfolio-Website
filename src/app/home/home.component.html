@@ -75,6 +75,22 @@
     </div>
   </section>
 
+  <section class="panel openpgp-section">
+    <div class="openpgp-copy">
+      <p class="eyebrow">{{ content().home.openPgpTitle }}</p>
+      <p class="openpgp-description">{{ content().home.openPgpDescription }}</p>
+    </div>
+    <div class="openpgp-actions">
+      <a class="action-link openpgp-download-link" [href]="openPgpKey.assetPath" download="julian-lechner-public.asc">
+        {{ content().home.openPgpDownload }}
+      </a>
+      <p class="openpgp-fingerprint">
+        <span>{{ content().home.openPgpFingerprintLabel }}</span>
+        <strong>{{ openPgpKey.formattedFingerprint }}</strong>
+      </p>
+    </div>
+  </section>
+
   <section id="about" class="story-section panel about-scroll-anim-enabled">
     <div class="section-heading">
       <p class="eyebrow">{{ content().home.aboutEyebrow }}</p>

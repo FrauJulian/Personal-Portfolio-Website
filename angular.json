@@ -17,12 +17,29 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist",
-            "index": "src/index.html",
+            "outputPath": {
+              "base": "dist",
+              "browser": "browser",
+              "media": "media"
+            },
+            "outputMode": "static",
+            "index": {
+              "input": "src/index.html",
+              "output": "index.html",
+              "preloadInitial": true
+            },
             "browser": "src/main.ts",
+            "server": false,
             "polyfills": [],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": ["src"]
+            },
+            "security": {
+              "autoCsp": true
+            },
+            "clearScreen": false,
             "assets": [
               {
                 "glob": "**/*",
@@ -35,7 +52,8 @@
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": false
           },
           "configurations": {
             "production": {
@@ -43,13 +61,16 @@
                 "scripts": true,
                 "styles": {
                   "minify": true,
-                  "inlineCritical": true
+                  "inlineCritical": true,
+                  "removeSpecialComments": true
                 },
                 "fonts": {
                   "inline": true
                 }
               },
               "outputHashing": "all",
+              "crossOrigin": "anonymous",
+              "subresourceIntegrity": true,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
@@ -64,13 +85,23 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kB",
                   "maximumError": "8kB"
+                },
+                {
+                  "type": "anyScript",
+                  "maximumWarning": "350kB",
+                  "maximumError": "500kB"
                 }
               ]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
+              "sourceMap": {
+                "scripts": true,
+                "styles": true,
+                "vendor": false,
+                "sourcesContent": true
+              },
               "namedChunks": true
             }
           },

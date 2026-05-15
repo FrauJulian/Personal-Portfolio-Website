@@ -1,5 +1,5 @@
 import { createReadStream } from 'node:fs';
-import { access, readdir, stat } from 'node:fs/promises';
+import { access, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,15 +9,13 @@ const __dirname = path.dirname(__filename);
 
 const appRoot = path.resolve(__dirname, '..');
 const distRoot = path.join(appRoot, 'dist');
-const port = Number.parseInt(process.env.PORT ?? '3000', 10);
+const browserRoot = path.join(distRoot, 'browser');
+const port = 3000;
 
 const mimeTypes = new Map([
   ['.css', 'text/css; charset=utf-8'],
-  ['.gif', 'image/gif'],
   ['.html', 'text/html; charset=utf-8'],
   ['.ico', 'image/x-icon'],
-  ['.jpg', 'image/jpeg'],
-  ['.jpeg', 'image/jpeg'],
   ['.js', 'text/javascript; charset=utf-8'],
   ['.json', 'application/json; charset=utf-8'],
   ['.map', 'application/json; charset=utf-8'],
@@ -25,8 +23,6 @@ const mimeTypes = new Map([
   ['.svg', 'image/svg+xml'],
   ['.txt', 'text/plain; charset=utf-8'],
   ['.webp', 'image/webp'],
-  ['.woff', 'font/woff'],
-  ['.woff2', 'font/woff2'],
   ['.xml', 'application/xml; charset=utf-8'],
 ]);
 
@@ -48,23 +44,9 @@ function getCacheControl(filePath) {
   }
 
   if (
-    [
-      '.css',
-      '.gif',
-      '.ico',
-      '.jpg',
-      '.jpeg',
-      '.js',
-      '.json',
-      '.map',
-      '.png',
-      '.svg',
-      '.txt',
-      '.webp',
-      '.woff',
-      '.woff2',
-      '.xml',
-    ].includes(extension)
+    ['.css', '.ico', '.js', '.json', '.map', '.png', '.svg', '.txt', '.webp', '.xml'].includes(
+      extension,
+    )
   ) {
     return normalizedPath.includes('/browser/')
       ? 'public, max-age=604800, stale-while-revalidate=86400'
@@ -83,36 +65,13 @@ async function pathExists(targetPath) {
   }
 }
 
-async function resolveBrowserRoot() {
-  const directBrowserRoot = path.join(distRoot, 'browser');
-  if (await pathExists(path.join(directBrowserRoot, 'index.html'))) {
-    return directBrowserRoot;
-  }
-
-  const distEntries = await readdir(distRoot, { withFileTypes: true });
-  for (const entry of distEntries) {
-    if (!entry.isDirectory()) {
-      continue;
-    }
-
-    const nestedBrowserRoot = path.join(distRoot, entry.name, 'browser');
-    if (await pathExists(path.join(nestedBrowserRoot, 'index.html'))) {
-      return nestedBrowserRoot;
-    }
-  }
-
-  throw new Error(`Could not locate a browser build under ${distRoot}`);
-}
-
-const browserRoot = await resolveBrowserRoot();
-
 async function resolveFile(urlPath) {
   const normalized = path.posix.normalize(decodeURIComponent(urlPath));
   const relativePath = normalized.replace(/^(\.\.(\/|\\|$))+/, '').replace(/^\/+/, '');
 
-  const distCandidate = path.join(distRoot, relativePath);
-  if ((await pathExists(distCandidate)) && (await stat(distCandidate)).isFile()) {
-    return distCandidate;
+  const rootCandidate = path.join(distRoot, relativePath);
+  if ((await pathExists(rootCandidate)) && (await stat(rootCandidate)).isFile()) {
+    return rootCandidate;
   }
 
   const browserCandidate = path.join(browserRoot, relativePath);
@@ -151,5 +110,5 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, '0.0.0.0', () => {
-  console.log(`Serving static app from ${browserRoot} on port ${port}`);
+  console.log(`Serving static app on port ${port}`);
 });

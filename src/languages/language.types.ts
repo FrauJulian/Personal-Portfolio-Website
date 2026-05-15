@@ -44,6 +44,10 @@ export interface LanguagePack {
     portfolioEyebrow: string;
     heroIntro: string;
     contactTitle: string;
+    openPgpTitle: string;
+    openPgpDescription: string;
+    openPgpDownload: string;
+    openPgpFingerprintLabel: string;
     viewProjects: string;
     aboutMe: string;
     nextHighlightAriaLabel: string;

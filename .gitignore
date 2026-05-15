@@ -9,6 +9,7 @@
 # Generierte Build- und Test-Ausgaben
 /dist
 /coverage
+/public
 /src/assets/optimized
 
 # Betriebssystem-Dateileichen

@@ -12,6 +12,7 @@
 .angular
 node_modules
 dist
+public
 .npm-cache
 coverage
 .eslintcache

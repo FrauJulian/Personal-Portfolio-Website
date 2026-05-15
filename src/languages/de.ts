@@ -18,6 +18,10 @@ export const deLanguage: LanguagePack = {
     heroIntro:
       'Ich entwickle zuverlässige Systeme, übersichtliche Benutzeroberflächen und praktische digitale Lösungen, die sich in realen Kundensystemen bewähren.',
     contactTitle: 'Kontaktiere mich',
+    openPgpTitle: 'OpenPGP',
+    openPgpDescription: 'Verwende meinen Public Key für verschlüsselte Kommunikation.',
+    openPgpDownload: 'Public Key herunterladen',
+    openPgpFingerprintLabel: 'Fingerprint',
     viewProjects: 'Projekte',
     aboutMe: 'Über mich',
     nextHighlightAriaLabel: 'Nächstes Bild anzeigen',

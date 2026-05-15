@@ -12,6 +12,7 @@ import { interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { global } from '../../global';
+import { openPgpKey } from '../generated/openpgp-key.generated';
 import type {
   LanguageBioTextEntry,
   LanguagePortraitHighlight,
@@ -71,6 +72,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly global = global;
   protected readonly age = this.calculateAge(global.birthdate);
   protected readonly contactMailHref = `mailto:${global.contactMail}`;
+  protected readonly openPgpKey = openPgpKey;
   protected readonly arrowRightIcon = arrowRightIcon;
   protected readonly arrowDownIcon = arrowDownIcon;
   protected readonly envelopeIcon = envelopeIcon;
