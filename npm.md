@@ -1,12 +1,16 @@
-Create a new custom location:
+# Nginx Proxy Manager Notes
 
-Location: ~*
-Path: \.(?:js|css|mjs|webp|avif|png|jpg|jpeg|gif|svg|ico|woff2?)$
-Scheme/Hostname/Port: same as Origin
-Extra Options:
+## Custom Location
 
----
+Create a new custom location with these values:
 
+- Location: `~*`
+- Path: `\.(?:js|css|mjs|webp|avif|png|jpg|jpeg|gif|svg|ico|woff2?)$`
+- Scheme/Hostname/Port: `same as Origin`
+
+Use the following extra options:
+
+```nginx
 proxy_http_version 1.1;
 proxy_set_header Connection "";
 proxy_set_header Host $host;
@@ -17,13 +21,13 @@ proxy_buffering on;
 expires 1y;
 add_header Cache-Control "public, max-age=31536000, immutable" always;
 add_header Vary "Accept-Encoding" always;
+```
 
----
+## General Configuration
 
-General Configuration:
+Use the following general proxy configuration:
 
----
-
+```nginx
 proxy_http_version 1.1;
 proxy_set_header Connection "";
 proxy_set_header Host $host;
@@ -57,7 +61,6 @@ gzip_types
   text/plain
   text/xml;
 
-# Nur aktiv lassen, wenn dein NPMplus-Image brotli unterstützt.
 brotli on;
 brotli_comp_level 5;
 brotli_min_length 1024;
@@ -75,3 +78,4 @@ brotli_types
 
 add_header Cache-Control "no-cache, must-revalidate" always;
 add_header Vary "Accept-Encoding" always;
+```

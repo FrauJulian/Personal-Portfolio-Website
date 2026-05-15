@@ -31,7 +31,7 @@
     "------ STARTUP": "",
     "test": "npm run generate:assets && ng test",
     "dev": "npm run generate:assets && ng serve",
-    "start": "node dist/server/server.mjs",
+    "start": "node scripts/static-server.mjs",
     "------ CONFIGS": "",
     "prepare": "husky"
   },
