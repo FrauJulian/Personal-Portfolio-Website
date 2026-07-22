@@ -14,7 +14,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      code: read
 
     steps:
       - name: Checkout repository
@@ -33,7 +33,7 @@ jobs:
         run: |
           version=$(node -p 'require("./package.json").version')
           docker_tag=$version
-          revision=${GITHUB_RUN_ATTEMPT}
+          revision=${GITEA_RUN_ATTEMPT}
           echo "value=$version" >> "$GITHUB_OUTPUT"
           echo "docker_tag=$docker_tag" >> "$GITHUB_OUTPUT"
           echo "revision=$revision" >> "$GITHUB_OUTPUT"
