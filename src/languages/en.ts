@@ -222,7 +222,7 @@ export const enLanguage: LanguagePack = {
     },
     {
       title: 'Discord Audio Stream Library',
-      link: 'https://github.com/FrauJulian/Discord-Audio-Stream',
+      link: 'https://git.lechner-systems.at/fraujulian/Discord-Audio-Stream',
       description:
         'A TypeScript library for Discord that simplifies audio playback, with a focus on stable 24/7 streaming without interruptions.',
       skills: ['TypeScript', 'YML'],
