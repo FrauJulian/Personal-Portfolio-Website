@@ -25,7 +25,7 @@ LABEL org.opencontainers.image.description="👋 My portfolio website built with
 LABEL org.opencontainers.image.licenses="GPL-3.0-only"
 LABEL org.opencontainers.image.version="${APP_VERSION}"
 LABEL org.opencontainers.image.revision="${VCS_REF}"
-LABEL org.opencontainers.image.source="https://github.com/FrauJulian/Personal-Portfolio-Website"
+LABEL org.opencontainers.image.source="https://git.lechner-systems.at/fraujulian/Personal-Portfolio-Website"
 
 COPY --from=build --chown=node:node /app/dist ./dist
 COPY --chown=node:node scripts/static-server.mjs ./scripts/static-server.mjs

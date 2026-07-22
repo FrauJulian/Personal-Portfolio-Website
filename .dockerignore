@@ -1,6 +1,6 @@
 # Git- und Projekt-Metadaten werden nicht in den Docker-Build-Kontext kopiert
 .git
-.github
+.gitea
 .husky
 .claude
 

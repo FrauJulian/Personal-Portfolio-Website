@@ -45,8 +45,8 @@
       "prettier --write"
     ]
   },
-  "repository": "https://github.com/FrauJulian/Personal-Portfolio-Website",
-  "bugs": "https://github.com/FrauJulian/Personal-Portfolio-Website/issues",
+  "repository": "https://git.lechner-systems.at/fraujulian/Personal-Portfolio-Website",
+  "bugs": "https://git.lechner-systems.at/fraujulian/Personal-Portfolio-Website/issues",
   "author": {
     "name": "Lechner Julian",
     "nickname": "FrauJulian",
