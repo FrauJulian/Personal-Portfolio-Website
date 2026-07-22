@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      code: read
+
     steps:
       - name: checkout Repository
         uses: actions/checkout@v4
