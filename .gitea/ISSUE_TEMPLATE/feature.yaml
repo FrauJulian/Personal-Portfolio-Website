@@ -1,6 +1,7 @@
 name: 💡 Enhancement
-description: Suggest a new feature or improvement
+about: Suggest a new feature or improvement
 title: '💡 [ENHANCEMENT]: '
+ref: main
 body:
   - type: textarea
     id: description

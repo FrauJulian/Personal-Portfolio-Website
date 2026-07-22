@@ -1,6 +1,7 @@
 name: ⚙️ Improvement
-description: Suggest an improvement to existing functionality, code quality, or performance
+about: Suggest an improvement to existing functionality, code quality, or performance
 title: '⚙️ [Improvement]: '
+ref: main
 body:
   - type: textarea
     id: context
