@@ -2,8 +2,6 @@
 
 ### [Website Preview](https://fraujulian.xyz/)
 
-<img width="2551" height="1175" alt="Portfolio website preview" src="https://github.com/user-attachments/assets/24657c0a-4f95-4573-8472-092984d6cc4e" />
-
 ## 👂 Languages / Framework / Packages
 
 - Angular v21
@@ -61,6 +59,6 @@ npm run test
 
 ~ made by [**FrauJulian**](https://fraujulian.xyz/).
 
-Give it a star ⭐ on [GitHub](https://github.com/FrauJulian/Personal-Portfolio-Website)!
+Give it a star ⭐ on [Gitea](https://git.lechner-systems.at/fraujulian/Personal-Portfolio-Website)!
 
 ### Greetings from Austria! ⛰️
