@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.14.0'
+          node-version: '24.15.0'
           cache: npm
       - run: npm ci
       - run: npm run lint
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.14.0'
+          node-version: '24.15.0'
           cache: npm
       - run: npm ci
       - run: npm run format:check
@@ -43,7 +43,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.14.0'
+          node-version: '24.15.0'
           cache: npm
       - run: npm ci
       - run: npm run version:check
@@ -57,10 +57,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.14.0'
+          node-version: '24.15.0'
           cache: npm
+      - uses: browser-actions/setup-chrome@v2
+        id: setup-chrome
+        with:
+          install-dependencies: true
       - run: npm ci
       - name: Run tests
         run: npm run test
         env:
-          CHROME_BIN: google-chrome
+          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}

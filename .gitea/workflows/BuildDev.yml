@@ -57,10 +57,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js v24.14.0
+      - name: Use Node.js v24.15.0
         uses: actions/setup-node@v4
         with:
-          node-version: '24.14.0'
+          node-version: '24.15.0'
 
       - name: Set build version
         run: npm run version:set
