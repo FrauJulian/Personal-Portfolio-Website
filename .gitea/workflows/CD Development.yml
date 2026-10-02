@@ -1,14 +1,54 @@
-name: CD Production
+name: CD Development
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 23 * * *'
 
 env:
   REGISTRY: docker.lechner-systems.at
   IMAGE_NAME: lechnersystems/portfolio
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      code: read
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check changes since previous development release
+        id: changes
+        env:
+          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
+          API_URL: ${{ gitea.server_url }}/api/v1/repos/${{ gitea.repository }}/actions/workflows/CD%20Development.yml/runs
+        run: |
+          runs="$(curl --fail-with-body --silent --show-error \
+            --header "Authorization: token ${GITEA_TOKEN}" \
+            "${API_URL}?branch=main&limit=50")"
+          previous_sha="$(printf '%s' "$runs" | jq -r \
+            --argjson current_run "$GITEA_RUN_ID" \
+            '[.workflow_runs[] | select(.id != $current_run and .status == "success" and (.event == "schedule" or .event == "workflow_dispatch"))][0].head_sha // empty')"
+          if [ -z "$previous_sha" ]; then
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          else
+            git cat-file -e "${previous_sha}^{commit}"
+            if git diff --quiet "$previous_sha" "$GITEA_SHA"; then
+              echo 'changed=false' >> "$GITHUB_OUTPUT"
+              echo 'No changes since the previous successful development release.'
+            else
+              echo 'changed=true' >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
   docker:
+    needs: changes
+    if: needs.changes.outputs.changed == 'true'
     runs-on: ubuntu-latest
     permissions:
       code: read
@@ -17,8 +57,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Use Node.js v24.15.0
         uses: actions/setup-node@v4
@@ -48,7 +86,7 @@ jobs:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
-      - name: Build and push latest image
+      - name: Build and push development image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -58,21 +96,20 @@ jobs:
             APP_VERSION=${{ steps.version.outputs.value }}
             VCS_REF=${{ steps.version.outputs.revision }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development
 
-      - name: Create Gitea release
+      - name: Create Gitea pre-release
         env:
           GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
           RELEASE_TAG: v${{ steps.version.outputs.docker_tag }}
         run: |
           api_url="${{ gitea.server_url }}/api/v1/repos/${{ gitea.repository }}/releases"
-          # ponytail: 50 recent releases cover normal reruns; paginate if old releases are rebuilt.
           releases="$(curl --fail-with-body --silent --show-error \
               --header "Authorization: token ${GITEA_TOKEN}" \
               "${api_url}?limit=50")"
           previous_tag="$(printf '%s' "$releases" | jq -r \
               --arg tag "$RELEASE_TAG" \
-              '[.[] | select(.draft == false and .tag_name != $tag)][0].tag_name // empty')"
+              '[.[] | select(.draft == false and .prerelease == true and .tag_name != $tag)][0].tag_name // empty')"
 
           if [ -n "$previous_tag" ]; then
               commit_messages="$(git log --reverse --format='- %s' "${previous_tag}..${GITEA_SHA}")"
@@ -83,7 +120,7 @@ jobs:
           fi
 
           if [ -z "$commit_messages" ]; then
-              commit_messages='- No commits since the previous release'
+              commit_messages='- No commits since the previous pre-release'
           fi
 
           {
@@ -100,7 +137,7 @@ jobs:
               --arg tag "$RELEASE_TAG" \
               --arg target "$GITEA_SHA" \
               --rawfile body release-notes.md \
-              '{tag_name: $tag, target_commitish: $target, name: $tag, body: $body}' \
+              '{tag_name: $tag, target_commitish: $target, name: $tag, body: $body, prerelease: true}' \
               > release.json
 
           release_id="$(printf '%s' "$releases" | jq -r \
