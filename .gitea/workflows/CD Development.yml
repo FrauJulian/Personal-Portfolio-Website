@@ -96,7 +96,7 @@ jobs:
             APP_VERSION=${{ steps.version.outputs.value }}
             VCS_REF=${{ steps.version.outputs.revision }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev
 
       - name: Create Gitea pre-release
         env:
