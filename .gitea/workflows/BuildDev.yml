@@ -1,17 +1,54 @@
-name: Build Docker Image - Dev
+name: Release Development
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 23 * * *'
 
 env:
   REGISTRY: docker.lechner-systems.at
   IMAGE_NAME: lechnersystems/portfolio
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      code: read
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check changes since previous development release
+        id: changes
+        env:
+          GITEA_TOKEN: ${{ secrets.GITEA_TOKEN }}
+          API_URL: ${{ gitea.server_url }}/api/v1/repos/${{ gitea.repository }}/actions/workflows/BuildDev.yml/runs
+        run: |
+          runs="$(curl --fail-with-body --silent --show-error \
+            --header "Authorization: token ${GITEA_TOKEN}" \
+            "${API_URL}?branch=main&limit=50")"
+          previous_sha="$(printf '%s' "$runs" | jq -r \
+            --argjson current_run "$GITEA_RUN_ID" \
+            '[.workflow_runs[] | select(.id != $current_run and .status == "success" and (.event == "schedule" or .event == "workflow_dispatch"))][0].head_sha // empty')"
+          if [ -z "$previous_sha" ]; then
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          else
+            git cat-file -e "${previous_sha}^{commit}"
+            if git diff --quiet "$previous_sha" "$GITEA_SHA"; then
+              echo 'changed=false' >> "$GITHUB_OUTPUT"
+              echo 'No changes since the previous successful development release.'
+            else
+              echo 'changed=true' >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
   docker:
+    needs: changes
+    if: needs.changes.outputs.changed == 'true'
     runs-on: ubuntu-latest
     permissions:
       code: read
