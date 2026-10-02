@@ -1,64 +1,75 @@
 # FrauJulian's Portfolio Website
 
-### [Website Preview](https://fraujulian.xyz/)
+## Preview
 
-## 👂 Languages / Framework / Packages
+Visit the live website at [fraujulian.xyz](https://fraujulian.xyz/).
 
-- Angular v21
+## Technology
+
+- Angular 22
 - TypeScript
 - SCSS
+- Karma and Jasmine for tests
 
-## 💻 Development
+## Features
 
-### Development Preview
+- English and German language options
+- About, work, and project portfolio
+- Contact links and downloadable OpenPGP public key
+- Imprint and privacy information
+- Interactive portrait highlights
+
+## Project Architecture
+
+- `src/app/home` — portfolio landing page
+- `src/app/imprint` — imprint and privacy page
+- `src/app/footer` — site footer
+- `src/app/shared` — reusable UI components
+- `src/app/services` — language and preference services
+- `src/languages` — English and German content
+- `scripts` — asset generation, versioning, and static file tools
+
+## Setup
+
+Requirements: Node.js 24.15 or newer and npm 11.12 or newer.
+
+### Development
 
 ```bash
+npm ci
 npm run dev
 ```
 
-### Building
+The development server generates required static assets and runs the site at
+`http://localhost:4200`.
+
+### Production
 
 ```bash
 npm run build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/`
-directory. The production build optimizes your application for performance and
-speed.
+The build writes the static site to `dist/browser`. The static server serves the
+built site at `http://localhost:3000`.
 
-### Start compiled Project
-
-```bash
-npm run start
-```
-
-## 🔍 Code Quality
-
-### Lint & Format check
-
-```bash
-npm run check
-```
-
-### Auto-fix lint & format issues
-
-```bash
-npm run fix
-```
-
-## 🧪 Running Unit Tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test
-runner, use the following command:
+## Tests
 
 ```bash
 npm run test
 ```
 
-## 🤝 Enjoy?
+This generates assets and runs the Karma/Jasmine tests in ChromeHeadless.
 
-~ made by [**FrauJulian**](https://fraujulian.xyz/).
+## Docs
 
-Give it a star ⭐ on [Gitea](https://git.lechner-systems.at/fraujulian/Personal-Portfolio-Website)!
+- [Nginx Proxy Manager deployment notes](npm.md)
 
-### Greetings from Austria! ⛰️
+## Guidelines
+
+Run `npm run check` before submitting changes. See [AGENTS.md](AGENTS.md) for
+project conventions.
+
+## LICENSE
+
+Licensed under the [GNU Affero General Public License v3.0](LICENSE).
