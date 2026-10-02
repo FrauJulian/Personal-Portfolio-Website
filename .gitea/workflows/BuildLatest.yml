@@ -1,4 +1,4 @@
-name: Build Docker Image - Latest
+name: Release Production
 
 on:
   workflow_dispatch:
