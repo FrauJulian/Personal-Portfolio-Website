@@ -28,13 +28,13 @@ jobs:
             --header "Authorization: token ${GITEA_TOKEN}" \
             "${API_URL}?branch=main&limit=50")"
           previous_sha="$(printf '%s' "$runs" | jq -r \
-            --argjson current_run "$GITEA_RUN_ID" \
+            --argjson current_run "$GITHUB_RUN_ID" \
             '[.workflow_runs[] | select(.id != $current_run and .status == "success" and (.event == "schedule" or .event == "workflow_dispatch"))][0].head_sha // empty')"
           if [ -z "$previous_sha" ]; then
             echo 'changed=true' >> "$GITHUB_OUTPUT"
           else
             git cat-file -e "${previous_sha}^{commit}"
-            if git diff --quiet "$previous_sha" "$GITEA_SHA"; then
+            if git diff --quiet "$previous_sha" HEAD; then
               echo 'changed=false' >> "$GITHUB_OUTPUT"
               echo 'No changes since the previous successful development release.'
             else

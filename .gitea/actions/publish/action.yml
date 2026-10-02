@@ -43,7 +43,7 @@ runs:
         fi
         echo "value=$version" >> "$GITHUB_OUTPUT"
         echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"
-        echo "revision=$GITEA_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
+        echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -73,6 +73,7 @@ runs:
         RELEASE_TAG: ${{ steps.version.outputs.release_tag }}
         PRERELEASE: ${{ inputs.prerelease }}
       run: |
+        commit_sha="$(git rev-parse HEAD)"
         api_url="${{ gitea.server_url }}/api/v1/repos/${{ gitea.repository }}/releases"
         # ponytail: 50 recent releases cover normal reruns; paginate if old releases are rebuilt.
         releases="$(curl --fail-with-body --silent --show-error \
@@ -84,10 +85,10 @@ runs:
             '[.[] | select(.draft == false and .prerelease == $prerelease and .tag_name != $tag)][0].tag_name // empty')"
 
         if [ -n "$previous_tag" ]; then
-            commit_messages="$(git log --reverse --format='- %s' "${previous_tag}..${GITEA_SHA}")"
+            commit_messages="$(git log --reverse --format='- %s' "${previous_tag}..${commit_sha}")"
             full_changelog="${{ gitea.server_url }}/${{ gitea.repository }}/compare/${previous_tag}...${RELEASE_TAG}"
         else
-            commit_messages="$(git log --reverse --format='- %s' "${GITEA_SHA}")"
+            commit_messages="$(git log --reverse --format='- %s' "$commit_sha")"
             full_changelog=""
         fi
 
@@ -107,7 +108,7 @@ runs:
 
         jq --null-input \
             --arg tag "$RELEASE_TAG" \
-            --arg target "$GITEA_SHA" \
+            --arg target "$commit_sha" \
             --argjson prerelease "$PRERELEASE" \
             --rawfile body release-notes.md \
             '{tag_name: $tag, target_commitish: $target, name: $tag, body: $body, prerelease: $prerelease}' \
