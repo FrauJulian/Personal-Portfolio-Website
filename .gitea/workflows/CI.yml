@@ -59,12 +59,5 @@ jobs:
         with:
           node-version: '24.15.0'
           cache: npm
-      - uses: browser-actions/setup-chrome@v2
-        id: setup-chrome
-        with:
-          install-dependencies: true
       - run: npm ci
-      - name: Run tests
-        run: npm run test -- --browsers=ChromeHeadlessNoSandbox
-        env:
-          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
+      - run: npm run test
