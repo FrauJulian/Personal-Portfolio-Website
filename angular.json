@@ -126,27 +126,11 @@
           "builder": "@angular/build:extract-i18n"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "watch": false,
-            "browsers": "ChromeHeadless",
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "buildTarget": "::development",
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "src/assets/optimized",
-                "output": "assets/optimized"
-              },
-              {
-                "glob": "**/*",
-                "input": "public",
-                "output": "public"
-              }
-            ],
-            "styles": ["src/styles.scss"],
-            "scripts": []
+            "watch": false
           }
         }
       }

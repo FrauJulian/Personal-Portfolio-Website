@@ -133,7 +133,7 @@ describe('ImprintComponent', (): void => {
     it('should render an "Imprint & Privacy" heading', (): void => {
       const el = fixture.nativeElement as HTMLElement;
       const headings = Array.from(el.querySelectorAll('h1'));
-      expect(headings.some((h): boolean => h.textContent?.includes('Imprint') === true)).toBeTrue();
+      expect(headings.some((h): boolean => h.textContent?.includes('Imprint') === true)).toBe(true);
     });
 
     it('should contain a back link to the portfolio root', (): void => {

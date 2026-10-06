@@ -1,5 +1,6 @@
+import type { Mock } from 'vitest';
 import type { ComponentFixture } from '@angular/core/testing';
-import { TestBed, fakeAsync, tick, discardPeriodicTasks } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { IMAGE_LOADER } from '@angular/common';
 import type { ImageLoaderConfig } from '@angular/common';
@@ -14,6 +15,28 @@ import type {
 } from '../../languages/language.types';
 
 describe('HomeComponent', (): void => {
+  beforeEach((): void => {
+    // performance stays real so the change detection timing tests keep measuring.
+    vi.useFakeTimers({
+      toFake: [
+        'setTimeout',
+        'clearTimeout',
+        'setInterval',
+        'clearInterval',
+        'requestAnimationFrame',
+        'cancelAnimationFrame',
+      ],
+    });
+    // jsdom does not implement matchMedia.
+    vi.stubGlobal('matchMedia', (): MediaQueryList => ({ matches: false }) as MediaQueryList);
+  });
+
+  afterEach((): void => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
   let fixture: ComponentFixture<HomeComponent>;
   let component: HomeComponent;
 
@@ -63,8 +86,7 @@ describe('HomeComponent', (): void => {
 
   afterEach((): void => {
     // Explicitly destroy to stop the interval(1000) subscription started in ngOnInit.
-    // Without this, the real setInterval keeps the browser's event loop alive after
-    // the test suite completes, causing Karma to disconnect with a 30 s timeout.
+    // Without this, the interval keeps firing after the test has finished.
     fixture.destroy();
   });
 
@@ -151,7 +173,7 @@ describe('HomeComponent', (): void => {
     it('should set isPortraitSwitching to true immediately', (): void => {
       comp.isPortraitSwitching = false;
       comp.showNextPortraitHighlight();
-      expect(comp.isPortraitSwitching).toBeTrue();
+      expect(comp.isPortraitSwitching).toBe(true);
     });
 
     it('should not advance index when already switching', (): void => {
@@ -161,129 +183,124 @@ describe('HomeComponent', (): void => {
     });
 
     it('should not call setTimeout when only one portrait exists', (): void => {
-      const highlights = (comp as unknown as { portraitHighlights: LanguagePortraitHighlight[] })
-        .portraitHighlights;
+      const highlights = (
+        comp as unknown as {
+          portraitHighlights: LanguagePortraitHighlight[];
+        }
+      ).portraitHighlights;
       const saved = [...highlights]; // snapshot before mutation
       highlights.splice(1, saved.length - 1); // reduce to a single entry
 
-      const setSpy = spyOn(window, 'setTimeout');
+      const setSpy = vi.spyOn(window, 'setTimeout');
       comp.showNextPortraitHighlight();
       expect(setSpy).not.toHaveBeenCalled();
 
       highlights.splice(0, highlights.length, ...saved); // restore from snapshot
     });
 
-    it('should advance the portrait index after 125 ms', fakeAsync((): void => {
+    it('should advance the portrait index after 125 ms', async (): Promise<void> => {
       const zone = TestBed.inject(NgZone);
       zone.runOutsideAngular((): void => {
         comp.showNextPortraitHighlight();
       });
-      tick(125);
+      await vi.advanceTimersByTimeAsync(125);
       expect(comp.currentPortraitHighlightIndex).toBe(1);
-      tick(125);
-      discardPeriodicTasks();
-    }));
+      await vi.advanceTimersByTimeAsync(125);
+    });
 
-    it('should reset isPortraitSwitching to false after 250 ms', fakeAsync((): void => {
+    it('should reset isPortraitSwitching to false after 250 ms', async (): Promise<void> => {
       const zone = TestBed.inject(NgZone);
       zone.runOutsideAngular((): void => {
         comp.showNextPortraitHighlight();
       });
-      tick(250);
-      expect(comp.isPortraitSwitching).toBeFalse();
-      discardPeriodicTasks();
-    }));
+      await vi.advanceTimersByTimeAsync(250);
+      expect(comp.isPortraitSwitching).toBe(false);
+    });
 
-    it('should wrap portrait index from the last position back to 0', fakeAsync((): void => {
+    it('should wrap portrait index from the last position back to 0', async (): Promise<void> => {
       comp.currentPortraitHighlightIndex = enLanguage.portraitHighlights.length - 1;
       const zone = TestBed.inject(NgZone);
       zone.runOutsideAngular((): void => {
         comp.showNextPortraitHighlight();
       });
-      tick(125);
+      await vi.advanceTimersByTimeAsync(125);
       expect(comp.currentPortraitHighlightIndex).toBe(0);
-      tick(125);
-      discardPeriodicTasks();
-    }));
+      await vi.advanceTimersByTimeAsync(125);
+    });
   });
 
   // ── Bio toggle ─────────────────────────────────────────────────────────────
 
   describe('toggleBio', (): void => {
-    it('should mount bio immediately on opening', fakeAsync((): void => {
+    it('should mount bio immediately on opening', async (): Promise<void> => {
       comp.toggleBio();
-      expect(comp.isLongBioMounted).toBeTrue();
-      tick(100);
-      discardPeriodicTasks();
-    }));
+      expect(comp.isLongBioMounted).toBe(true);
+      await vi.advanceTimersByTimeAsync(100);
+    });
 
-    it('should set isLongBioShown to true after the double-rAF delay', fakeAsync((): void => {
+    it('should set isLongBioShown to true after the double-rAF delay', async (): Promise<void> => {
       comp.toggleBio();
-      tick(50); // allow both nested requestAnimationFrame calls to execute
+      await vi.advanceTimersByTimeAsync(50); // allow both nested requestAnimationFrame calls to execute
       fixture.detectChanges();
-      expect(comp.isLongBioShown).toBeTrue();
-      discardPeriodicTasks();
-    }));
+      expect(comp.isLongBioShown).toBe(true);
+    });
 
-    it('should set isLongBioShown to false immediately on close', fakeAsync((): void => {
+    it('should set isLongBioShown to false immediately on close', async (): Promise<void> => {
       // Open first
       comp.toggleBio();
-      tick(50);
+      await vi.advanceTimersByTimeAsync(50);
       fixture.detectChanges();
 
       // Close
       comp.toggleBio();
       fixture.detectChanges();
-      expect(comp.isLongBioShown).toBeFalse();
-      tick(300);
-      discardPeriodicTasks();
-    }));
+      expect(comp.isLongBioShown).toBe(false);
+      await vi.advanceTimersByTimeAsync(300);
+    });
 
-    it('should keep isLongBioMounted true during the 300 ms close animation', fakeAsync((): void => {
+    it('should keep isLongBioMounted true during the 300 ms close animation', async (): Promise<void> => {
       comp.toggleBio();
-      tick(50);
+      await vi.advanceTimersByTimeAsync(50);
       fixture.detectChanges();
 
       comp.toggleBio();
       fixture.detectChanges();
-      expect(comp.isLongBioMounted).toBeTrue();
+      expect(comp.isLongBioMounted).toBe(true);
 
-      tick(299);
-      expect(comp.isLongBioMounted).toBeTrue();
+      await vi.advanceTimersByTimeAsync(299);
+      expect(comp.isLongBioMounted).toBe(true);
 
-      tick(1);
+      await vi.advanceTimersByTimeAsync(1);
       fixture.detectChanges();
-      expect(comp.isLongBioMounted).toBeFalse();
-      discardPeriodicTasks();
-    }));
+      expect(comp.isLongBioMounted).toBe(false);
+    });
 
-    it('should cancel pending close timeout when re-opened during animation', fakeAsync((): void => {
+    it('should cancel pending close timeout when re-opened during animation', async (): Promise<void> => {
       comp.toggleBio();
-      tick(50);
+      await vi.advanceTimersByTimeAsync(50);
       fixture.detectChanges();
 
       comp.toggleBio(); // start closing
-      tick(150); // halfway through 300 ms
+      await vi.advanceTimersByTimeAsync(150); // halfway through 300 ms
 
       comp.toggleBio(); // re-open before unmount
-      tick(50);
+      await vi.advanceTimersByTimeAsync(50);
       fixture.detectChanges();
 
-      expect(comp.isLongBioMounted).toBeTrue();
-      expect(comp.isLongBioShown).toBeTrue();
+      expect(comp.isLongBioMounted).toBe(true);
+      expect(comp.isLongBioShown).toBe(true);
 
-      tick(500);
-      discardPeriodicTasks();
-    }));
+      await vi.advanceTimersByTimeAsync(500);
+    });
   });
 
   // ── Scroll helpers ─────────────────────────────────────────────────────────
 
   describe('scroll helpers', (): void => {
-    let scrollSpy: jasmine.Spy;
+    let scrollSpy: Mock;
 
     beforeEach((): void => {
-      scrollSpy = spyOn(window, 'scrollTo');
+      scrollSpy = vi.spyOn(window, 'scrollTo').mockReturnValue(undefined);
     });
 
     it('should call window.scrollTo when scrolling to the about section', (): void => {
@@ -349,20 +366,18 @@ describe('HomeComponent', (): void => {
   // ── Lifecycle cleanup ──────────────────────────────────────────────────────
 
   describe('ngOnDestroy', (): void => {
-    it('should clear pending portrait switch timers on destroy', fakeAsync((): void => {
+    it('should clear pending portrait switch timers on destroy', async (): Promise<void> => {
       comp.showNextPortraitHighlight();
-      const clearSpy = spyOn(window, 'clearTimeout').and.callThrough();
+      const clearSpy = vi.spyOn(window, 'clearTimeout');
 
       fixture.destroy();
 
       expect(clearSpy).toHaveBeenCalled();
-      discardPeriodicTasks();
-    }));
+    });
 
-    it('should not throw when destroyed', fakeAsync((): void => {
+    it('should not throw when destroyed', async (): Promise<void> => {
       expect((): void => fixture.destroy()).not.toThrow();
-      discardPeriodicTasks();
-    }));
+    });
   });
 
   // ── Template rendering ─────────────────────────────────────────────────────
@@ -430,7 +445,7 @@ describe('HomeComponent', (): void => {
 
   describe('Performance', (): void => {
     it('should keep scroll effects enabled on desktop pointers when motion is allowed', (): void => {
-      spyOn(window, 'matchMedia').and.callFake(
+      vi.spyOn(window, 'matchMedia').mockImplementation(
         (query: string): MediaQueryList =>
           ({
             matches:
@@ -439,29 +454,29 @@ describe('HomeComponent', (): void => {
           }) as MediaQueryList,
       );
 
-      expect(comp.shouldEnableScrollEffects()).toBeTrue();
+      expect(comp.shouldEnableScrollEffects()).toBe(true);
     });
 
     it('should keep scroll effects enabled on coarse touch pointers when motion is allowed', (): void => {
-      spyOn(window, 'matchMedia').and.callFake(
+      vi.spyOn(window, 'matchMedia').mockImplementation(
         (query: string): MediaQueryList =>
           ({
             matches: query === '(hover: none) and (pointer: coarse)',
           }) as MediaQueryList,
       );
 
-      expect(comp.shouldEnableScrollEffects()).toBeTrue();
+      expect(comp.shouldEnableScrollEffects()).toBe(true);
     });
 
     it('should disable scroll effects when reduced motion is requested', (): void => {
-      spyOn(window, 'matchMedia').and.callFake(
+      vi.spyOn(window, 'matchMedia').mockImplementation(
         (query: string): MediaQueryList =>
           ({
             matches: query === '(prefers-reduced-motion: reduce)',
           }) as MediaQueryList,
       );
 
-      expect(comp.shouldEnableScrollEffects()).toBeFalse();
+      expect(comp.shouldEnableScrollEffects()).toBe(false);
     });
 
     it('should create and run initial change detection within 200 ms', (): void => {
@@ -480,13 +495,13 @@ describe('HomeComponent', (): void => {
       expect(performance.now() - start).toBeLessThan(100);
     });
 
-    it('should deduplicate rapid schedule calls to a single requestAnimationFrame', fakeAsync((): void => {
-      // The RAF registered during beforeEach's ngOnInit lives outside this fakeAsync zone.
+    it('should deduplicate rapid schedule calls to a single requestAnimationFrame', async (): Promise<void> => {
+      // The RAF registered during beforeEach's ngOnInit is still pending under fake timers.
       // Resetting the ID to null makes the schedule function treat the slot as free.
       comp.scrollAnimationFrameId = null;
 
       let rafCallCount = 0;
-      spyOn(window, 'requestAnimationFrame').and.callFake((): number => {
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((): number => {
         rafCallCount++;
         return rafCallCount; // returns non-null so subsequent calls deduplicate
       });
@@ -496,14 +511,13 @@ describe('HomeComponent', (): void => {
       comp.scheduleNameGradientUpdate();
 
       expect(rafCallCount).toBe(1);
-      discardPeriodicTasks();
-    }));
+    });
 
-    it('should deduplicate project-entry reveal scheduling the same way', fakeAsync((): void => {
+    it('should deduplicate project-entry reveal scheduling the same way', async (): Promise<void> => {
       comp.projectEntryAnimationFrameId = null;
 
       let rafCallCount = 0;
-      spyOn(window, 'requestAnimationFrame').and.callFake((): number => {
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((): number => {
         rafCallCount++;
         return rafCallCount;
       });
@@ -513,14 +527,13 @@ describe('HomeComponent', (): void => {
       comp.scheduleProjectEntryRevealUpdate();
 
       expect(rafCallCount).toBe(1);
-      discardPeriodicTasks();
-    }));
+    });
 
-    it('should deduplicate about-section scroll scheduling the same way', fakeAsync((): void => {
+    it('should deduplicate about-section scroll scheduling the same way', async (): Promise<void> => {
       comp.aboutSectionAnimationFrameId = null;
 
       let rafCallCount = 0;
-      spyOn(window, 'requestAnimationFrame').and.callFake((): number => {
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((): number => {
         rafCallCount++;
         return rafCallCount;
       });
@@ -530,7 +543,6 @@ describe('HomeComponent', (): void => {
       comp.scheduleAboutSectionScrollAnimationUpdate();
 
       expect(rafCallCount).toBe(1);
-      discardPeriodicTasks();
-    }));
+    });
   });
 });

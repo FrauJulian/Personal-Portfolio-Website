@@ -31,7 +31,9 @@ describe('AppComponent', (): void => {
   });
 
   it('should preselect English by default', (): void => {
-    const comp = component as unknown as { selectedLanguage(): string };
+    const comp = component as unknown as {
+      selectedLanguage(): string;
+    };
     expect(comp.selectedLanguage()).toBe('en');
   });
 
@@ -57,8 +59,8 @@ describe('AppComponent', (): void => {
     fixture.detectChanges();
 
     expect(comp.currentLanguageCode()).toBe('de');
-    expect(comp.isLanguageConfirmed()).toBeTrue();
-    expect(comp.isLanguageSelectorOpen()).toBeFalse();
+    expect(comp.isLanguageConfirmed()).toBe(true);
+    expect(comp.isLanguageSelectorOpen()).toBe(false);
     expect(localStorage.getItem('portfolio-language')).toBe('de');
   });
 
@@ -74,8 +76,8 @@ describe('AppComponent', (): void => {
     };
 
     expect(restoredComponent.currentLanguageCode()).toBe('de');
-    expect(restoredComponent.isLanguageConfirmed()).toBeTrue();
-    expect(restoredComponent.isLanguageSelectorOpen()).toBeFalse();
+    expect(restoredComponent.isLanguageConfirmed()).toBe(true);
+    expect(restoredComponent.isLanguageSelectorOpen()).toBe(false);
   });
 
   it('should reopen the selector after confirmation', (): void => {
@@ -89,6 +91,6 @@ describe('AppComponent', (): void => {
     comp.reopenLanguageSelector();
     fixture.detectChanges();
 
-    expect(comp.isLanguageSelectorOpen()).toBeTrue();
+    expect(comp.isLanguageSelectorOpen()).toBe(true);
   });
 });
