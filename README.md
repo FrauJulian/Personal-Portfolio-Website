@@ -9,7 +9,7 @@ Visit the live website at [fraujulian.xyz](https://fraujulian.xyz/).
 - Angular 22
 - TypeScript
 - SCSS
-- Karma and Jasmine for tests
+- Vitest for tests
 
 ## Features
 
@@ -59,7 +59,7 @@ built site at `http://localhost:3000`.
 npm run test
 ```
 
-This generates assets and runs the Karma/Jasmine tests in ChromeHeadless.
+This generates assets and runs the Vitest tests in jsdom.
 
 ## Docs
 

@@ -3,7 +3,7 @@
 ## Project Context
 
 This is an Angular portfolio application using Angular 21, TypeScript, SCSS,
-Karma/Jasmine tests, and static hosting for production output. Production
+Vitest tests, and static hosting for production output. Production
 application code lives in `src/app`; the client entry point lives in
 `src/main.ts`.
 
@@ -32,7 +32,7 @@ maintain generated or copied output in `public/assets/optimized` or `dist`.
 - `npm run build`: generates assets, builds the production app, and copies
   static root files. Run this only when explicitly requested.
 - `npm start`: serves the built static app through `scripts/static-server.mjs`.
-- `npm test`: generates assets and starts Angular tests with Karma/Jasmine.
+- `npm test`: generates assets and starts Angular tests with Vitest.
 - `npm run check`: runs linting, format checks, version checks, and source text
   checks. Always use this as the final validation.
 - `npm run fix`: places version data, runs ESLint fixes, fixes source text, and
