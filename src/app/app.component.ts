@@ -1,17 +1,18 @@
-import { DOCUMENT } from '@angular/common';
 import {
+  afterRenderEffect,
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   signal,
+  viewChild,
 } from '@angular/core';
-import type { OnDestroy, OnInit } from '@angular/core';
+import type { ElementRef, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import type { LanguageCode } from '../languages/language.types';
 import type { LanguageOption } from './app.types';
+import { LanguagePreferenceService } from './services/language-preference.service';
 import { ShellLanguageService } from './services/shell-language.service';
 
 @Component({
@@ -21,13 +22,14 @@ import { ShellLanguageService } from './services/shell-language.service';
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit, OnDestroy {
-  private readonly document = inject(DOCUMENT);
+export class AppComponent implements OnInit {
+  private readonly languagePreferenceService = inject(LanguagePreferenceService);
   private readonly shellLanguageService = inject(ShellLanguageService);
+  private readonly languageDialog =
+    viewChild.required<ElementRef<HTMLDialogElement>>('languageDialog');
 
   protected readonly content = this.shellLanguageService.content;
-  protected readonly currentLanguageCode = this.shellLanguageService.languageCode;
-  protected readonly isLanguageConfirmed = this.shellLanguageService.isLanguageConfirmed;
+  protected readonly currentLanguageCode = this.languagePreferenceService.languageCode;
   protected readonly isLanguageSelectorOpen = signal(false);
   protected readonly selectedLanguage = signal<LanguageCode>('en');
   protected readonly languageOptions: readonly LanguageOption[] = [
@@ -41,26 +43,22 @@ export class AppComponent implements OnInit, OnDestroy {
     this.getLanguageLabel(this.currentLanguageCode(), this.content()),
   );
 
-  constructor() {
-    effect((): void => {
-      const overflowValue = this.isLanguageSelectorOpen() ? 'hidden' : '';
-      this.document.body.style.overflow = overflowValue;
-      this.document.documentElement.style.overflow = overflowValue;
-    });
-  }
+  private readonly syncDialog = afterRenderEffect((): void => {
+    const dialog = this.languageDialog().nativeElement;
+    if (this.isLanguageSelectorOpen() && !dialog.open) {
+      dialog.showModal();
+    } else if (!this.isLanguageSelectorOpen() && dialog.open) {
+      dialog.close();
+    }
+  });
 
   ngOnInit(): void {
-    const initialLanguage = this.shellLanguageService.initializeFromStorage();
-    this.selectedLanguage.set(initialLanguage);
+    this.selectedLanguage.set(this.languagePreferenceService.initialize());
   }
 
   protected chooseLanguage(language: LanguageCode): void {
     this.selectedLanguage.set(language);
-    this.confirmLanguage();
-  }
-
-  protected confirmLanguage(): void {
-    this.shellLanguageService.confirmLanguage(this.selectedLanguage());
+    this.languagePreferenceService.confirmLanguage(language);
     this.isLanguageSelectorOpen.set(false);
   }
 
@@ -69,6 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isLanguageSelectorOpen.set(true);
   }
 
+  /** Also runs when the dialog closes natively, e.g. via Escape. */
   protected closeLanguageSelector(): void {
     this.selectedLanguage.set(this.currentLanguageCode());
     this.isLanguageSelectorOpen.set(false);
@@ -82,10 +81,5 @@ export class AppComponent implements OnInit, OnDestroy {
 
   protected getLanguageLabel(language: LanguageCode, content = this.dialogContent()): string {
     return language === 'de' ? content.app.languageGerman : content.app.languageEnglish;
-  }
-
-  ngOnDestroy(): void {
-    this.document.body.style.overflow = '';
-    this.document.documentElement.style.overflow = '';
   }
 }

@@ -27,7 +27,7 @@ describe('AppComponent', (): void => {
 
   it('should keep the language selector closed on first visit', (): void => {
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('.language-overlay')).toBeNull();
+    expect(el.querySelector<HTMLDialogElement>('dialog.language-overlay')?.open).toBe(false);
   });
 
   it('should preselect English by default', (): void => {
@@ -51,7 +51,6 @@ describe('AppComponent', (): void => {
     const comp = component as unknown as {
       chooseLanguage(language: 'en' | 'de'): void;
       currentLanguageCode(): string;
-      isLanguageConfirmed(): boolean;
       isLanguageSelectorOpen(): boolean;
     };
 
@@ -59,7 +58,6 @@ describe('AppComponent', (): void => {
     fixture.detectChanges();
 
     expect(comp.currentLanguageCode()).toBe('de');
-    expect(comp.isLanguageConfirmed()).toBe(true);
     expect(comp.isLanguageSelectorOpen()).toBe(false);
     expect(localStorage.getItem('portfolio-language')).toBe('de');
   });
@@ -71,12 +69,10 @@ describe('AppComponent', (): void => {
     restoredFixture.detectChanges();
     const restoredComponent = restoredFixture.componentInstance as unknown as {
       currentLanguageCode(): string;
-      isLanguageConfirmed(): boolean;
       isLanguageSelectorOpen(): boolean;
     };
 
     expect(restoredComponent.currentLanguageCode()).toBe('de');
-    expect(restoredComponent.isLanguageConfirmed()).toBe(true);
     expect(restoredComponent.isLanguageSelectorOpen()).toBe(false);
   });
 
@@ -92,5 +88,19 @@ describe('AppComponent', (): void => {
     fixture.detectChanges();
 
     expect(comp.isLanguageSelectorOpen()).toBe(true);
+  });
+
+  it('should sync the selector state when the dialog closes natively', (): void => {
+    const comp = component as unknown as {
+      reopenLanguageSelector(): void;
+      isLanguageSelectorOpen(): boolean;
+    };
+    comp.reopenLanguageSelector();
+    fixture.detectChanges();
+
+    const dialog = (fixture.nativeElement as HTMLElement).querySelector('dialog');
+    dialog?.dispatchEvent(new Event('close'));
+
+    expect(comp.isLanguageSelectorOpen()).toBe(false);
   });
 });

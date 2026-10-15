@@ -1,4 +1,4 @@
-<div class="app-content" [attr.aria-hidden]="isLanguageSelectorOpen() ? 'true' : null" [attr.inert]="isLanguageSelectorOpen() ? '' : null">
+<div class="app-content">
   <router-outlet></router-outlet>
 </div>
 
@@ -16,14 +16,14 @@
   </span>
 </button>
 
-@if (isLanguageSelectorOpen()) {
-  <div
-    class="language-overlay"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="language-title"
-    (click)="closeLanguageSelectorOnBackdrop($event)"
-  >
+<dialog
+  #languageDialog
+  class="language-overlay"
+  aria-labelledby="language-title"
+  (close)="closeLanguageSelector()"
+  (click)="closeLanguageSelectorOnBackdrop($event)"
+>
+  @if (isLanguageSelectorOpen()) {
     <section class="language-card panel">
       <div class="language-card-header">
         <div class="language-copy">
@@ -57,5 +57,5 @@
         }
       </div>
     </section>
-  </div>
-}
+  }
+</dialog>
