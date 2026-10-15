@@ -1,142 +1,103 @@
-import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import type { OnDestroy } from '@angular/core';
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
-  NgZone,
   signal,
 } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
-import { interval } from 'rxjs';
+import { filter, interval } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { global } from '../../global';
-import { openPgpKey } from '../generated/openpgp-key.generated';
-import type {
-  LanguageBioTextEntry,
-  LanguagePortraitHighlight,
-  LanguageProject,
-} from '../../languages/language.types';
 import { FooterComponent } from '../footer/footer.component';
 import { LanguageService } from '../services/language.service';
 import { IconComponent } from '../shared/icon/icon.component';
 import {
   arrowDownIcon,
   arrowRightIcon,
-  discordIcon,
   envelopeIcon,
-  githubIcon,
+  giteaIcon,
   linkedinIcon,
   phoneIcon,
+  signalIcon,
 } from '../shared/icon/icons';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FooterComponent, IconComponent, NgOptimizedImage],
+  imports: [FooterComponent, IconComponent],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HomeComponent implements OnDestroy {
+  private static readonly bioTickerIntervalMs = 1250;
+
   private readonly destroyRef = inject(DestroyRef);
-  private readonly zone = inject(NgZone);
   private readonly languageService = inject(LanguageService);
   protected readonly content = this.languageService.content;
 
-  private scrollAnimationFrameId: number | null = null;
-  private projectEntryAnimationFrameId: number | null = null;
-  private aboutSectionAnimationFrameId: number | null = null;
-  private readonly scheduleNameGradientUpdate: () => void = (): void => {
-    if (this.scrollAnimationFrameId !== null || typeof window === 'undefined') return;
-    this.scrollAnimationFrameId = window.requestAnimationFrame((): void => {
-      this.scrollAnimationFrameId = null;
+  private scrollEffectsAnimationFrameId: number | null = null;
+  private readonly scheduleScrollEffectsUpdate: () => void = (): void => {
+    if (this.scrollEffectsAnimationFrameId !== null) return;
+    this.scrollEffectsAnimationFrameId = window.requestAnimationFrame((): void => {
+      this.scrollEffectsAnimationFrameId = null;
       this.updateNameGradientProgress();
-    });
-  };
-  private readonly scheduleProjectEntryRevealUpdate: () => void = (): void => {
-    if (this.projectEntryAnimationFrameId !== null || typeof window === 'undefined') return;
-    this.projectEntryAnimationFrameId = window.requestAnimationFrame((): void => {
-      this.projectEntryAnimationFrameId = null;
-      this.updateProjectEntryRevealProgress();
-    });
-  };
-  private readonly scheduleAboutSectionScrollAnimationUpdate: () => void = (): void => {
-    if (this.aboutSectionAnimationFrameId !== null || typeof window === 'undefined') return;
-    this.aboutSectionAnimationFrameId = window.requestAnimationFrame((): void => {
-      this.aboutSectionAnimationFrameId = null;
       this.updateAboutSectionScrollProgress();
+      this.updateProjectEntryRevealProgress();
     });
   };
 
   protected readonly global = global;
   protected readonly age = this.calculateAge(global.birthdate);
   protected readonly contactMailHref = `mailto:${global.contactMail}`;
-  protected readonly openPgpKey = openPgpKey;
   protected readonly arrowRightIcon = arrowRightIcon;
   protected readonly arrowDownIcon = arrowDownIcon;
   protected readonly envelopeIcon = envelopeIcon;
   protected readonly phoneIcon = phoneIcon;
-  protected readonly discordIcon = discordIcon;
-  protected readonly githubIcon = githubIcon;
+  protected readonly signalIcon = signalIcon;
+  protected readonly giteaIcon = giteaIcon;
   protected readonly linkedinIcon = linkedinIcon;
 
-  private readonly isLongBioShownState = signal(false);
-  private readonly isLongBioMountedState = signal(false);
-  private readonly currentPortraitHighlightIndexState = signal(0);
-  private readonly isPortraitSwitchingState = signal(false);
-  private readonly currentIndexState = signal(0);
+  protected readonly isLongBioShown = signal(false);
+  protected readonly isLongBioMounted = signal(false);
+  protected readonly currentPortraitHighlightIndex = signal(0);
+  protected readonly isPortraitSwitching = signal(false);
+  protected readonly currentIndex = signal(0);
+  protected readonly isBioTickerPaused = signal(false);
   private bioHideTimeoutId: number | null = null;
   private portraitSwitchTimeoutId: number | null = null;
   private portraitSwitchDoneTimeoutId: number | null = null;
 
-  protected get isLongBioShown(): boolean {
-    return this.isLongBioShownState();
-  }
-  protected set isLongBioShown(value: boolean) {
-    this.isLongBioShownState.set(value);
-  }
-  protected get isLongBioMounted(): boolean {
-    return this.isLongBioMountedState();
-  }
-  protected set isLongBioMounted(value: boolean) {
-    this.isLongBioMountedState.set(value);
-  }
-  protected get currentPortraitHighlightIndex(): number {
-    return this.currentPortraitHighlightIndexState();
-  }
-  protected set currentPortraitHighlightIndex(value: number) {
-    this.currentPortraitHighlightIndexState.set(value);
-  }
-  protected get isPortraitSwitching(): boolean {
-    return this.isPortraitSwitchingState();
-  }
-  protected set isPortraitSwitching(value: boolean) {
-    this.isPortraitSwitchingState.set(value);
-  }
-  protected get currentIndex(): number {
-    return this.currentIndexState();
-  }
-  protected set currentIndex(value: number) {
-    this.currentIndexState.set(value);
-  }
-  protected get portraitHighlights(): LanguagePortraitHighlight[] {
-    return this.content().portraitHighlights;
-  }
-  protected get projects(): LanguageProject[] {
-    return this.content().projects;
-  }
-  protected get currentPortraitHighlight(): LanguagePortraitHighlight | null {
-    return this.portraitHighlights[this.currentPortraitHighlightIndexState()] ?? null;
-  }
-  protected get currentBioEntry(): LanguageBioTextEntry {
-    return (
-      this.content().bioTextsList[this.currentIndexState()] ?? {
-        label: this.content().home.fallbackBioLabel,
-        value: '',
-      }
-    );
-  }
+  protected readonly portraitHighlights = computed(() => this.content().portraitHighlights);
+  /** Splits off the last title word so the arrow stays glued to it and never wraps alone. */
+  protected readonly projects = computed(() =>
+    this.content().projects.map((project) => {
+      const tailStart = project.title.lastIndexOf(' ') + 1;
+      return {
+        ...project,
+        titleHead: project.title.slice(0, tailStart),
+        titleTail: project.title.slice(tailStart),
+      };
+    }),
+  );
+  protected readonly currentPortraitHighlight = computed(
+    () => this.portraitHighlights()[this.currentPortraitHighlightIndex()] ?? null,
+  );
+  protected readonly currentBioText = computed(
+    (): string => this.content().bioTextsList[this.currentIndex()] ?? '',
+  );
+
+  private readonly startBrowserEffects = afterNextRender((): void => {
+    this.preloadPortraitHighlights();
+    if (!this.shouldEnableScrollEffects()) return;
+    this.startBioTicker();
+    window.addEventListener('scroll', this.scheduleScrollEffectsUpdate, { passive: true });
+    window.addEventListener('resize', this.scheduleScrollEffectsUpdate, { passive: true });
+    this.scheduleScrollEffectsUpdate();
+  });
 
   protected interpolate(text: string): string {
     return text
@@ -144,78 +105,48 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       .replaceAll('{{age}}', String(this.age));
   }
 
-  ngOnInit(): void {
-    this.zone.runOutsideAngular((): void => {
-      this.initNameGradientScrollAnimation();
-    });
-    this.zone.runOutsideAngular((): void => {
-      interval(1000)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((): void => {
-          this.zone.run((): void => {
-            const len = this.content().bioTextsList.length;
-            this.currentIndex = len > 0 ? (this.currentIndex + 1) % len : 0;
-          });
-        });
-    });
-  }
-
-  ngAfterViewInit(): void {
-    this.zone.runOutsideAngular((): void => {
-      this.initProjectEntryRevealObserver();
-      this.initAboutSectionScrollAnimation();
-    });
-  }
   ngOnDestroy(): void {
+    if (typeof window === 'undefined') return;
     if (this.bioHideTimeoutId !== null) {
       window.clearTimeout(this.bioHideTimeoutId);
       this.bioHideTimeoutId = null;
     }
     this.clearPortraitSwitchTimeouts();
-    this.destroyNameGradientScrollAnimation();
-    this.destroyProjectEntryRevealObserver();
-    this.destroyAboutSectionScrollAnimation();
+    this.destroyScrollEffects();
   }
 
   protected toggleBio(): void {
-    if (this.isLongBioShown) {
-      this.isLongBioShown = false;
-      if (typeof window !== 'undefined') {
-        if (this.bioHideTimeoutId !== null) window.clearTimeout(this.bioHideTimeoutId);
-        this.bioHideTimeoutId = window.setTimeout((): void => {
-          this.isLongBioMounted = false;
-          this.bioHideTimeoutId = null;
-        }, 300);
-      } else {
-        this.isLongBioMounted = false;
-      }
+    if (this.isLongBioShown()) {
+      this.isLongBioShown.set(false);
+      if (this.bioHideTimeoutId !== null) window.clearTimeout(this.bioHideTimeoutId);
+      this.bioHideTimeoutId = window.setTimeout((): void => {
+        this.isLongBioMounted.set(false);
+        this.bioHideTimeoutId = null;
+      }, 300);
       return;
     }
-    if (this.bioHideTimeoutId !== null && typeof window !== 'undefined') {
+    if (this.bioHideTimeoutId !== null) {
       window.clearTimeout(this.bioHideTimeoutId);
       this.bioHideTimeoutId = null;
     }
-    this.isLongBioMounted = true;
-    if (typeof window !== 'undefined') {
+    this.isLongBioMounted.set(true);
+    window.requestAnimationFrame((): void => {
       window.requestAnimationFrame((): void => {
-        window.requestAnimationFrame((): void => {
-          this.isLongBioShown = true;
-        });
+        this.isLongBioShown.set(true);
       });
-    } else {
-      this.isLongBioShown = true;
-    }
+    });
   }
   protected showNextPortraitHighlight(): void {
-    if (this.portraitHighlights.length <= 1 || this.isPortraitSwitching) return;
-    this.isPortraitSwitching = true;
+    if (this.portraitHighlights().length <= 1 || this.isPortraitSwitching()) return;
+    this.isPortraitSwitching.set(true);
     this.portraitSwitchTimeoutId = window.setTimeout((): void => {
-      this.currentPortraitHighlightIndex =
-        (this.currentPortraitHighlightIndex + 1) % this.portraitHighlights.length;
+      this.currentPortraitHighlightIndex.update(
+        (index: number): number => (index + 1) % this.portraitHighlights().length,
+      );
       this.portraitSwitchTimeoutId = null;
     }, 125);
     this.portraitSwitchDoneTimeoutId = window.setTimeout((): void => {
-      this.isPortraitSwitching = false;
+      this.isPortraitSwitching.set(false);
       this.portraitSwitchDoneTimeoutId = null;
     }, 250);
   }
@@ -239,62 +170,47 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return !prefersReducedMotion;
   }
 
-  private initNameGradientScrollAnimation(): void {
-    if (!this.shouldEnableScrollEffects()) return;
-    window.addEventListener('scroll', this.scheduleNameGradientUpdate, { passive: true });
-    window.addEventListener('resize', this.scheduleNameGradientUpdate, { passive: true });
-    this.scheduleNameGradientUpdate();
-  }
-  private initProjectEntryRevealObserver(): void {
-    if (!this.shouldEnableScrollEffects()) return;
-    window.addEventListener('scroll', this.scheduleProjectEntryRevealUpdate, { passive: true });
-    window.addEventListener('resize', this.scheduleProjectEntryRevealUpdate, { passive: true });
-    this.scheduleProjectEntryRevealUpdate();
-  }
-  private destroyProjectEntryRevealObserver(): void {
-    if (typeof window === 'undefined' || typeof document === 'undefined') return;
-    window.removeEventListener('scroll', this.scheduleProjectEntryRevealUpdate);
-    window.removeEventListener('resize', this.scheduleProjectEntryRevealUpdate);
-    if (this.projectEntryAnimationFrameId !== null) {
-      window.cancelAnimationFrame(this.projectEntryAnimationFrameId);
-      this.projectEntryAnimationFrameId = null;
+  /** Loads the other highlight images at low priority so a click swaps them without a visible delay. */
+  private preloadPortraitHighlights(): void {
+    const current = this.currentPortraitHighlight();
+    for (const highlight of this.portraitHighlights()) {
+      if (highlight === current) continue;
+      const image = new Image();
+      image.fetchPriority = 'low';
+      image.sizes = highlight.imageSizes;
+      image.srcset = highlight.imageSrcset;
+      image.src = highlight.image;
     }
+  }
+
+  private startBioTicker(): void {
+    interval(HomeComponent.bioTickerIntervalMs)
+      .pipe(
+        filter((): boolean => !this.isBioTickerPaused()),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((): void => {
+        const length = this.content().bioTextsList.length;
+        this.currentIndex.update((index: number): number =>
+          length > 0 ? (index + 1) % length : 0,
+        );
+      });
+  }
+
+  private destroyScrollEffects(): void {
+    window.removeEventListener('scroll', this.scheduleScrollEffectsUpdate);
+    window.removeEventListener('resize', this.scheduleScrollEffectsUpdate);
+    if (this.scrollEffectsAnimationFrameId !== null) {
+      window.cancelAnimationFrame(this.scrollEffectsAnimationFrameId);
+      this.scrollEffectsAnimationFrameId = null;
+    }
+    document.documentElement.style.removeProperty('--name-pride-progress');
+    document.getElementById('about')?.style.removeProperty('--about-scroll-progress');
     document.querySelectorAll<HTMLElement>('.project-entry').forEach((entry: HTMLElement): void => {
       entry.style.removeProperty('--project-entry-progress');
     });
   }
-  private initAboutSectionScrollAnimation(): void {
-    if (!this.shouldEnableScrollEffects()) return;
-    window.addEventListener('scroll', this.scheduleAboutSectionScrollAnimationUpdate, {
-      passive: true,
-    });
-    window.addEventListener('resize', this.scheduleAboutSectionScrollAnimationUpdate, {
-      passive: true,
-    });
-    this.scheduleAboutSectionScrollAnimationUpdate();
-  }
-  private destroyAboutSectionScrollAnimation(): void {
-    if (typeof window === 'undefined' || typeof document === 'undefined') return;
-    window.removeEventListener('scroll', this.scheduleAboutSectionScrollAnimationUpdate);
-    window.removeEventListener('resize', this.scheduleAboutSectionScrollAnimationUpdate);
-    if (this.aboutSectionAnimationFrameId !== null) {
-      window.cancelAnimationFrame(this.aboutSectionAnimationFrameId);
-      this.aboutSectionAnimationFrameId = null;
-    }
-    document.getElementById('about')?.style.removeProperty('--about-scroll-progress');
-  }
-  private destroyNameGradientScrollAnimation(): void {
-    if (typeof window === 'undefined') return;
-    window.removeEventListener('scroll', this.scheduleNameGradientUpdate);
-    window.removeEventListener('resize', this.scheduleNameGradientUpdate);
-    if (this.scrollAnimationFrameId !== null) {
-      window.cancelAnimationFrame(this.scrollAnimationFrameId);
-      this.scrollAnimationFrameId = null;
-    }
-    document.documentElement.style.removeProperty('--name-pride-progress');
-  }
   private clearPortraitSwitchTimeouts(): void {
-    if (typeof window === 'undefined') return;
     if (this.portraitSwitchTimeoutId !== null) {
       window.clearTimeout(this.portraitSwitchTimeoutId);
       this.portraitSwitchTimeoutId = null;
@@ -305,7 +221,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   private updateNameGradientProgress(): void {
-    if (typeof window === 'undefined') return;
     const root: HTMLElement = document.documentElement;
     const portfolioEyebrow: HTMLElement | null = document.getElementById('portfolio-eyebrow');
     const portfolioTriggerY: number =
@@ -326,7 +241,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     root.style.setProperty('--name-pride-progress', progress.toFixed(4));
   }
   private updateAboutSectionScrollProgress(): void {
-    if (typeof window === 'undefined') return;
     const aboutSection: HTMLElement | null = document.getElementById('about');
     if (aboutSection === null) return;
     const sectionRect: DOMRect = aboutSection.getBoundingClientRect();
@@ -339,7 +253,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     aboutSection.style.setProperty('--about-scroll-progress', clampedProgress.toFixed(4));
   }
   private updateProjectEntryRevealProgress(): void {
-    if (typeof window === 'undefined' || typeof document === 'undefined') return;
     const projectEntries: NodeListOf<HTMLElement> = document.querySelectorAll('.project-entry');
     const viewportHeight: number = window.innerHeight || 1;
     const startY: number = viewportHeight * 0.98;

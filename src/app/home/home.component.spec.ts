@@ -2,17 +2,13 @@ import type { Mock } from 'vitest';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { IMAGE_LOADER } from '@angular/common';
-import type { ImageLoaderConfig } from '@angular/common';
 import { NgZone } from '@angular/core';
+import type { Signal, WritableSignal } from '@angular/core';
 
 import { HomeComponent } from './home.component';
 import { global } from '../../global';
 import { enLanguage } from '../../languages/en';
-import type {
-  LanguageBioTextEntry,
-  LanguagePortraitHighlight,
-} from '../../languages/language.types';
+import type { LanguagePortraitHighlight } from '../../languages/language.types';
 
 describe('HomeComponent', (): void => {
   beforeEach((): void => {
@@ -42,26 +38,24 @@ describe('HomeComponent', (): void => {
 
   interface ComponentAccess {
     age: number;
-    currentIndex: number;
-    isLongBioShown: boolean;
-    isLongBioMounted: boolean;
-    isPortraitSwitching: boolean;
-    currentPortraitHighlightIndex: number;
+    currentIndex: WritableSignal<number>;
+    isBioTickerPaused: WritableSignal<boolean>;
+    isLongBioShown: WritableSignal<boolean>;
+    isLongBioMounted: WritableSignal<boolean>;
+    isPortraitSwitching: WritableSignal<boolean>;
+    currentPortraitHighlightIndex: WritableSignal<number>;
+    portraitHighlights: Signal<LanguagePortraitHighlight[]>;
     bioHideTimeoutId: number | null;
-    scrollAnimationFrameId: number | null;
-    projectEntryAnimationFrameId: number | null;
-    aboutSectionAnimationFrameId: number | null;
-    scheduleNameGradientUpdate(): void;
-    scheduleProjectEntryRevealUpdate(): void;
-    scheduleAboutSectionScrollAnimationUpdate(): void;
+    scrollEffectsAnimationFrameId: number | null;
+    scheduleScrollEffectsUpdate(): void;
     shouldEnableScrollEffects(): boolean;
     toggleBio(): void;
     showNextPortraitHighlight(): void;
     scrollToAboutSection(): void;
     scrollToProjectsSection(): void;
     scrollToContactLinks(): void;
-    currentBioEntry: LanguageBioTextEntry;
-    currentPortraitHighlight: LanguagePortraitHighlight | null;
+    currentBioText: Signal<string>;
+    currentPortraitHighlight: Signal<LanguagePortraitHighlight | null>;
   }
 
   let comp: ComponentAccess;
@@ -69,13 +63,7 @@ describe('HomeComponent', (): void => {
   beforeEach(async (): Promise<void> => {
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
-      providers: [
-        provideRouter([]),
-        {
-          provide: IMAGE_LOADER,
-          useValue: (config: ImageLoaderConfig): string => config.src,
-        },
-      ],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomeComponent);
@@ -85,7 +73,7 @@ describe('HomeComponent', (): void => {
   });
 
   afterEach((): void => {
-    // Explicitly destroy to stop the interval(1000) subscription started in ngOnInit.
+    // Explicitly destroy to stop the bio ticker interval started after the first render.
     // Without this, the interval keeps firing after the test has finished.
     fixture.destroy();
   });
@@ -115,40 +103,69 @@ describe('HomeComponent', (): void => {
 
   // ── Bio cycling ────────────────────────────────────────────────────────────
 
-  describe('currentBioEntry getter', (): void => {
+  describe('currentBioText', (): void => {
     it('should return the first bioTextsList entry at index 0', (): void => {
-      comp.currentIndex = 0;
-      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[0]);
+      comp.currentIndex.set(0);
+      expect(comp.currentBioText()).toEqual(enLanguage.bioTextsList[0]);
     });
 
     it('should return the correct entry when index changes', (): void => {
-      comp.currentIndex = 3;
-      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[3]);
+      comp.currentIndex.set(3);
+      expect(comp.currentBioText()).toEqual(enLanguage.bioTextsList[3]);
     });
 
-    it('should return the fallback entry when index is out of range', (): void => {
-      comp.currentIndex = 99999;
-      expect(comp.currentBioEntry.label).toBeDefined();
-      expect(comp.currentBioEntry.value).toBeDefined();
+    it('should return an empty text when index is out of range', (): void => {
+      comp.currentIndex.set(99999);
+      expect(comp.currentBioText()).toBe('');
     });
   });
 
   describe('interval-driven bio cycling', (): void => {
+    it('should advance to the next entry every 1250 ms', async (): Promise<void> => {
+      await vi.advanceTimersByTimeAsync(1249);
+      expect(comp.currentIndex()).toBe(0);
+      await vi.advanceTimersByTimeAsync(1);
+      expect(comp.currentIndex()).toBe(1);
+    });
+
+    it('should pause while the bio is hovered', async (): Promise<void> => {
+      const meta = (fixture.nativeElement as HTMLElement).querySelector('.hero-meta');
+      meta?.dispatchEvent(new MouseEvent('mouseenter'));
+      await vi.advanceTimersByTimeAsync(2500);
+      expect(comp.currentIndex()).toBe(0);
+
+      meta?.dispatchEvent(new MouseEvent('mouseleave'));
+      await vi.advanceTimersByTimeAsync(1250);
+      expect(comp.currentIndex()).toBe(1);
+    });
+
+    it('should not cycle when reduced motion is requested', async (): Promise<void> => {
+      vi.stubGlobal('matchMedia', (): MediaQueryList => ({ matches: true }) as MediaQueryList);
+      const reducedFixture = TestBed.createComponent(HomeComponent);
+      reducedFixture.detectChanges();
+      const reduced = reducedFixture.componentInstance as unknown as ComponentAccess;
+
+      await vi.advanceTimersByTimeAsync(5000);
+
+      expect(reduced.currentIndex()).toBe(0);
+      reducedFixture.destroy();
+    });
+
     it('should start with currentIndex 0', (): void => {
-      expect(comp.currentIndex).toBe(0);
+      expect(comp.currentIndex()).toBe(0);
     });
 
     it('should expose a valid bio entry for the current index', (): void => {
-      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[0]);
+      expect(comp.currentBioText()).toEqual(enLanguage.bioTextsList[0]);
     });
 
     it('should correctly wrap from the last entry back to 0 using modulo', (): void => {
       const last = enLanguage.bioTextsList.length - 1;
-      comp.currentIndex = last;
-      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[last]);
-      comp.currentIndex = (last + 1) % enLanguage.bioTextsList.length;
-      expect(comp.currentIndex).toBe(0);
-      expect(comp.currentBioEntry).toEqual(enLanguage.bioTextsList[0]);
+      comp.currentIndex.set(last);
+      expect(comp.currentBioText()).toEqual(enLanguage.bioTextsList[last]);
+      comp.currentIndex.set((last + 1) % enLanguage.bioTextsList.length);
+      expect(comp.currentIndex()).toBe(0);
+      expect(comp.currentBioText()).toEqual(enLanguage.bioTextsList[0]);
     });
   });
 
@@ -156,38 +173,52 @@ describe('HomeComponent', (): void => {
 
   describe('currentPortraitHighlight getter', (): void => {
     it('should return the highlight at the current index', (): void => {
-      comp.currentPortraitHighlightIndex = 0;
-      expect(comp.currentPortraitHighlight).toEqual(enLanguage.portraitHighlights[0]);
+      comp.currentPortraitHighlightIndex.set(0);
+      expect(comp.currentPortraitHighlight()).toEqual(enLanguage.portraitHighlights[0]);
     });
 
     it('should return null when index is out of range', (): void => {
-      comp.currentPortraitHighlightIndex = 99999;
-      expect(comp.currentPortraitHighlight).toBeNull();
+      comp.currentPortraitHighlightIndex.set(99999);
+      expect(comp.currentPortraitHighlight()).toBeNull();
+    });
+  });
+
+  describe('portrait preloading', (): void => {
+    it('should preload every highlight image except the visible one', (): void => {
+      const preloaded: string[] = [];
+      vi.spyOn(window, 'Image').mockImplementation(function (): HTMLImageElement {
+        const image = document.createElement('img');
+        Object.defineProperty(image, 'src', {
+          set: (value: string): void => {
+            preloaded.push(value);
+          },
+        });
+        return image;
+      });
+
+      const preloadFixture = TestBed.createComponent(HomeComponent);
+      preloadFixture.detectChanges();
+
+      expect(preloaded).toEqual(enLanguage.portraitHighlights.slice(1).map((h) => h.image));
+      preloadFixture.destroy();
     });
   });
 
   describe('showNextPortraitHighlight', (): void => {
-    // Timer tests run outside Angular zone to prevent NgOptimizedImage from
-    // throwing NG02953 when height/width inputs change during re-render.
-
     it('should set isPortraitSwitching to true immediately', (): void => {
-      comp.isPortraitSwitching = false;
+      comp.isPortraitSwitching.set(false);
       comp.showNextPortraitHighlight();
-      expect(comp.isPortraitSwitching).toBe(true);
+      expect(comp.isPortraitSwitching()).toBe(true);
     });
 
     it('should not advance index when already switching', (): void => {
-      comp.isPortraitSwitching = true;
+      comp.isPortraitSwitching.set(true);
       comp.showNextPortraitHighlight();
-      expect(comp.currentPortraitHighlightIndex).toBe(0);
+      expect(comp.currentPortraitHighlightIndex()).toBe(0);
     });
 
     it('should not call setTimeout when only one portrait exists', (): void => {
-      const highlights = (
-        comp as unknown as {
-          portraitHighlights: LanguagePortraitHighlight[];
-        }
-      ).portraitHighlights;
+      const highlights = comp.portraitHighlights();
       const saved = [...highlights]; // snapshot before mutation
       highlights.splice(1, saved.length - 1); // reduce to a single entry
 
@@ -204,7 +235,7 @@ describe('HomeComponent', (): void => {
         comp.showNextPortraitHighlight();
       });
       await vi.advanceTimersByTimeAsync(125);
-      expect(comp.currentPortraitHighlightIndex).toBe(1);
+      expect(comp.currentPortraitHighlightIndex()).toBe(1);
       await vi.advanceTimersByTimeAsync(125);
     });
 
@@ -214,17 +245,17 @@ describe('HomeComponent', (): void => {
         comp.showNextPortraitHighlight();
       });
       await vi.advanceTimersByTimeAsync(250);
-      expect(comp.isPortraitSwitching).toBe(false);
+      expect(comp.isPortraitSwitching()).toBe(false);
     });
 
     it('should wrap portrait index from the last position back to 0', async (): Promise<void> => {
-      comp.currentPortraitHighlightIndex = enLanguage.portraitHighlights.length - 1;
+      comp.currentPortraitHighlightIndex.set(enLanguage.portraitHighlights.length - 1);
       const zone = TestBed.inject(NgZone);
       zone.runOutsideAngular((): void => {
         comp.showNextPortraitHighlight();
       });
       await vi.advanceTimersByTimeAsync(125);
-      expect(comp.currentPortraitHighlightIndex).toBe(0);
+      expect(comp.currentPortraitHighlightIndex()).toBe(0);
       await vi.advanceTimersByTimeAsync(125);
     });
   });
@@ -234,7 +265,7 @@ describe('HomeComponent', (): void => {
   describe('toggleBio', (): void => {
     it('should mount bio immediately on opening', async (): Promise<void> => {
       comp.toggleBio();
-      expect(comp.isLongBioMounted).toBe(true);
+      expect(comp.isLongBioMounted()).toBe(true);
       await vi.advanceTimersByTimeAsync(100);
     });
 
@@ -242,7 +273,7 @@ describe('HomeComponent', (): void => {
       comp.toggleBio();
       await vi.advanceTimersByTimeAsync(50); // allow both nested requestAnimationFrame calls to execute
       fixture.detectChanges();
-      expect(comp.isLongBioShown).toBe(true);
+      expect(comp.isLongBioShown()).toBe(true);
     });
 
     it('should set isLongBioShown to false immediately on close', async (): Promise<void> => {
@@ -254,7 +285,7 @@ describe('HomeComponent', (): void => {
       // Close
       comp.toggleBio();
       fixture.detectChanges();
-      expect(comp.isLongBioShown).toBe(false);
+      expect(comp.isLongBioShown()).toBe(false);
       await vi.advanceTimersByTimeAsync(300);
     });
 
@@ -265,14 +296,14 @@ describe('HomeComponent', (): void => {
 
       comp.toggleBio();
       fixture.detectChanges();
-      expect(comp.isLongBioMounted).toBe(true);
+      expect(comp.isLongBioMounted()).toBe(true);
 
       await vi.advanceTimersByTimeAsync(299);
-      expect(comp.isLongBioMounted).toBe(true);
+      expect(comp.isLongBioMounted()).toBe(true);
 
       await vi.advanceTimersByTimeAsync(1);
       fixture.detectChanges();
-      expect(comp.isLongBioMounted).toBe(false);
+      expect(comp.isLongBioMounted()).toBe(false);
     });
 
     it('should cancel pending close timeout when re-opened during animation', async (): Promise<void> => {
@@ -287,8 +318,8 @@ describe('HomeComponent', (): void => {
       await vi.advanceTimersByTimeAsync(50);
       fixture.detectChanges();
 
-      expect(comp.isLongBioMounted).toBe(true);
-      expect(comp.isLongBioShown).toBe(true);
+      expect(comp.isLongBioMounted()).toBe(true);
+      expect(comp.isLongBioShown()).toBe(true);
 
       await vi.advanceTimersByTimeAsync(500);
     });
@@ -400,7 +431,13 @@ describe('HomeComponent', (): void => {
       expect(h1?.textContent).toContain(global.lastname);
     });
 
-    it('should render the bio label from the current bioTextsList entry', (): void => {
+    it('should link the skills box to the LinkedIn skills page', (): void => {
+      const el = fixture.nativeElement as HTMLElement;
+      const link = el.querySelector<HTMLAnchorElement>('a.hero-meta');
+      expect(link?.getAttribute('href')).toBe(global.linkedinSkillsUrl);
+    });
+
+    it('should render the skills label above the rotating skill', (): void => {
       const el = fixture.nativeElement as HTMLElement;
       expect(el.querySelector('.meta-label')).not.toBeNull();
     });
@@ -424,6 +461,17 @@ describe('HomeComponent', (): void => {
       const el = fixture.nativeElement as HTMLElement;
       const entries = el.querySelectorAll('.project-entry');
       expect(entries.length).toBe(enLanguage.projects.length);
+    });
+
+    it('should keep the arrow on the same line as the last title word', (): void => {
+      const el = fixture.nativeElement as HTMLElement;
+      const tails = Array.from(el.querySelectorAll('.project-title-tail'));
+      expect(tails.map((tail): string => tail.textContent?.trim() ?? '')).toEqual(
+        enLanguage.projects.map((project): string => project.title.split(' ').at(-1) ?? ''),
+      );
+      tails.forEach((tail): void => {
+        expect(tail.querySelector('.project-arrow')).not.toBeNull();
+      });
     });
 
     it('should render all project titles', (): void => {
@@ -495,10 +543,10 @@ describe('HomeComponent', (): void => {
       expect(performance.now() - start).toBeLessThan(100);
     });
 
-    it('should deduplicate rapid schedule calls to a single requestAnimationFrame', async (): Promise<void> => {
-      // The RAF registered during beforeEach's ngOnInit is still pending under fake timers.
+    it('should batch all scroll effects into a single requestAnimationFrame', async (): Promise<void> => {
+      // The RAF registered after the first render is still pending under fake timers.
       // Resetting the ID to null makes the schedule function treat the slot as free.
-      comp.scrollAnimationFrameId = null;
+      comp.scrollEffectsAnimationFrameId = null;
 
       let rafCallCount = 0;
       vi.spyOn(window, 'requestAnimationFrame').mockImplementation((): number => {
@@ -506,41 +554,9 @@ describe('HomeComponent', (): void => {
         return rafCallCount; // returns non-null so subsequent calls deduplicate
       });
 
-      comp.scheduleNameGradientUpdate();
-      comp.scheduleNameGradientUpdate();
-      comp.scheduleNameGradientUpdate();
-
-      expect(rafCallCount).toBe(1);
-    });
-
-    it('should deduplicate project-entry reveal scheduling the same way', async (): Promise<void> => {
-      comp.projectEntryAnimationFrameId = null;
-
-      let rafCallCount = 0;
-      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((): number => {
-        rafCallCount++;
-        return rafCallCount;
-      });
-
-      comp.scheduleProjectEntryRevealUpdate();
-      comp.scheduleProjectEntryRevealUpdate();
-      comp.scheduleProjectEntryRevealUpdate();
-
-      expect(rafCallCount).toBe(1);
-    });
-
-    it('should deduplicate about-section scroll scheduling the same way', async (): Promise<void> => {
-      comp.aboutSectionAnimationFrameId = null;
-
-      let rafCallCount = 0;
-      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((): number => {
-        rafCallCount++;
-        return rafCallCount;
-      });
-
-      comp.scheduleAboutSectionScrollAnimationUpdate();
-      comp.scheduleAboutSectionScrollAnimationUpdate();
-      comp.scheduleAboutSectionScrollAnimationUpdate();
+      comp.scheduleScrollEffectsUpdate();
+      comp.scheduleScrollEffectsUpdate();
+      comp.scheduleScrollEffectsUpdate();
 
       expect(rafCallCount).toBe(1);
     });

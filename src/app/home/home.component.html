@@ -11,85 +11,75 @@
       </div>
 
       <div class="hero-actions">
-        <div class="hero-contact-block">
-          <p class="hero-contact-title">{{ content().home.contactTitle }}</p>
-          <div id="contact-links" class="contact-area hero-contact-area">
-            <a [href]="contactMailHref" aria-label="Send mail"><app-icon [icon]="envelopeIcon" size="lg"></app-icon></a>
-            <a href="tel:{{ global.hrefContactPhone }}" aria-label="Call phone number"
-              ><app-icon [icon]="phoneIcon" size="lg"></app-icon
-            ></a>
-            <a href="https://discord.com/users/860206216893693973" aria-label="Discord profile"
-              ><app-icon [icon]="discordIcon" size="lg"></app-icon
-            ></a>
-            <a href="https://git.lechner-systems.at/fraujulian" aria-label="Gitea profile"
-              ><app-icon [icon]="githubIcon" size="lg"></app-icon
-            ></a>
-            <a href="https://www.linkedin.com/in/julian-lechner-98b377356/" aria-label="LinkedIn profile"
-              ><app-icon [icon]="linkedinIcon" size="lg"></app-icon
-            ></a>
-          </div>
-        </div>
-
         <div class="hero-action-links">
           <button class="action-link" type="button" (click)="scrollToProjectsSection()">{{ content().home.viewProjects }}</button>
           <button class="action-link" type="button" (click)="scrollToAboutSection()">{{ content().home.aboutMe }}</button>
         </div>
-      </div>
-
-      <div class="hero-meta">
-        <div>
-          <span class="meta-label">{{ currentBioEntry.label }}</span
-          ><strong>{{ currentBioEntry.value }}</strong>
+        <div class="hero-contact-block">
+          <p class="hero-contact-title">{{ content().home.contactTitle }}</p>
+          <div id="contact-links" class="contact-area hero-contact-area">
+            <a [href]="contactMailHref" [attr.aria-label]="content().home.mailAriaLabel"
+              ><app-icon [icon]="envelopeIcon" size="lg"></app-icon
+            ></a>
+            <a href="tel:{{ global.hrefContactPhone }}" [attr.aria-label]="content().home.phoneAriaLabel"
+              ><app-icon [icon]="phoneIcon" size="lg"></app-icon
+            ></a>
+            <a [href]="global.signalUrl" [attr.aria-label]="content().home.signalAriaLabel"
+              ><app-icon [icon]="signalIcon" size="lg"></app-icon
+            ></a>
+            <a href="https://git.lechner-systems.at/fraujulian" [attr.aria-label]="content().home.giteaAriaLabel"
+              ><app-icon [icon]="giteaIcon" size="lg"></app-icon
+            ></a>
+            <a href="https://www.linkedin.com/in/julianlechner2009/" [attr.aria-label]="content().home.linkedinAriaLabel"
+              ><app-icon [icon]="linkedinIcon" size="lg"></app-icon
+            ></a>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="hero-visual">
-      @if (currentPortraitHighlight) {
+      @if (currentPortraitHighlight(); as highlight) {
         <div class="portrait-highlight">
           <button
             type="button"
             class="portrait-highlight-button"
             (click)="showNextPortraitHighlight()"
             [attr.aria-label]="content().home.nextHighlightAriaLabel"
-            [title]="portraitHighlights.length > 1 ? content().home.nextHighlightTitle : content().home.singleHighlightTitle"
+            [title]="portraitHighlights().length > 1 ? content().home.nextHighlightTitle : content().home.singleHighlightTitle"
           >
-            <div class="portrait-media" [class.portrait-media-switching]="isPortraitSwitching">
+            <div class="portrait-media" [class.portrait-media-switching]="isPortraitSwitching()">
               <img
                 class="hero-feature-image"
-                [src]="currentPortraitHighlight.image"
-                [attr.srcset]="currentPortraitHighlight.imageSrcset"
-                [attr.sizes]="currentPortraitHighlight.imageSizes"
-                [width]="currentPortraitHighlight.imageWidth"
-                [height]="currentPortraitHighlight.imageHeight"
+                [src]="highlight.image"
+                [attr.srcset]="highlight.imageSrcset"
+                [attr.sizes]="highlight.imageSizes"
+                [width]="highlight.imageWidth"
+                [height]="highlight.imageHeight"
                 fetchpriority="high"
                 decoding="async"
-                [alt]="currentPortraitHighlight.text + ' ' + content().home.portraitAltSuffix"
+                [alt]="highlight.text + ' ' + content().home.portraitAltSuffix"
               />
-              @if (currentPortraitHighlightIndex === 0) {
+              @if (currentPortraitHighlightIndex() === 0) {
                 <span class="portrait-click-hint">{{ content().home.clickHint }}</span>
               }
-              <span class="portrait-caption">{{ currentPortraitHighlight.text }}</span>
+              <span class="portrait-caption">{{ highlight.text }}</span>
             </div>
           </button>
         </div>
       }
-    </div>
-  </section>
-
-  <section class="panel openpgp-section">
-    <div class="openpgp-copy">
-      <p class="eyebrow">{{ content().home.openPgpTitle }}</p>
-      <p class="openpgp-description">{{ content().home.openPgpDescription }}</p>
-    </div>
-    <div class="openpgp-actions">
-      <a class="action-link openpgp-download-link" [href]="openPgpKey.assetPath" download="julian-lechner-public.asc">
-        {{ content().home.openPgpDownload }}
+      <a
+        class="hero-meta"
+        [href]="global.linkedinSkillsUrl"
+        [attr.aria-label]="content().home.skillsLinkAriaLabel"
+        (mouseenter)="isBioTickerPaused.set(true)"
+        (mouseleave)="isBioTickerPaused.set(false)"
+      >
+        <div>
+          <span class="meta-label">{{ content().home.skillsLabel }}</span
+          ><strong>{{ currentBioText() }}</strong>
+        </div>
       </a>
-      <p class="openpgp-fingerprint">
-        <span>{{ content().home.openPgpFingerprintLabel }}</span>
-        <strong>{{ openPgpKey.formattedFingerprint }}</strong>
-      </p>
     </div>
   </section>
 
@@ -105,11 +95,11 @@
       </div>
       <div class="story-detail">
         <button class="detail-toggle" type="button" (click)="toggleBio()">
-          <span>{{ isLongBioShown ? content().home.detailToggleClose : content().home.detailToggleOpen }}</span
-          ><app-icon [icon]="isLongBioShown ? arrowDownIcon : arrowRightIcon"></app-icon>
+          <span>{{ isLongBioShown() ? content().home.detailToggleClose : content().home.detailToggleOpen }}</span
+          ><app-icon [icon]="isLongBioShown() ? arrowDownIcon : arrowRightIcon"></app-icon>
         </button>
-        @if (isLongBioMounted) {
-          <div class="detail-panel" [class.detail-panel-enter]="isLongBioShown" [class.detail-panel-leave]="!isLongBioShown">
+        @if (isLongBioMounted()) {
+          <div class="detail-panel" [class.detail-panel-enter]="isLongBioShown()" [class.detail-panel-leave]="!isLongBioShown()">
             <p>{{ content().home.detailParagraphs[0] }}</p>
             <p>{{ content().home.detailParagraphs[1] }}</p>
             <p>{{ content().home.detailParagraphs[2] }}</p>
@@ -127,7 +117,7 @@
       <p class="eyebrow">{{ content().home.projectsEyebrow }}</p>
     </div>
     <div class="project-list">
-      @for (project of projects; track project.link + '-' + $index; let i = $index) {
+      @for (project of projects(); track project.link + '-' + $index; let i = $index) {
         <a
           class="panel project-entry"
           [class.project-entry-reverse]="i % 2 === 1"
@@ -141,24 +131,25 @@
             <img
               class="project-icon"
               [class.project-icon-circle]="project.circleIcon !== false"
-              [ngSrc]="project.icon"
+              [src]="project.icon"
               [attr.srcset]="project.iconSrcset ?? null"
               [attr.sizes]="project.iconSizes ?? null"
               [width]="project.iconWidth ?? 216"
               [height]="project.iconHeight ?? 216"
-              disableOptimizedSrcset
-              [alt]="project.title + ' icon'"
+              loading="eager"
+              fetchpriority="low"
+              decoding="async"
+              [alt]="project.title + ' ' + content().home.projectIconAltSuffix"
             />
           }
           <div class="project-copy">
             <div class="project-header">
               <div class="project-title-wrap">
-                <span class="project-link">{{ project.title }}</span>
-              </div>
-              <div class="project-languages" [attr.aria-label]="content().home.projectLanguagesAriaLabel">
-                @for (language of project.skills; track language + '-' + $index) {
-                  <span class="project-language-chip">{{ language }}</span>
-                }
+                <span class="project-link"
+                  >{{ project.titleHead
+                  }}<span class="project-title-tail"
+                    >{{ project.titleTail }}<app-icon class="project-arrow" [icon]="arrowRightIcon"></app-icon></span
+                ></span>
               </div>
             </div>
             <p class="project-description">{{ project.description }}</p>
@@ -169,4 +160,4 @@
   </section>
 </main>
 
-<app-footer ngSkipHydration></app-footer>
+<app-footer></app-footer>
