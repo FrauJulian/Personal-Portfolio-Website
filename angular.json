@@ -45,10 +45,6 @@
                 "glob": "**/*",
                 "input": "src/assets/optimized",
                 "output": "assets/optimized"
-              },
-              {
-                "glob": "**/*",
-                "input": "public"
               }
             ],
             "styles": ["src/styles.scss"],
