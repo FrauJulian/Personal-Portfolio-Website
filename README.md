@@ -13,9 +13,9 @@ Visit the live website at [fraujulian.xyz](https://fraujulian.xyz/).
 
 ## Features
 
-- English and German language options
+- English and German language options (`?lang=de` selects German)
 - About, work, and project portfolio
-- Contact links and downloadable OpenPGP public key
+- Contact links
 - Imprint and privacy information
 - Interactive portrait highlights
 
