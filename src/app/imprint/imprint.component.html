@@ -17,10 +17,8 @@
       <div class="portrait-highlight legal-contact-box">
         <p class="hero-contact-title">{{ content().imprint.provider }}</p>
         <p class="legal-provider-name">{{ global.firstname }} {{ global.lastname }}</p>
-        <p>- Lechner Systems -</p>
         <p>{{ global.address.street }} {{ global.address.houseNumber }}</p>
         <p>{{ global.address.zip }} {{ global.address.city }}</p>
-        <p>{{ global.address.state }}</p>
         <p>{{ global.address.country }}</p>
         <hr />
         <p class="hero-contact-title">{{ content().imprint.directContact }}</p>
@@ -38,37 +36,20 @@
   </section>
 
   <section class="story-section panel legal-section">
-    <div class="section-heading">
-      <p class="eyebrow">{{ content().imprint.scopeEyebrow }}</p>
-      <h2>{{ content().imprint.scopeTitle }}</h2>
-    </div>
-    <div class="story-grid">
-      <div class="story-copy">
-        <p>{{ content().imprint.scopeLeft }}</p>
-      </div>
-      <div class="story-detail">
-        <p>{{ content().imprint.scopeRight }}</p>
-      </div>
-    </div>
-  </section>
-  <section class="story-section panel legal-section">
     <div class="section-heading compact">
       <p class="eyebrow">{{ content().imprint.privacyEyebrow }}</p>
       <h2>{{ content().imprint.privacyTitle }}</h2>
     </div>
     <div class="story-grid">
       <div class="story-copy">
-        <p>{{ bind(content().imprint.privacyLeftParagraphs[0]) }}</p>
-        <p>{{ content().imprint.privacyLeftParagraphs[1] }}</p>
-        <p>{{ content().imprint.privacyLeftParagraphs[2] }}</p>
+        <p>{{ content().imprint.privacyLeft }}</p>
       </div>
       <div class="story-detail">
-        <p>{{ content().imprint.privacyRightParagraphs[0] }}</p>
-        <p>{{ content().imprint.privacyRightParagraphs[1] }}</p>
-        <p>{{ content().imprint.privacyRightParagraphs[2] }}</p>
+        <p>{{ content().imprint.privacyRight }}</p>
       </div>
     </div>
   </section>
+
   <section class="story-section panel legal-section">
     <div class="section-heading compact">
       <p class="eyebrow">{{ content().imprint.rightsEyebrow }}</p>
@@ -90,7 +71,7 @@
     </div>
     <div class="story-grid">
       <div class="story-copy">
-        <p>{{ content().imprint.copyrightLeftParagraphs[0] }}</p>
+        <p>{{ bind(content().imprint.copyrightLeftParagraphs[0]) }}</p>
         <p>{{ content().imprint.copyrightLeftParagraphs[1] }}</p>
       </div>
       <div class="story-detail">
@@ -101,4 +82,4 @@
   </section>
 </main>
 
-<app-footer ngSkipHydration></app-footer>
+<app-footer [showImprintLink]="false"></app-footer>
