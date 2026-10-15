@@ -3,15 +3,17 @@ export interface ImprintData {
   houseNumber: number;
   zip: number;
   city: string;
-  state: string;
   country: string;
 }
 
 export interface Global {
   firstname: string;
   lastname: string;
+  siteUrl: string;
   contactMail: string;
   abuseMail: string;
+  linkedinSkillsUrl: string;
+  signalUrl: string;
   contactPhone: string;
   hrefContactPhone: string;
   birthdate: string;
