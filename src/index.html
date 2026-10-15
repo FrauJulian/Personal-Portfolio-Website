@@ -13,7 +13,42 @@
     <base href="/" />
 
     <link rel="icon" type="image/webp" sizes="128x128" href="assets/optimized/portrait/me-128.webp" />
-    <title>Lechner Julian</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/optimized/icons/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/optimized/icons/apple-touch-icon.png" />
+    <title>Julian Lechner</title>
+    <link rel="preload" as="image" fetchpriority="high" href="assets/optimized/background.webp" />
+    <link
+      rel="preload"
+      as="image"
+      fetchpriority="high"
+      href="assets/optimized/portrait/me.webp"
+      imagesrcset="assets/optimized/portrait/me-320.webp 320w, assets/optimized/portrait/me-384.webp 384w, assets/optimized/portrait/me-480.webp 480w, assets/optimized/portrait/me.webp 640w"
+      imagesizes="(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px"
+    />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Julian Lechner" />
+    <meta property="og:image" content="https://fraujulian.xyz/assets/optimized/icons/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Portrait of Julian Lechner" />
+    <meta property="profile:first_name" content="Julian" />
+    <meta property="profile:last_name" content="Lechner" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Julian Lechner",
+        "alternateName": "FrauJulian",
+        "url": "https://fraujulian.xyz/",
+        "image": "https://fraujulian.xyz/assets/optimized/icons/og-image.jpg",
+        "jobTitle": "Full-Stack Developer",
+        "address": { "@type": "PostalAddress", "addressCountry": "AT" },
+        "sameAs": ["https://git.lechner-systems.at/fraujulian", "https://www.linkedin.com/in/julianlechner2009/"]
+      }
+    </script>
   </head>
   <body>
     <app-root></app-root>
