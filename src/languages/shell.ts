@@ -10,8 +10,14 @@ export const enShellLanguage: LanguageShellPack = {
     languageGerman: 'German',
   },
   footer: {
-    noscriptMessage: 'Please enable JavaScript for the full experience.',
     imprintLink: 'Imprint',
+    homeLink: 'Portfolio',
+  },
+  meta: {
+    description:
+      'Full-stack developer building reliable, high-performance systems and clean, maintainable code. Focused on practical solutions that actually hold up in production.',
+    homeTitle: 'Julian Lechner – Full-Stack Developer',
+    imprintTitle: 'Imprint & Privacy – Julian Lechner',
   },
 };
 
@@ -25,7 +31,13 @@ export const deShellLanguage: LanguageShellPack = {
     languageGerman: 'Deutsch',
   },
   footer: {
-    noscriptMessage: 'Bitte aktiviere JavaScript um alles zu sehen.',
     imprintLink: 'Impressum',
+    homeLink: 'Portfolio',
+  },
+  meta: {
+    description:
+      'Full-Stack-Entwickler für zuverlässige, performante Systeme und sauberen, wartbaren Code. Fokus auf praktische Lösungen, die sich im Produktivbetrieb bewähren.',
+    homeTitle: 'Julian Lechner – Full-Stack-Entwickler',
+    imprintTitle: 'Impressum & Datenschutz – Julian Lechner',
   },
 };

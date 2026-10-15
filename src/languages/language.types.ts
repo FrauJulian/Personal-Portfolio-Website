@@ -4,18 +4,12 @@ export interface LanguageProject {
   title: string;
   link: string;
   description: string;
-  skills: string[];
   icon?: string;
   iconSrcset?: string;
   iconSizes?: string;
   iconWidth?: number;
   iconHeight?: number;
   circleIcon?: boolean;
-}
-
-export interface LanguageBioTextEntry {
-  label: string;
-  value: string;
 }
 
 export interface LanguagePortraitHighlight {
@@ -27,7 +21,7 @@ export interface LanguagePortraitHighlight {
   text: string;
 }
 
-export interface LanguagePack {
+export interface LanguageShellPack {
   app: {
     selectorTitle: string;
     changeLanguage: string;
@@ -37,17 +31,21 @@ export interface LanguagePack {
     languageGerman: string;
   };
   footer: {
-    noscriptMessage: string;
     imprintLink: string;
+    homeLink: string;
   };
+  meta: {
+    description: string;
+    homeTitle: string;
+    imprintTitle: string;
+  };
+}
+
+export interface LanguagePack {
   home: {
     portfolioEyebrow: string;
     heroIntro: string;
     contactTitle: string;
-    openPgpTitle: string;
-    openPgpDescription: string;
-    openPgpDownload: string;
-    openPgpFingerprintLabel: string;
     viewProjects: string;
     aboutMe: string;
     nextHighlightAriaLabel: string;
@@ -63,8 +61,14 @@ export interface LanguagePack {
     getInTouch: string;
     projectsEyebrow: string;
     openProjectPrefix: string;
-    projectLanguagesAriaLabel: string;
-    fallbackBioLabel: string;
+    projectIconAltSuffix: string;
+    mailAriaLabel: string;
+    phoneAriaLabel: string;
+    signalAriaLabel: string;
+    giteaAriaLabel: string;
+    linkedinAriaLabel: string;
+    skillsLabel: string;
+    skillsLinkAriaLabel: string;
   };
   imprint: {
     legalEyebrow: string;
@@ -76,14 +80,10 @@ export interface LanguagePack {
     phone: string;
     contact: string;
     abuse: string;
-    scopeEyebrow: string;
-    scopeTitle: string;
-    scopeLeft: string;
-    scopeRight: string;
     privacyEyebrow: string;
     privacyTitle: string;
-    privacyLeftParagraphs: string[];
-    privacyRightParagraphs: string[];
+    privacyLeft: string;
+    privacyRight: string;
     rightsEyebrow: string;
     rightsTitle: string;
     rightsLeft: string;
@@ -93,9 +93,7 @@ export interface LanguagePack {
     copyrightLeftParagraphs: string[];
     copyrightRightParagraphs: string[];
   };
-  bioTextsList: LanguageBioTextEntry[];
+  bioTextsList: string[];
   portraitHighlights: LanguagePortraitHighlight[];
   projects: LanguageProject[];
 }
-
-export type LanguageShellPack = Pick<LanguagePack, 'app' | 'footer'>;

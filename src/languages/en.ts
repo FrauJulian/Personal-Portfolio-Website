@@ -1,27 +1,11 @@
 import type { LanguagePack } from './language.types';
 
 export const enLanguage: LanguagePack = {
-  app: {
-    selectorTitle: 'Select language',
-    changeLanguage: 'Language',
-    changeLanguageAriaLabel: 'Change language',
-    closeSelector: 'Close language selection',
-    languageEnglish: 'English',
-    languageGerman: 'German',
-  },
-  footer: {
-    noscriptMessage: 'Please enable JavaScript for the full experience.',
-    imprintLink: 'Imprint',
-  },
   home: {
     portfolioEyebrow: 'Portfolio',
     heroIntro:
       'I build reliable systems, clean interfaces, and practical digital solutions that actually hold up in production.',
     contactTitle: 'Contact me',
-    openPgpTitle: 'OpenPGP',
-    openPgpDescription: 'Download my public key for encrypted communication.',
-    openPgpDownload: 'Download public key',
-    openPgpFingerprintLabel: 'Fingerprint',
     viewProjects: 'View projects',
     aboutMe: 'About me',
     nextHighlightAriaLabel: 'Show next image',
@@ -45,79 +29,87 @@ export const enLanguage: LanguagePack = {
     getInTouch: 'Get in touch!',
     projectsEyebrow: 'Current Jobs & Projects',
     openProjectPrefix: 'Open project',
-    projectLanguagesAriaLabel: 'Project languages',
-    fallbackBioLabel: 'my stack',
+    projectIconAltSuffix: 'logo',
+    mailAriaLabel: 'Send an email',
+    phoneAriaLabel: 'Call phone number',
+    signalAriaLabel: 'Message on Signal',
+    giteaAriaLabel: 'Gitea profile',
+    linkedinAriaLabel: 'LinkedIn profile',
+    skillsLabel: 'Skills',
+    skillsLinkAriaLabel: 'View all skills on LinkedIn',
   },
   imprint: {
     legalEyebrow: 'Legal',
     title: 'Imprint & Privacy',
     intro:
-      'Legal information under Austrian law and privacy information under the GDPR for this website operated by {{firstname}} {{lastname}}, trading as Lechner Systems.',
+      'Legal information under Austrian law and privacy information under the GDPR for all websites operated by {{firstname}} {{lastname}}.',
     backToPortfolio: 'Back to portfolio',
     provider: 'Provider',
     directContact: 'Direct Contact',
     phone: 'Phone',
     contact: 'Email',
     abuse: 'Abuse Email',
-    scopeEyebrow: 'Scope',
-    scopeTitle: 'Scope Of These Notices',
-    scopeLeft:
-      'These notices apply to this portfolio website and to content made available directly through this domain. Linked third-party websites are subject to the notices of their respective operators.',
-    scopeRight:
-      'The website presents projects, technical services, and contact options in the field of software engineering, IT, and digital systems. No contract is concluded automatically through this website.',
     privacyEyebrow: 'Privacy',
-    privacyTitle: 'Privacy And Data Processing',
-    privacyLeftParagraphs: [
-      'The controller for data processing within the meaning of the General Data Protection Regulation (GDPR) is {{firstname}} {{lastname}}, reachable at {{contactMail}} and by phone at {{contactPhone}}.',
-      'As currently implemented, this website does not use its own tracking, analytics cookies, marketing cookies, or long-term personal usage profiling.',
-      'When the website is accessed, technically necessary server and connection data may be processed, especially IP address, access date and time, requested resource, transferred data volume, browser and operating system information, and referrer where this data is transmitted by the browser.',
-    ],
-    privacyRightParagraphs: [
-      'Processing takes place to provide the website, maintain technical stability and security, prevent abuse, analyze errors, and handle contact requests. The legal bases include Art. 6(1)(f) GDPR and, for pre-contractual communication, Art. 6(1)(b) GDPR.',
-      'If you contact me by email or phone, the information you provide is processed to handle your request and continue communication. Personal data is disclosed only where legally required, needed for legal claims, or initiated by you.',
-      'Personal data is stored only as long as necessary for the stated purposes, statutory retention duties, or the establishment, exercise, or defense of legal claims.',
-    ],
+    privacyTitle: 'No Data Collection',
+    privacyLeft:
+      'This website does not collect or process personal data. The only exception is information that is technically transmitted when a website is accessed, such as IP address, date and time, requested page, referrer, and browser and operating system information (user agent).',
+    privacyRight:
+      'This data is used solely to operate the website securely and reliably (Art. 6(1)(f) GDPR). There is no tracking and there are no cookies. Your chosen language is stored only locally in your browser.',
     rightsEyebrow: 'Rights',
-    rightsTitle: 'Data Subject Rights And Complaints',
+    rightsTitle: 'Your Rights Under The GDPR',
     rightsLeft:
-      'Subject to statutory requirements, data subjects have rights of access, rectification, erasure, restriction of processing, data portability, and objection. Where processing is based on consent, that consent may be withdrawn at any time with effect for the future.',
+      'You have the right of access, rectification, erasure, restriction of processing, data portability, and objection. Send requests to the email address listed above.',
     rightsRight:
-      'Complaints can be submitted to the Austrian Data Protection Authority: Barichgasse 40-42, 1030 Vienna, email dsb@dsb.gv.at, website dsb.gv.at.',
+      'Complaints can be filed with the Austrian Data Protection Authority, Barichgasse 40-42, 1030 Vienna, dsb@dsb.gv.at.',
     copyrightEyebrow: 'Copyright',
-    copyrightTitle: 'Copyright, External Links, And Applicable Law',
+    copyrightTitle: 'Copyright & Liability',
     copyrightLeftParagraphs: [
-      'All content on this website, including texts, images, graphics, photographs, layouts, source code, and other works, is protected by copyright unless stated otherwise.',
-      'Any use beyond statutory exceptions requires prior written consent of the respective rights holder.',
+      'All content on all websites operated by {{firstname}} {{lastname}}, in particular texts, images, photographs, graphics, and design, is protected by copyright. All rights reserved.',
+      'Any reproduction, modification, distribution, or other use without my prior written consent is prohibited. The source code is governed solely by the license stated in its repository.',
     ],
     copyrightRightParagraphs: [
-      'This website may contain links to third-party websites. Their operators are solely responsible for their contents, privacy practices, and technical security.',
-      'Austrian law applies exclusively, unless mandatory consumer protection provisions require otherwise.',
+      'I accept no liability for the content of linked external websites. Their operators are solely responsible for it.',
+      'Austrian law applies, unless mandatory consumer protection provisions provide otherwise.',
     ],
   },
   bioTextsList: [
-    { label: 'Languages', value: 'C#' },
-    { label: 'Languages', value: 'TypeScript' },
-    { label: 'Languages', value: 'Bash' },
-    { label: 'Frontend', value: 'Angular' },
-    { label: 'Frontend', value: 'WPF' },
-    { label: 'Frontend', value: 'Avalonia' },
-    { label: 'Backend', value: '.NET' },
-    { label: 'Backend', value: 'ASP.NET Core' },
-    { label: 'Backend', value: 'Entity Framework Core' },
-    { label: 'Backend', value: 'Node.js' },
-    { label: 'Backend', value: 'REST' },
-    { label: 'Backend', value: 'Swagger' },
-    { label: 'Database', value: 'Microsoft SQL' },
-    { label: 'Database', value: 'MariaDB' },
-    { label: 'DevOps', value: 'Git' },
-    { label: 'DevOps', value: 'GitHub & GitLab' },
-    { label: 'DevOps', value: 'Azure DevOps' },
-    { label: 'DevOps', value: 'Docker' },
-    { label: 'DevOps', value: 'Ubuntu' },
-    { label: 'DevOps', value: 'Arch' },
-    { label: 'Declarative Languages', value: 'XAML' },
-    { label: 'Declarative Languages', value: 'YAML' },
-    { label: 'Declarative Languages', value: 'Markdown' },
+    'C#',
+    'TypeScript',
+    'JavaScript',
+    'Java',
+    'SQL',
+    'Bash',
+    'Windows PowerShell',
+    '.NET Core',
+    '.NET Framework',
+    'ASP.NET',
+    'Entity Framework (EF) Core',
+    'Windows Presentation Foundation (WPF)',
+    'Model View ViewModel (MVVM)',
+    'Model View Controller (MVC)',
+    'Web Development',
+    'AngularJS',
+    'Node.js',
+    'Microsoft SQL Server',
+    'MariaDB',
+    'Git',
+    'GitHub',
+    'GitLab',
+    'Azure DevOps',
+    'Continuous Integration and Continuous Delivery (CI/CD)',
+    'System Administration',
+    'Linux Server',
+    'Windows Server',
+    'Proxmox',
+    'Email Security & Authentication: SPF, DKIM, DMARC, DNSSEC/DANE & MTA-STS',
+    'Artificial Intelligence (AI)',
+    'AI Agents',
+    'Anthropic Claude',
+    'OpenAI Codex',
+    'Agile',
+    'Scrum',
+    'Project Management',
+    'Project Communication',
   ],
   portraitHighlights: [
     {
@@ -170,16 +162,6 @@ export const enLanguage: LanguagePack = {
       imageHeight: 480,
       text: 'Traveling',
     },
-    {
-      image: 'assets/optimized/portrait/culture.webp',
-      imageSrcset:
-        'assets/optimized/portrait/culture-320.webp 320w, assets/optimized/portrait/culture-384.webp 384w, assets/optimized/portrait/culture-480.webp 480w, assets/optimized/portrait/culture.webp 640w',
-      imageSizes:
-        '(max-width: 700px) calc(100vw - 4rem), (max-width: 900px) min(calc(100vw - 9rem), 560px), 320px',
-      imageWidth: 640,
-      imageHeight: 482,
-      text: 'Culture',
-    },
   ],
   projects: [
     {
@@ -187,7 +169,6 @@ export const enLanguage: LanguagePack = {
       link: 'https://sobit.at/',
       description:
         'I primarily work for SobIT GmbH, a Vienna-based subsidiary of Wiener Sozialdienste. We develop software for the healthcare sector, focusing on modern desktop, mobile, and web applications that support mobile care services.',
-      skills: ['TypeScript', 'C#', 'Microsoft SQL', 'WPF', 'YML/XML'],
       icon: 'assets/optimized/logos/sobit.webp',
       iconSrcset:
         'assets/optimized/logos/sobit-64.webp 64w, assets/optimized/logos/sobit-128.webp 128w, assets/optimized/logos/sobit.webp 216w',
@@ -199,7 +180,6 @@ export const enLanguage: LanguagePack = {
       link: 'https://www.synhost.de/',
       description:
         'A hosting service provider of GERLACH SYSTEMS, for whom I develop interfaces between individual systems and provide technical support.',
-      skills: ['TypeScript', 'MariaDB', 'YML'],
       icon: 'assets/optimized/logos/synhost.webp',
       iconSrcset:
         'assets/optimized/logos/synhost-64.webp 64w, assets/optimized/logos/synhost-128.webp 128w, assets/optimized/logos/synhost.webp 216w',
@@ -213,7 +193,6 @@ export const enLanguage: LanguagePack = {
       link: 'https://www.synradio.de/',
       description:
         'An online radio project, also operated by GERLACH SYSTEMS, where I build and maintain the technical side of its digital presence — including the website, bots, and plugins for voice chats and games.',
-      skills: ['TypeScript', 'Angular', 'FFmpeg', 'YML'],
       icon: 'assets/optimized/logos/synradio.webp',
       iconSrcset:
         'assets/optimized/logos/synradio-64.webp 64w, assets/optimized/logos/synradio-128.webp 128w, assets/optimized/logos/synradio.webp 216w',
@@ -225,7 +204,6 @@ export const enLanguage: LanguagePack = {
       link: 'https://git.lechner-systems.at/fraujulian/Discord-Audio-Stream',
       description:
         'A TypeScript library for Discord that simplifies audio playback, with a focus on stable 24/7 streaming without interruptions.',
-      skills: ['TypeScript', 'YML'],
       icon: 'assets/optimized/logos/discord.webp',
       iconSrcset:
         'assets/optimized/logos/discord-64.webp 64w, assets/optimized/logos/discord-128.webp 128w, assets/optimized/logos/discord.webp 216w',
@@ -237,10 +215,9 @@ export const enLanguage: LanguagePack = {
       link: '',
       description:
         'This portfolio website you’re currently viewing is one of my actively maintained projects. 😁',
-      skills: ['TypeScript', 'Angular', 'YML'],
       icon: 'assets/optimized/portrait/me.webp',
       iconSrcset:
-        'assets/optimized/portrait/me-64.webp 64w, assets/optimized/portrait/me-128.webp 128w, assets/optimized/portrait/me.webp 216w',
+        'assets/optimized/portrait/me-128.webp 128w, assets/optimized/portrait/me-320.webp 320w',
       iconSizes: '(max-width: 700px) 64px, 108px',
       iconWidth: 320,
       iconHeight: 385,
@@ -251,7 +228,6 @@ export const enLanguage: LanguagePack = {
       link: 'https://tauchertreff-mostviertel.at/',
       description:
         'I also support my local diving club by developing, setting up, and operating its digital infrastructure — including email, the website, cloud services, and everything that comes with it.',
-      skills: ['TypeScript', 'MariaDB', 'Angular', 'YML'],
       icon: 'assets/optimized/logos/tauchertreff.webp',
       iconSrcset:
         'assets/optimized/logos/tauchertreff-64.webp 64w, assets/optimized/logos/tauchertreff-128.webp 128w, assets/optimized/logos/tauchertreff.webp 216w',
