@@ -80,6 +80,13 @@ describe('FooterComponent', (): void => {
       expect(imprintLink).toBeTruthy();
     });
 
+    it('should link back to the portfolio instead of the imprint on the imprint page', (): void => {
+      fixture.componentRef.setInput('showImprintLink', false);
+      fixture.detectChanges();
+      const links = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('a'));
+      expect(links.map((a): string => a.textContent?.trim() ?? '')).toEqual(['Portfolio']);
+    });
+
     it('should contain a footer element', (): void => {
       const el = fixture.nativeElement as HTMLElement;
       expect(el.querySelector('footer')).not.toBeNull();
