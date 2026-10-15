@@ -2,31 +2,35 @@ import { Injectable, signal } from '@angular/core';
 
 import type { LanguageCode } from '../../languages/language.types';
 
+const isLanguageCode = (value: string | null): value is LanguageCode =>
+  value === 'en' || value === 'de';
+
 @Injectable({ providedIn: 'root' })
 export class LanguagePreferenceService {
   private static readonly storageKey = 'portfolio-language';
   private readonly currentLanguageCode = signal<LanguageCode>('en');
-  private readonly languageConfirmed = signal(true);
 
   readonly languageCode = this.currentLanguageCode.asReadonly();
-  readonly isLanguageConfirmed = this.languageConfirmed.asReadonly();
 
-  initializeFromStorage(): LanguageCode {
+  /** Picks the language from `?lang=`, then the stored choice, then the browser language. */
+  initialize(): LanguageCode {
     if (typeof window === 'undefined') {
       return this.currentLanguageCode();
     }
 
-    const storedLanguage = window.localStorage.getItem(LanguagePreferenceService.storageKey);
-    if (storedLanguage === 'de' || storedLanguage === 'en') {
-      this.currentLanguageCode.set(storedLanguage);
-    }
+    const candidates = [
+      new URLSearchParams(window.location.search).get('lang'),
+      window.localStorage.getItem(LanguagePreferenceService.storageKey),
+      window.navigator.language.slice(0, 2).toLowerCase(),
+    ];
+    const language = candidates.find(isLanguageCode) ?? 'en';
+    this.currentLanguageCode.set(language);
 
-    return this.currentLanguageCode();
+    return language;
   }
 
   confirmLanguage(code: LanguageCode): void {
     this.currentLanguageCode.set(code);
-    this.languageConfirmed.set(true);
 
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(LanguagePreferenceService.storageKey, code);
