@@ -15,7 +15,7 @@ const rasterExtensions = new Set([
   '.tif',
   '.tiff',
 ]);
-const passthroughExtensions = new Set(['.svg']);
+const passthroughExtensions = new Set(['.svg', '.woff2']);
 
 function collectFilesRecursively(directoryPath) {
   if (!fs.existsSync(directoryPath)) {
@@ -139,6 +139,32 @@ async function writeOptimizedAsset(sourceFilePath) {
   };
 }
 
+const iconSourcePath = path.join(sourceRoot, 'portrait', 'me.png');
+const iconOutputs = [
+  { fileName: 'icons/favicon-32.png', width: 32, height: 32, fit: 'cover', format: 'png' },
+  { fileName: 'icons/apple-touch-icon.png', width: 180, height: 180, fit: 'cover', format: 'png' },
+  { fileName: 'icons/og-image.jpg', width: 1200, height: 630, fit: 'contain', format: 'jpeg' },
+];
+
+// Favicons and social previews need PNG/JPEG because not every client accepts WebP.
+async function writeIconAssets() {
+  if (!fs.existsSync(iconSourcePath)) {
+    console.warn('Icon generation skipped: portrait/me.png not found.');
+    return;
+  }
+
+  for (const { fileName, width, height, fit, format } of iconOutputs) {
+    const targetFilePath = path.join(targetRoot, fileName);
+    fs.mkdirSync(path.dirname(targetFilePath), { recursive: true });
+    await sharp(iconSourcePath)
+      .resize({ width, height, fit, position: 'top', background: '#08080b' })
+      .flatten({ background: '#08080b' })
+      .toFormat(format, { quality: 86 })
+      .toFile(targetFilePath);
+    console.log(`Generated: ${fileName}`);
+  }
+}
+
 async function run() {
   if (!fs.existsSync(sourceRoot)) {
     console.log('Optimized asset generation skipped: no unoptimized asset directory found.');
@@ -174,6 +200,8 @@ async function run() {
       `Optimized: ${result.sourceRelativePath} -> ${result.targetRelativePath} (${savedBytes >= 0 ? `-${savedBytes}` : `+${Math.abs(savedBytes)}`} bytes)`,
     );
   }
+
+  await writeIconAssets();
 
   console.log(
     `Optimized asset generation complete. Converted: ${convertedCount}, copied: ${copiedCount}, net saved: ${totalSavedBytes} bytes.`,
