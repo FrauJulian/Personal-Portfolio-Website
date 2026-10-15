@@ -2,7 +2,7 @@
 
 ## Project Context
 
-This is an Angular portfolio application using Angular 21, TypeScript, SCSS,
+This is an Angular portfolio application using Angular 22, TypeScript, SCSS,
 Vitest tests, and static hosting for production output. Production
 application code lives in `src/app`; the client entry point lives in
 `src/main.ts`.
